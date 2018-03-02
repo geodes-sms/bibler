@@ -1,0 +1,590 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.field &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.field</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module represents the fields of each entry.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">.field_name</span> <span class="k">import</span> <span class="n">FieldName</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">utils</span>
+
+<div class="viewcode-block" id="FieldValueMappingToSimple"><a class="viewcode-back" href="../../FieldValueMappingToSimple.html#app.field.FieldValueMappingToSimple">[docs]</a><span class="k">class</span> <span class="nc">FieldValueMappingToSimple</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">Singleton</span><span class="p">):</span>
+<div class="viewcode-block" id="FieldValueMappingToSimple.__init__"><a class="viewcode-back" href="../../FieldValueMappingToSimple.html#app.field.FieldValueMappingToSimple.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">ss}&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ss&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">c</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">r</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">&#39;</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">`</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\\&quot;</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">^</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">~</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">c{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">r{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&#39;{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">`{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\\&quot;</span><span class="s2">{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">^{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">~{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="FieldValueMappingToHTML"><a class="viewcode-back" href="../../FieldValueMappingToHTML.html#app.field.FieldValueMappingToHTML">[docs]</a><span class="k">class</span> <span class="nc">FieldValueMappingToHTML</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">Singleton</span><span class="p">):</span>
+<div class="viewcode-block" id="FieldValueMappingToHTML.__init__"><a class="viewcode-back" href="../../FieldValueMappingToHTML.html#app.field.FieldValueMappingToHTML.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">ss}&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;szlig;&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">ss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;szlig;&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&amp;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">&amp;}&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">c</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">cedil;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">r</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">ring;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">&#39;</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">acute;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">`</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">grave;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\\&quot;</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">uml;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">^</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">circ;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="s2">~</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">tilde;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;{</span><span class="se">\\</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">slash;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">c{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">cedil;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">r{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">ring;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&#39;{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">acute;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">`{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">grave;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\\&quot;</span><span class="s2">{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">uml;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">^{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">circ;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">~{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">tilde;&#39;</span> <span class="o">%</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">o&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;oslash;&#39;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">O&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&amp;Oslash;&#39;</span></div></div>
+
+<div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The generic class representing any field of an entry.</span>
+<span class="sd">    Every field has a :class:`name` and a :class:`value`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Field.__init__"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type name: :class:`str`</span>
+<span class="sd">        :param name: The name of the field.</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The value of the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div>
+    
+<div class="viewcode-block" id="Field.isEmpty"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.isEmpty">[docs]</a>    <span class="k">def</span> <span class="nf">isEmpty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verfies if the field does not have a value.</span>
+<span class="sd">        :rtype: :class:`bool`</span>
+<span class="sd">        :return: :class:`True` if the value is empty, :class:`False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span></div>
+        
+<div class="viewcode-block" id="Field.getName"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.getName">[docs]</a>    <span class="k">def</span> <span class="nf">getName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the name of this field.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The name of the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+        
+<div class="viewcode-block" id="Field.getValue"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.getValue">[docs]</a>    <span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of this field.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The value of the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span></div>
+        
+<div class="viewcode-block" id="Field.setValue"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.setValue">[docs]</a>    <span class="k">def</span> <span class="nf">setValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the value for this field.</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The value of the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div>
+        
+<div class="viewcode-block" id="Field.format"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Correctly format the value of this field according to the BibTeX standard.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="Field.getHTMLValue"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.getHTMLValue">[docs]</a>    <span class="k">def</span> <span class="nf">getHTMLValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of this field in HTML format.</span>
+<span class="sd">        @see: :class:`toHTML`.</span>
+<span class="sd">        :return: The value in HTML encoding.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Field</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Field.getACMValue"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.getACMValue">[docs]</a>    <span class="k">def</span> <span class="nf">getACMValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of this field in HTML format following the ACM style.</span>
+<span class="sd">        @see: :class:`toHTML`.</span>
+<span class="sd">        :return: The value in HTML encoding.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getHTMLValue</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Field.getHtmlDefaultValue"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.getHtmlDefaultValue">[docs]</a>    <span class="k">def</span> <span class="nf">getHtmlDefaultValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value of this field in HTML format following the default style.</span>
+<span class="sd">        @see: :class:`toHTML`.</span>
+<span class="sd">        :return: The value in HTML encoding.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getHTMLValue</span><span class="p">()</span></div>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Field.simplify"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip all special characters in a string.</span>
+<span class="sd">        For example:: a{\&#39;a}a or a\&#39;{a}a -&gt; aaa</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The string to simplify.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The simplified value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">FieldValueMappingToSimple</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">FieldValueMappingToSimple</span><span class="p">()[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Field</span><span class="o">.</span><span class="n">__clean</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+        
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Field.toHTML"><a class="viewcode-back" href="../../FieldClass.html#app.field.Field.toHTML">[docs]</a>    <span class="k">def</span> <span class="nf">toHTML</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert all BibTeX special commands into HTML encodings.</span>
+<span class="sd">        For example:: {\&#39;e} -&gt; &amp;eacute; or \&#39;{e} -&gt; &amp;eacute;</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The string to convert.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The value in HTML encoding.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">FieldValueMappingToHTML</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">FieldValueMappingToHTML</span><span class="p">()[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;#8211;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Field</span><span class="o">.</span><span class="n">__clean</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__clean</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all E{lb},E{rb},[,], and other BibTeX commands.</span>
+<span class="sd">        For example:: {\&#39;e} -&gt; &amp;eacute;</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The string to convert.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The cleaned value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">em&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">it&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Contributor"><a class="viewcode-back" href="../../Contributor.html#app.field.Contributor">[docs]</a><span class="k">class</span> <span class="nc">Contributor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contributor of an article such asE{:} an author, an editor, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Contributor.__init__"><a class="viewcode-back" href="../../Contributor.html#app.field.Contributor.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">von</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">jr</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type last: :class:`str`</span>
+<span class="sd">        :param last: The last name.</span>
+<span class="sd">        :type first: :class:`str`</span>
+<span class="sd">        :param first: The first name.</span>
+<span class="sd">        :type von: :class:`str`</span>
+<span class="sd">        :param von: The preposition before the last name like &#39;de la&#39; in &#39;Eugene de la Croix&#39;.</span>
+<span class="sd">        :type jr: :class:`str`</span>
+<span class="sd">        :param jr: The suffix at the end of the name like &#39;Jr.&#39; in &#39;Martin Luther King Jr.&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">first</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">first</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">last</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">last</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">von</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">von</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">jr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">jr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preposition</span> <span class="o">=</span> <span class="n">von</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">jr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preposition</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preposition</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+<div class="viewcode-block" id="ContributorField"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField">[docs]</a><span class="k">class</span> <span class="nc">ContributorField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for contributors. Multiple contributors must be separated by &#39; and &#39;.</span>
+<span class="sd">    The supported formats for individual names are defined in `BibTeX&lt;http://www.openoffice.org/bibliographic/bibtex-defs.html&gt;`:</span>
+<span class="sd">        - Last</span>
+<span class="sd">        - First Last</span>
+<span class="sd">        - Last, First</span>
+<span class="sd">        - First von Last</span>
+<span class="sd">        - von Last, First</span>
+<span class="sd">        - von Last, Jr, First </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ET_AL</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;et al.&#39;</span><span class="p">,</span> <span class="s1">&#39;and others&#39;</span><span class="p">)</span>
+    <span class="n">SPLIT</span> <span class="o">=</span> <span class="s1">&#39; and &#39;</span>
+    
+<div class="viewcode-block" id="ContributorField.__init__"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ContributorField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasEtal</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">von</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;(?P&lt;von&gt;([a-z]+)|(</span><span class="se">\\\\</span><span class="s2">\{.[a-z]+\})|(\{</span><span class="se">\\\\</span><span class="s2">.[a-z]+\})|(</span><span class="se">\\\\</span><span class="s2">.\{[a-z]+\})|(</span><span class="se">\\\\</span><span class="s2">[^{][a-z]+))?&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">re_von_Last_Jr_First</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">von</span> <span class="o">+</span> <span class="s2">&quot;&quot;&quot;\s*(?P&lt;last&gt;[^,]+)\s*,\s*(?P&lt;jr&gt;[^,]*)\s*,\s*(?P&lt;first&gt;.*)&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">re_von_Last_First</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">von</span> <span class="o">+</span> <span class="s2">&quot;&quot;&quot;\s*(?P&lt;last&gt;[^,]+)\s*,\s*(?P&lt;first&gt;.*)&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getContributors"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getContributors">[docs]</a>    <span class="k">def</span> <span class="nf">getContributors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the list of contributors.</span>
+<span class="sd">        :rtype: list of :class:`Contributor`</span>
+<span class="sd">        :return: The list of contributors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getContributorsCount"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getContributorsCount">[docs]</a>    <span class="k">def</span> <span class="nf">getContributorsCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of contributors.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The number of contributors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="ContributorField.format"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">people</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">people</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">etal</span> <span class="ow">in</span> <span class="n">ContributorField</span><span class="o">.</span><span class="n">ET_AL</span><span class="p">:</span>
+            <span class="n">etal_ix</span> <span class="o">=</span> <span class="n">people</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">etal</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">etal_ix</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hasEtal</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">people</span> <span class="o">=</span> <span class="n">people</span><span class="p">[:</span><span class="n">etal_ix</span><span class="p">]</span> <span class="c1"># removes ET_AL and everything after </span>
+                <span class="k">break</span>
+        <span class="n">people</span> <span class="o">=</span> <span class="n">people</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ContributorField</span><span class="o">.</span><span class="n">SPLIT</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">people</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">re_von_Last_Jr_First</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                <span class="c1"># von Last, Jr, First</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Contributor</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">),</span> <span class="n">first</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">),</span> <span class="n">von</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;von&#39;</span><span class="p">),</span> <span class="n">jr</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;jr&#39;</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">re_von_Last_First</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="c1"># von Last, First</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Contributor</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">),</span> <span class="n">first</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">),</span> <span class="n">von</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;von&#39;</span><span class="p">)))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">vonIx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+                            <span class="n">vonIx</span> <span class="o">=</span> <span class="n">i</span>
+                            <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">vonIx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1"># First Last </span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Contributor</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">person</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">first</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">person</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+                    <span class="k">elif</span> <span class="n">vonIx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Incorrect author name: missing last name.&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># First von Last </span>
+                        <span class="n">lastIx</span> <span class="o">=</span> <span class="n">vonIx</span>
+                        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="n">vonIx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]):</span>
+                            <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+                                <span class="n">lastIx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">vonIx</span> <span class="o">+</span> <span class="mi">1</span>
+                                <span class="k">break</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Contributor</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="n">lastIx</span><span class="p">:]),</span> <span class="n">first</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">person</span><span class="p">[:</span><span class="n">vonIx</span><span class="p">]),</span> <span class="n">von</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="n">vonIx</span><span class="p">:</span><span class="n">lastIx</span><span class="p">])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">ContributorField</span><span class="o">.</span><span class="n">SPLIT</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasEtal</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">ContributorField</span><span class="o">.</span><span class="n">ET_AL</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getFirstNameFirst"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getFirstNameFirst">[docs]</a>    <span class="k">def</span> <span class="nf">getFirstNameFirst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contributor</span><span class="p">):</span>
+            <span class="n">person</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">first_name</span><span class="p">:</span>
+                <span class="n">first</span> <span class="o">=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">first_name</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">+=</span> <span class="n">Field</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;. &#39;</span>
+                <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+                    <span class="n">suffix</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">preposition</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">preposition</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">last_name</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">last_name</span>
+            <span class="k">if</span> <span class="n">suffix</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">contributor</span><span class="o">.</span><span class="n">suffix</span>
+            <span class="k">return</span> <span class="n">person</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getFirstNameLast"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getFirstNameLast">[docs]</a>    <span class="k">def</span> <span class="nf">getFirstNameLast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contributor</span><span class="p">):</span>
+            <span class="n">person</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">preposition</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">preposition</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">last_name</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">last_name</span>
+            <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">first_name</span><span class="p">:</span>
+                <span class="n">first</span> <span class="o">=</span> <span class="n">contributor</span><span class="o">.</span><span class="n">first_name</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">person</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">Field</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span>
+                <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">contributor</span><span class="o">.</span><span class="n">suffix</span>
+            <span class="k">return</span> <span class="n">person</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getHTMLValue"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getHTMLValue">[docs]</a>    <span class="k">def</span> <span class="nf">getHTMLValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">firstNameOrder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the names of the contributors in HTML.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The contributors in HTML.</span>
+<span class="sd">        :raises: Exception: If a name is not in a legal format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">people</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">contributor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="p">:</span>
+                <span class="n">person</span> <span class="o">=</span> <span class="n">firstNameOrder</span><span class="p">(</span><span class="n">contributor</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">person</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
+                    <span class="n">person</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span>
+                <span class="n">people</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">_and</span> <span class="o">=</span> <span class="n">ContributorField</span><span class="o">.</span><span class="n">SPLIT</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">_and</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="n">_and</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">people</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">_and</span> <span class="o">+</span> <span class="n">people</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">people</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasEtal</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">+=</span> <span class="n">ContributorField</span><span class="o">.</span><span class="n">ET_AL</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">Field</span><span class="o">.</span><span class="n">toHTML</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid </span><span class="si">%s</span><span class="s1"> names.&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getACMValue"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getACMValue">[docs]</a>    <span class="k">def</span> <span class="nf">getACMValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the names of the contributors in HTML following the ACM style.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The contributors in HTML.</span>
+<span class="sd">        :raises: Exception: If a name is not in a legal format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getHTMLValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getFirstNameLast</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getHtmlDefaultValue"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getHtmlDefaultValue">[docs]</a>    <span class="k">def</span> <span class="nf">getHtmlDefaultValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the names of the contributors in HTML following the default style.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The contributors in HTML.</span>
+<span class="sd">        :raises: Exception: If a name is not in a legal format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getHTMLValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getFirstNameFirst</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ContributorField.getFirstLastName"><a class="viewcode-back" href="../../ContributorField.html#app.field.ContributorField.getFirstLastName">[docs]</a>    <span class="k">def</span> <span class="nf">getFirstLastName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the last name of the first contributor.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The last name of the first contributor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No author or editor name found.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contributors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">last_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div></div>
+        
+    
+<div class="viewcode-block" id="Author"><a class="viewcode-back" href="../../Author.html#app.field.Author">[docs]</a><span class="k">class</span> <span class="nc">Author</span><span class="p">(</span><span class="n">ContributorField</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for authors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Author.__init__"><a class="viewcode-back" href="../../Author.html#app.field.Author.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Author</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Author</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+        
+    
+<div class="viewcode-block" id="Editor"><a class="viewcode-back" href="../../Editor.html#app.field.Editor">[docs]</a><span class="k">class</span> <span class="nc">Editor</span><span class="p">(</span><span class="n">ContributorField</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Editor.__init__"><a class="viewcode-back" href="../../Editor.html#app.field.Editor.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Editor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Editor</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Organization"><a class="viewcode-back" href="../../Organization.html#app.field.Organization">[docs]</a><span class="k">class</span> <span class="nc">Organization</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for the organization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Organization.__init__"><a class="viewcode-back" href="../../Organization.html#app.field.Organization.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Organization</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Organization</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Organization.getFirstWord"><a class="viewcode-back" href="../../Organization.html#app.field.Organization.getFirstWord">[docs]</a>    <span class="k">def</span> <span class="nf">getFirstWord</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the first word of the organization name.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The first word.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span></div></div>
+        
+    
+<div class="viewcode-block" id="Pages"><a class="viewcode-back" href="../../Pages.html#app.field.Pages">[docs]</a><span class="k">class</span> <span class="nc">Pages</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for pages.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Pages.__init__"><a class="viewcode-back" href="../../Pages.html#app.field.Pages.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Pages</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Pages</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">re_dashes</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;-+&quot;&quot;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pages.format"><a class="viewcode-back" href="../../Pages.html#app.field.Pages.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">re_dashes</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Year"><a class="viewcode-back" href="../../Year.html#app.field.Year">[docs]</a><span class="k">class</span> <span class="nc">Year</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for year.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Year.__init__"><a class="viewcode-back" href="../../Year.html#app.field.Year.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Year</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Year</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Year.getYear"><a class="viewcode-back" href="../../Year.html#app.field.Year.getYear">[docs]</a>    <span class="k">def</span> <span class="nf">getYear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the year part.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: The last four-digits of the value, or :class:`&#39;&#39;` if they are not present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="DOI"><a class="viewcode-back" href="../../DOI.html#app.field.DOI">[docs]</a><span class="k">class</span> <span class="nc">DOI</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for DOI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DOI.__init__"><a class="viewcode-back" href="../../DOI.html#app.field.DOI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DOI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">DOI</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="DOI.format"><a class="viewcode-back" href="../../DOI.html#app.field.DOI.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../Paper.html#app.field.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for paper.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Paper.__init__"><a class="viewcode-back" href="../../Paper.html#app.field.Paper.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">doi</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type value: :class:`str`</span>
+<span class="sd">        :param value: The value of the field.</span>
+<span class="sd">        :type doi: :class:`DOI`</span>
+<span class="sd">        :param doi: The DOI field form which the paper field will get its value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Paper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">doi</span><span class="p">:</span>
+            <span class="n">doi</span><span class="o">.</span><span class="n">format</span><span class="p">()</span>
+            <span class="n">doi</span> <span class="o">=</span> <span class="n">doi</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">doi</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">doi</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;http://dx.doi.org/&#39;</span> <span class="o">+</span> <span class="n">doi</span></div></div>
+
+<span class="k">class</span> <span class="nc">Abstract</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The field for the abstract.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Abstract</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Abstract</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

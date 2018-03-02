@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ContributorField &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class Author" href="Author.html" />
+    <link rel="prev" title="Class Contributor" href="Contributor.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Author.html" title="Class Author"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Contributor.html" title="Class Contributor"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="field.html" accesskey="U">Module Field</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-contributorfield">
+<h1>Class ContributorField<a class="headerlink" href="#class-contributorfield" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.field.ContributorField">
+<em class="property">class </em><code class="descclassname">app.field.</code><code class="descname">ContributorField</code><span class="sig-paren">(</span><em>name</em>, <em>value=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">app.field.Field</span></code></a></p>
+<p>The field for contributors. Multiple contributors must be separated by &#8216; and &#8216;.
+The supported formats for individual names are defined in <cite>BibTeX&lt;http://www.openoffice.org/bibliographic/bibtex-defs.html&gt;</cite>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Last</li>
+<li>First Last</li>
+<li>Last, First</li>
+<li>First von Last</li>
+<li>von Last, First</li>
+<li>von Last, Jr, First</li>
+</ul>
+</div></blockquote>
+<dl class="attribute">
+<dt id="app.field.ContributorField.ET_AL">
+<code class="descname">ET_AL</code><em class="property"> = ('et al.', 'and others')</em><a class="headerlink" href="#app.field.ContributorField.ET_AL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.field.ContributorField.SPLIT">
+<code class="descname">SPLIT</code><em class="property"> = ' and '</em><a class="headerlink" href="#app.field.ContributorField.SPLIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>value=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.format">
+<code class="descname">format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getACMValue">
+<code class="descname">getACMValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getACMValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getACMValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the names of the contributors in HTML following the ACM style.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The contributors in HTML.
+:raises: Exception: If a name is not in a legal format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getContributors">
+<code class="descname">getContributors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getContributors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getContributors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of contributors.
+:rtype: list of <code class="xref py py-class docutils literal"><span class="pre">Contributor</span></code>
+:return: The list of contributors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getContributorsCount">
+<code class="descname">getContributorsCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getContributorsCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getContributorsCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of contributors.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">int</span></code>
+:return: The number of contributors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getFirstLastName">
+<code class="descname">getFirstLastName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getFirstLastName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getFirstLastName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last name of the first contributor.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The last name of the first contributor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getFirstNameFirst">
+<code class="descname">getFirstNameFirst</code><span class="sig-paren">(</span><em>contributor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getFirstNameFirst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getFirstNameFirst" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getFirstNameLast">
+<code class="descname">getFirstNameLast</code><span class="sig-paren">(</span><em>contributor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getFirstNameLast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getFirstNameLast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getHTMLValue">
+<code class="descname">getHTMLValue</code><span class="sig-paren">(</span><em>firstNameOrder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getHTMLValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getHTMLValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the names of the contributors in HTML.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The contributors in HTML.
+:raises: Exception: If a name is not in a legal format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.ContributorField.getHtmlDefaultValue">
+<code class="descname">getHtmlDefaultValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#ContributorField.getHtmlDefaultValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.ContributorField.getHtmlDefaultValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the names of the contributors in HTML following the default style.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The contributors in HTML.
+:raises: Exception: If a name is not in a legal format.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Contributor.html"
+                        title="previous chapter">Class Contributor</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Author.html"
+                        title="next chapter">Class Author</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ContributorField.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Author.html" title="Class Author"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Contributor.html" title="Class Contributor"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="field.html" >Module Field</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

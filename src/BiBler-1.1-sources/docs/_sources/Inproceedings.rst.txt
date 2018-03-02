@@ -1,0 +1,9 @@
+
+Class Inproceedings
+===================
+.. autoclass:: app.entry.Inproceedings
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class BibTeXParserWithStdFields &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class BibTeXParserWithNonStdFields" href="BibTeXParserWithNonStdFields.html" />
+    <link rel="prev" title="Module bibtex_parser" href="bibtex_parser.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BibTeXParserWithNonStdFields.html" title="Class BibTeXParserWithNonStdFields"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bibtex_parser.html" title="Module bibtex_parser"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="bibtex_parser.html" accesskey="U">Module bibtex_parser</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-bibtexparserwithstdfields">
+<h1>Class BibTeXParserWithStdFields<a class="headerlink" href="#class-bibtexparserwithstdfields" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields">
+<em class="property">class </em><code class="descclassname">app.bibtex_parser.</code><code class="descname">BibTeXParserWithStdFields</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Same as <a class="reference internal" href="BibTeXParser.html#app.bibtex_parser.BibTeXParser" title="app.bibtex_parser.BibTeXParser"><code class="xref py py-class docutils literal"><span class="pre">BibTeXParser</span></code></a> but only looks at standard fields in the BibTeX entry.</p>
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields._BibTeXParserWithStdFields__parseNested">
+<code class="descname">_BibTeXParserWithStdFields__parseNested</code><span class="sig-paren">(</span><em>s</em>, <em>separator</em>, <em>inv_separator</em>, <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields._BibTeXParserWithStdFields__parseNested" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the string delimited within separators, even if the same separators are used inside the string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>s</strong> (<em>str</em>) &#8211; The string.</li>
+<li><strong>separator</strong> (<em>str</em>) &#8211; The opening separator.</li>
+<li><strong>inv_separator</strong> (<em>str</em>) &#8211; The closing separator.</li>
+<li><strong>level</strong> (<em>str</em>) &#8211; The level of nesting for finding the string to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; The result.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields._BibTeXParserWithStdFields__unicodeToTex">
+<code class="descname">_BibTeXParserWithStdFields__unicodeToTex</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields._BibTeXParserWithStdFields__unicodeToTex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The transformed BibTeX string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Constructor)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str.</em>) &#8211; The BibTeX string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields.findField">
+<code class="descname">findField</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields.findField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields.findField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the value of a field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> (<em>str</em>) &#8211; The field.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the string into an <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">Entry</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">Entry</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p>The entry object corresponding to its type. The default is <a class="reference internal" href="EmptyEntry.html#app.entry.EmptyEntry" title="app.entry.EmptyEntry"><code class="xref py py-class docutils literal"><span class="pre">EmptyEntry</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields.parseEntryHeader">
+<code class="descname">parseEntryHeader</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields.parseEntryHeader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields.parseEntryHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the type of the entry and its key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.bibtex_parser.BibTeXParserWithStdFields.parseFields">
+<code class="descname">parseFields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/bibtex_parser.html#BibTeXParserWithStdFields.parseFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.bibtex_parser.BibTeXParserWithStdFields.parseFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse all the fields of the entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bibtex_parser.html"
+                        title="previous chapter">Module bibtex_parser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BibTeXParserWithNonStdFields.html"
+                        title="next chapter">Class BibTeXParserWithNonStdFields</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/BibTeXParserWithStdFields.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BibTeXParserWithNonStdFields.html" title="Class BibTeXParserWithNonStdFields"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bibtex_parser.html" title="Module bibtex_parser"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="bibtex_parser.html" >Module bibtex_parser</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

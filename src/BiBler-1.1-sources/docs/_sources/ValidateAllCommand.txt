@@ -1,0 +1,10 @@
+
+Class ValidateAllCommand
+=========================
+
+.. autoclass:: app.command.ValidateAllCommand
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Entry &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class EmptyEntry" href="EmptyEntry.html" />
+    <link rel="prev" title="Class ValidationResult" href="ValidationResult.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="EmptyEntry.html" title="Class EmptyEntry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ValidationResult.html" title="Class ValidationResult"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="entry.html" accesskey="U">Module entry</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-entry">
+<h1>Class Entry<a class="headerlink" href="#class-entry" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.entry.Entry">
+<em class="property">class </em><code class="descclassname">app.entry.</code><code class="descname">Entry</code><a class="reference internal" href="_modules/app/entry.html#Entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The abstract class representing entries.    
+Every entry has an <code class="xref py py-class docutils literal"><span class="pre">_id</span></code>, a <code class="xref py py-class docutils literal"><span class="pre">key</span></code>, and dictionaries for <code class="xref py py-class docutils literal"><span class="pre">requiredFields</span></code>, <code class="xref py py-class docutils literal"><span class="pre">optionalFields</span></code>, and <code class="xref py py-class docutils literal"><span class="pre">additionalFields</span></code>
+as defined in <a class="reference external" href="http://www.openoffice.org/bibliographic/bibtex-defs.html">BibTeX</a>.
+<code class="xref py py-class docutils literal"><span class="pre">importantFields</span></code> are usually required from the optional ones, but if missing the entry is still valid.</p>
+<dl class="method">
+<dt id="app.entry.Entry._Entry__iterAllFieldsUnsorted">
+<code class="descname">_Entry__iterAllFieldsUnsorted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.entry.Entry._Entry__iterAllFieldsUnsorted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all fields of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list of fields.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry._Entry__toHtml">
+<code class="descname">_Entry__toHtml</code><span class="sig-paren">(</span><em>styleWriter</em><span class="sig-paren">)</span><a class="headerlink" href="#app.entry.Entry._Entry__toHtml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this entry into HTML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The HTML code within &lt;p&gt;&lt;/p&gt;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.formatField">
+<code class="descname">formatField</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.formatField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.formatField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correctly format a field inplace.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The name of the field.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.generateId">
+<code class="descname">generateId</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.generateId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.generateId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign the next available id to the entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.generateKey">
+<code class="descname">generateKey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.generateKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.generateKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the unique key for this entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.getContributors">
+<code class="descname">getContributors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getContributors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getContributors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the contributors of an entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of <a class="reference internal" href="Contributor.html#app.field.Contributor" title="app.field.Contributor"><code class="xref py py-class docutils literal"><span class="pre">Contributor</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The contributors.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="app.entry.Entry.getEntryType">
+<em class="property">static </em><code class="descname">getEntryType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getEntryType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getEntryType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the type of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The type of the entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.getField">
+<code class="descname">getField</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a field object of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The name of the field requested.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The field of the entry.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>Exception</strong> &#8211; If the field does not exist in this entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.getFieldValue">
+<code class="descname">getFieldValue</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getFieldValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getFieldValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of a field of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The name of the field requested.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of the field.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>Exception</strong> &#8211; If the field does not exist in this entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.getId">
+<code class="descname">getId</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the id of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The id of the entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.getKey">
+<code class="descname">getKey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.getKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.getKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the key of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The key of the entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.isEmpty">
+<code class="descname">isEmpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.isEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.isEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if an entry has all the fields empty</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.iterAdditionalFields">
+<code class="descname">iterAdditionalFields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.iterAdditionalFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.iterAdditionalFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all additional fields of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list of fields.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.iterAllFields">
+<code class="descname">iterAllFields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.iterAllFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.iterAllFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all fields of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list of fields.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.iterOptionalFields">
+<code class="descname">iterOptionalFields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.iterOptionalFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.iterOptionalFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all optional fields of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list of fields.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.iterRequiredFields">
+<code class="descname">iterRequiredFields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.iterRequiredFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.iterRequiredFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all required fields of this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="FieldClass.html#app.field.Field" title="app.field.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list of fields.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.matchesExact">
+<code class="descname">matchesExact</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.matchesExact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.matchesExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if any field value matches the query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>query</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; A substring to find.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">True</span></code> if query matched, <code class="xref py py-class docutils literal"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.matchesRegex">
+<code class="descname">matchesRegex</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.matchesRegex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.matchesRegex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if any field value matches the query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>query</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; A regular expression to find.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">True</span></code> if query matched, <code class="xref py py-class docutils literal"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.setField">
+<code class="descname">setField</code><span class="sig-paren">(</span><em>field</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.setField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.setField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a field for this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>field</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The name of the field.</li>
+<li><strong>value</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The value of the field.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>Exception</strong> &#8211; If the field does not exist in this entry.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.setId">
+<code class="descname">setId</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.setId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.setId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the id for this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_id</strong> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>) &#8211; The id of the entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.setKey">
+<code class="descname">setKey</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.setKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.setKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the key for this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The key of the entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toBibTeX">
+<code class="descname">toBibTeX</code><span class="sig-paren">(</span><em>ignoreEmptyField=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toBibTeX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toBibTeX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the entry into its BibTeX reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ignoreEmptyField</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; If <code class="xref py py-class docutils literal"><span class="pre">True</span></code> ignores empty fields.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The BibTeX reference.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The BibTeX format is:
+&#64;TYPE{KEY,</p>
+<blockquote>
+<div>FIELD1 = {VALUE1},
+FIELD2 = {VALUE2}</div></blockquote>
+<p class="last">}</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toCSV">
+<code class="descname">toCSV</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toCSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toCSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the entry into a tabified sequence of its fields.
+The order of the fields is always the same for any entry type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The row of all its values.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The row format is:  &#8220;VALUE1&#8221;   &#8220;VALUE2&#8221;</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toCompleteHtmlACM">
+<code class="descname">toCompleteHtmlACM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toCompleteHtmlACM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toCompleteHtmlACM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this entry into HTML following the ACM style.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The HTML code within &lt;p&gt;&lt;/p&gt;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toCompleteHtmlDefault">
+<code class="descname">toCompleteHtmlDefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toCompleteHtmlDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toCompleteHtmlDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this entry into HTML following the default style.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The HTML code within &lt;p&gt;&lt;/p&gt;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toEntryDict">
+<code class="descname">toEntryDict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toEntryDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toEntryDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the entry into an <code class="xref py py-class docutils literal"><span class="pre">EntryDict</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">gui.app_interface.EntryDict</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The entry in dictionary format.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toHtmlACM">
+<code class="descname">toHtmlACM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toHtmlACM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toHtmlACM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this entry into HTML following the ACM style.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The HTML code.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toHtmlDefault">
+<code class="descname">toHtmlDefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toHtmlDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toHtmlDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this entry into HTML following the default style.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The HTML code within.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.toSQL">
+<code class="descname">toSQL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.toSQL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.toSQL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the entry into an SQL INSERT statement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The INSERT statement.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.entry.Entry.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/entry.html#Entry.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.entry.Entry.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify that the entry is valid by checking that all required fields are not empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">True</span></code> if valid, <code class="xref py py-class docutils literal"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ValidationResult.html"
+                        title="previous chapter">Class ValidationResult</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="EmptyEntry.html"
+                        title="next chapter">Class EmptyEntry</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/EntryClass.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="EmptyEntry.html" title="Class EmptyEntry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ValidationResult.html" title="Class ValidationResult"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="entry.html" >Module entry</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

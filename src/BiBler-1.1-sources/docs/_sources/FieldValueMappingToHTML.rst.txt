@@ -1,0 +1,9 @@
+
+Class FieldValueMappingToHTML
+=============================
+.. autoclass:: app.field.FieldValueMappingToHTML
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

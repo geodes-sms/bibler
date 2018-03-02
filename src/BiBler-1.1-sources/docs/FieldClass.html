@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Field &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class Contributor" href="Contributor.html" />
+    <link rel="prev" title="Class FieldValueMappingToHTML" href="FieldValueMappingToHTML.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Contributor.html" title="Class Contributor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FieldValueMappingToHTML.html" title="Class FieldValueMappingToHTML"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="field.html" accesskey="U">Module Field</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-field">
+<h1>Class Field<a class="headerlink" href="#class-field" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.field.Field">
+<em class="property">class </em><code class="descclassname">app.field.</code><code class="descname">Field</code><span class="sig-paren">(</span><em>name</em>, <em>value=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The generic class representing any field of an entry.
+Every field has a <code class="xref py py-class docutils literal"><span class="pre">name</span></code> and a <code class="xref py py-class docutils literal"><span class="pre">value</span></code>.</p>
+<dl class="staticmethod">
+<dt id="app.field.Field._Field__clean">
+<em class="property">static </em><code class="descname">_Field__clean</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#app.field.Field._Field__clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all E{lb},E{rb},[,], and other BibTeX commands.
+For example:: {&#8216;e} -&gt; &amp;eacute;
+:type value: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:param value: The string to convert.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The cleaned value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>value=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The name of the field.</li>
+<li><strong>value</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The value of the field.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.format">
+<code class="descname">format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correctly format the value of this field according to the BibTeX standard.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.getACMValue">
+<code class="descname">getACMValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.getACMValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.getACMValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of this field in HTML format following the ACM style.
+&#64;see: <code class="xref py py-class docutils literal"><span class="pre">toHTML</span></code>.
+:return: The value in HTML encoding.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.getHTMLValue">
+<code class="descname">getHTMLValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.getHTMLValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.getHTMLValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of this field in HTML format.
+&#64;see: <code class="xref py py-class docutils literal"><span class="pre">toHTML</span></code>.
+:return: The value in HTML encoding.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.getHtmlDefaultValue">
+<code class="descname">getHtmlDefaultValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.getHtmlDefaultValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.getHtmlDefaultValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of this field in HTML format following the default style.
+&#64;see: <code class="xref py py-class docutils literal"><span class="pre">toHTML</span></code>.
+:return: The value in HTML encoding.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.getName">
+<code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.getName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.getName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of this field.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The name of the field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.getValue">
+<code class="descname">getValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.getValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.getValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of this field.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The value of the field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.isEmpty">
+<code class="descname">isEmpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.isEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.isEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verfies if the field does not have a value.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code>
+:return: <code class="xref py py-class docutils literal"><span class="pre">True</span></code> if the value is empty, <code class="xref py py-class docutils literal"><span class="pre">False</span></code> otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.field.Field.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value for this field.
+:type value: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:param value: The value of the field.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="app.field.Field.simplify">
+<em class="property">static </em><code class="descname">simplify</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strip all special characters in a string.
+For example:: a{&#8216;a}a or a&#8217;{a}a -&gt; aaa
+:type value: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:param value: The string to simplify.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The simplified value.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="app.field.Field.toHTML">
+<em class="property">static </em><code class="descname">toHTML</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/field.html#Field.toHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.field.Field.toHTML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert all BibTeX special commands into HTML encodings.
+For example:: {&#8216;e} -&gt; &amp;eacute; or &#8216;{e} -&gt; &amp;eacute;
+:type value: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:param value: The string to convert.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">str</span></code>
+:return: The value in HTML encoding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="FieldValueMappingToHTML.html"
+                        title="previous chapter">Class FieldValueMappingToHTML</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Contributor.html"
+                        title="next chapter">Class Contributor</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/FieldClass.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Contributor.html" title="Class Contributor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FieldValueMappingToHTML.html" title="Class FieldValueMappingToHTML"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="field.html" >Module Field</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

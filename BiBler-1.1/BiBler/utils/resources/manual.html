@@ -1,0 +1,155 @@
+<html>
+<body>
+    <h1>
+        BiBler User Manual
+    </h1>
+    
+    
+    <h2>Introduction</h2>
+    <p>
+        <a name="intro"></a>
+        BiBler allows you to manage and manipulate BibTeX entries following the <a href="http://www.openoffice.org/bibliographic/bibtex-defs.html">standard BibTeX rules and formats</a>.
+    </p>
+    
+    
+    <h2>File menu</h2>
+    <a name="file"></a>
+    <dl>
+        <dt><b>Open</b></dt>
+        <dd>Import a list of entries from a BibTeX file in a given format and overwrites all existing entries.</dd>
+        
+        <dt><b>Save</b></dt>
+        <dd>Overwrites the current file loaded with the list of entries displayed.</dd>
+        
+        <dt><b>Save as</b></dt>
+        <dd>Saves list of entries displayed in a new file in BibTeX format.</dd>
+        
+        <dt><b>Import from file</b></dt>
+        <dd>Import a list of entries from a file in a given format. The currently supported formats are EndNote and CSV.
+        For EndNote, you must have exported your library from EndNote using the BiBler Export style provided in the external/ folder of the BiBler distribution.
+        For CSV, the data must be formatted in the same way as the export does.</dd>
+        
+        <dt><b>Export to file</b></dt>
+        <dd>Export the list of entries to a file in a given format. The currently supported formats are HTML, CSV, and SQL (a MySQL database).</dd>
+        
+        <dt><b>Exit</b></dt>
+        <dd>Closes the BiBler application.</dd>
+    </dl>
+    
+    
+    <h2>Edit menu</h2>
+    <a name="edit"></a>
+    <dl>
+        <dt><b>Undo</b></dt>
+        <dd>Reverse the last operation performed. When the focus is in the editor, use Ctrl+Z to undo what you typed in.</dd>
+        
+        <dt><b>Select all text</b></dt>
+        <dd>Select the entire text in the editor. This enables the Ctrl+A keyboard shortcut in the editor.</dd>
+        
+        <dt><b>Filter</b></dt>
+        <dd>Search through the list of entries and display only those that satisfy the query provided. This searches through all values, not field names and entry types. The query is not case-sensitive and special characters are simplified (e.g., 'e' will match &eacute;). By default, an exact match of the query must be found. Regular expressions can be used if the option is enabled in the preferences. The supported regular expressions follow <a href="https://docs.python.org/2.7/library/re.html">Python regex</a>.</dd>
+        
+        <dt><b>Clear Filter</b></dt>
+        <dd>Display the entire list of entries back after a search.</dd>
+        
+        <dt><b>Preferences</b></dt>
+        <dd>Set the preferences of BiBler.</dd>
+            <ul>
+                <li><b>Bibliography style</b><br/>
+                Set the style of the HTML output of entries. This applies for the preview of an entry and the HTML export. The currently supported styles are ACM and a default style.</li>
+                
+                <li><b>Allow invalid entries</b><br/>
+                Only add valid well-formed entries according to the <a href="http://www.openoffice.org/bibliographic/bibtex-defs.html">standard BibTeX rules and formats</a> and ignore ill-formed entries. This also holds for Open and Import operations.</li>
+                
+                <li><b>Allow non-standard fields</b><br/>
+                Allow to retain non-standard <a href="http://www.openoffice.org/bibliographic/bibtex-defs.html">BibTeX fields</a> in each entry. This is enabled by default. Otherwise, those fields will be removed from the entries.</li>
+                
+                <li><b>Override key generation</b><br/>
+                When enabled, any new entry added (inserted, opened, or imported) will be assigned a unique BibTeX key, even if one was already provided. This option is diabled by default, however if an entry does not have a key provided, BiBler will assign one automatically.</li>
+                
+                <li><b>Search query as regular expression</b><br/>
+                When enabled, you can specify regular expressions in the search. This is disabled by default.</li>
+            </ul>
+    </dl>
+    
+    
+    <h2>Reference menu</h2>
+    <a name="reference"></a>
+    <dl>
+        <dt><b>Add new</b></dt>
+        <dd>Add a new empty entry in the list. To specify the content of the reference, see the update operation. New additions are appended at the end of the list. So you may need to scroll down to see it.</dd>
+        
+        <dt><b>Delete</b></dt>
+        <dd>Remove the selected entry from the list.</dd>
+        
+        <dt><b>Duplicate</b></dt>
+        <dd>Creates a new entry with the content copied form the selected entry.  New additions are appended at the end of the list. So you may need to scroll down to see it.</dd>
+        
+        <dt><b>Generate all keys</b></dt>
+        <dd>Generate the BibTeX key of entries in the list. This will override the existiing key even if the option is not enabled in the Preferences.</dd>
+        
+        <dt><b>Validate all</b></dt>
+        <dd>Check if all entries in the list are valid with repsect to the <a href="http://www.openoffice.org/bibliographic/bibtex-defs.html">BibTeX rules</a>. All invalid entries are highlighted in red.</dd>
+    </dl>
+    
+    
+    <h2>Help menu</h2>
+    <a name="help"></a>
+    <dl>
+        <dt><b>User manual</b></dt>
+        <dd>Open this document.</dd>
+        
+        <dt><b>About BiBler</b></dt>
+        <dd>Display additional information about the distribution of BiBler.</dd>
+    </dl>
+    
+    
+    <h2>List of entries</h2>
+    <a name="list"></a>
+    <p>
+        All entries added or loaded from a file are displayed as a table. The list displays minimal information to identify each entry.
+    </p>
+    <p>
+        Clicking on a column will sort all entries currently displayed in increasing alpha-numerical order. Columns can be resized, by moving to their header's edge, and can be reordered by drag-n-drop.
+    </p>
+    <p>
+        Entries in white are correct and valid. Entries in red are either missing a mandatory field or have an error in one of them. Entries in light color have a minor error. When you click on a colored entry, the corresponding error is displayed at the bootom of the window. Note that an entry may have more than one error.
+    </p>
+    <p>
+        When a paper is linked to an entry, a small PDF icon appears on the left of the of the row of the corresponding entry. Double-click on the row to open the file.
+    </p>
+    
+    
+    <h2>Editing an entry</h2>
+    <a name="update"></a>
+    <p>
+        When an entry is selected from the list, its content is displayed at the bottom left of the window. Currently, entries can only be edited in their BibTeX format. BibTeX entries must be specified in a valid syntax. When you are done modifying the text, click on Update to apply the changes to the entry.
+    </p>
+    <p>
+        The general format of a BibTeX entry is:
+<pre>@ENTRYTYPE{key,
+  field1 = {value1},
+  field2 = {value2}
+}
+</pre>
+        
+        White spaces are ignored. You can use curly brackets <code>{ }</code> or double quotes <code>" "</code> for values. If you do not provide a key, make sure the following comma is there.
+        Here is an example of an article appearing in a journal or magazine:
+<pre>@ARTICLE{article,
+  author = {Lastname1, Firstname1 and Lastname2, Firstname2},
+  journal = {The name of the journal},
+  title = {The title of the work},
+  year = {1993},
+  month = {aug},
+  note = {An optional note},
+  number = {2},
+  pages = {201--213},
+  volume = {4}
+}
+</pre>
+    </p>
+    <p>
+        Click on the following link to see some <a href="https://verbosus.com/bibtex-style-examples.html">BibTeX examples</a>. However, note that some of their fields have values not specified between curly brackets or double quotes, which is invalid.
+    </p>
+</body>
+</html>

@@ -1,0 +1,10 @@
+
+Class UndoCommand
+======================
+
+.. autoclass:: app.command.UndoCommand
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

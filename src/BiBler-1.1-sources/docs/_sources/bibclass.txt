@@ -1,0 +1,9 @@
+
+Class BiBler
+================
+
+.. autoclass:: __init__.BiBler
+   :members:
+   :undoc-members:
+   :private-members:
+   :special-members: __init__

@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Wrapper documentation &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Handler documentation" href="application.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="Handler documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="web.html" accesskey="U">Package web</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-web.bibwrap">
+<span id="wrapper-documentation"></span><h1>Wrapper documentation<a class="headerlink" href="#module-web.bibwrap" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Felix Belanger Robillard</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="web.bibwrap.BiBlerWrapper">
+<em class="property">class </em><code class="descclassname">web.bibwrap.</code><code class="descname">BiBlerWrapper</code><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper._BiBlerWrapper__getBiblerApp">
+<em class="property">static </em><code class="descname">_BiBlerWrapper__getBiblerApp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#web.bibwrap.BiBlerWrapper._BiBlerWrapper__getBiblerApp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an instance of BiblerApp.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Bibler&#8217;s API instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">BiblerApp</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.addEntry">
+<em class="property">static </em><code class="descname">addEntry</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.addEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.addEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs the corresponding EntryDict</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The written Entry from the BibTeX</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">EntryDict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.exportString">
+<em class="property">static </em><code class="descname">exportString</code><span class="sig-paren">(</span><em>bibtex</em>, <em>exportFormat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.exportString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.exportString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs a string to the specified format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String to specified format</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.formatBibtex">
+<em class="property">static </em><code class="descname">formatBibtex</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.formatBibtex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.formatBibtex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs a formatted BibTeX</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">BibTeX entry</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.getBibTeX">
+<em class="property">static </em><code class="descname">getBibTeX</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.getBibTeX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.getBibTeX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs the corresponding corrected BibTeX string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corrected BibTeX including overriden key</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.previewEntry">
+<em class="property">static </em><code class="descname">previewEntry</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.previewEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.previewEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs an HTML preview</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">HTML preview for the entry</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="web.bibwrap.BiBlerWrapper.validateEntry">
+<em class="property">static </em><code class="descname">validateEntry</code><span class="sig-paren">(</span><em>bibtex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/web/bibwrap.html#BiBlerWrapper.validateEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#web.bibwrap.BiBlerWrapper.validateEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a BibTeX string and outputs 1 if the entry is valid or 0 if it&#8217;s not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bibtex</strong> (<em>str</em>) &#8211; The BibTeX string to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Number of valid entries, which will be 0 or 1</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="application.html"
+                        title="previous chapter">Handler documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/bibwrap.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="Handler documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="web.html" >Package web</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

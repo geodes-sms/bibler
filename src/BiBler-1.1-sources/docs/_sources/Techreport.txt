@@ -1,0 +1,9 @@
+
+Class Techreport
+================
+.. autoclass:: app.entry.Techreport
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

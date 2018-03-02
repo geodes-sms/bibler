@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ReferenceManager &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Module User Interface" href="userInterface.html" />
+    <link rel="prev" title="Module Manager" href="manager.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="userInterface.html" title="Module User Interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manager.html" title="Module Manager"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="manager.html" accesskey="U">Module Manager</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-referencemanager">
+<h1>Class ReferenceManager<a class="headerlink" href="#class-referencemanager" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.manager.ReferenceManager">
+<em class="property">class </em><code class="descclassname">app.manager.</code><code class="descname">ReferenceManager</code><a class="reference internal" href="_modules/app/manager.html#ReferenceManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Manage the operations on entries.
+The reference manager holds the list of all the <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">entries</span></code></a>.</p>
+<dl class="method">
+<dt id="app.manager.ReferenceManager._ReferenceManager__parseEntry">
+<code class="descname">_ReferenceManager__parseEntry</code><span class="sig-paren">(</span><em>entryBibTeX</em><span class="sig-paren">)</span><a class="headerlink" href="#app.manager.ReferenceManager._ReferenceManager__parseEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set DOI if not set and set URL if not set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager._ReferenceManager__setKey">
+<code class="descname">_ReferenceManager__setKey</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#app.manager.ReferenceManager._ReferenceManager__setKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate and set a unique key to the entry.
+:type entry: <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">app.entry.Entry</span></code></a>
+:param entry: The entry.
+:raises: Exception: If the first author of the entry published more than 27 on the entry&#8217;s publication year.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>entryBibTeX</em>, <em>entryType=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.addEntry" title="app.user_interface.BiBlerApp.addEntry"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.addEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>entryId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.deleteEntry" title="app.user_interface.BiBlerApp.deleteEntry"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.deleteEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.deleteAll">
+<code class="descname">deleteAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.deleteAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.deleteAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.duplicate">
+<code class="descname">duplicate</code><span class="sig-paren">(</span><em>entryId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.duplicateEntry" title="app.user_interface.BiBlerApp.duplicateEntry"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.duplicateEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.generateAllKeys">
+<code class="descname">generateAllKeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.generateAllKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.generateAllKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.generateAllKeys" title="app.user_interface.BiBlerApp.generateAllKeys"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.generateAllKeys</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.getEntry">
+<code class="descname">getEntry</code><span class="sig-paren">(</span><em>entryId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.getEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.getEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entry given its id.
+:type entryId: <code class="xref py py-class docutils literal"><span class="pre">int</span></code>
+:param entryId: The I{id} of the entry. 
+:rtype: <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">app.entry.Entry</span></code></a>
+:return: The entry, <code class="xref py py-class docutils literal"><span class="pre">None</span></code> if not found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.getEntryCount">
+<code class="descname">getEntryCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.getEntryCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.getEntryCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.getEntryCount" title="app.user_interface.BiBlerApp.getEntryCount"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.getEntryCount</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.getIndex">
+<code class="descname">getIndex</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.getIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.getIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.getSearchResultCount">
+<code class="descname">getSearchResultCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.getSearchResultCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.getSearchResultCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.getSearchResultCount" title="app.user_interface.BiBlerApp.getSearchResultCount"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.getSearchResultCount</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.insertAt">
+<code class="descname">insertAt</code><span class="sig-paren">(</span><em>index</em>, <em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.insertAt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.insertAt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.iterEntries">
+<code class="descname">iterEntries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.iterEntries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.iterEntries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of all entries.
+:rtype: <code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">app.entry.Entry</span></code></a>
+:return: The list of entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.iterSearchResult">
+<code class="descname">iterSearchResult</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.iterSearchResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.iterSearchResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator over the list of entries filtered by the search.
+:rtype: <code class="docutils literal"><span class="pre">generator</span></code> of <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">app.entry.Entry</span></code></a>
+:return: The list of entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.search" title="app.user_interface.BiBlerApp.search"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.search</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.sort">
+<code class="descname">sort</code><span class="sig-paren">(</span><em>field</em>, <em>reverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.sort" title="app.user_interface.BiBlerApp.sort"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.sort</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>entryId</em>, <em>entryBibTeX</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.updateEntry" title="app.user_interface.BiBlerApp.updateEntry"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.updateEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.manager.ReferenceManager.updateEntryField">
+<code class="descname">updateEntryField</code><span class="sig-paren">(</span><em>entryId</em>, <em>fieldName</em>, <em>fieldValue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/manager.html#ReferenceManager.updateEntryField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.manager.ReferenceManager.updateEntryField" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;see: <a class="reference internal" href="BiBlerApp.html#app.user_interface.BiBlerApp.updateEntryField" title="app.user_interface.BiBlerApp.updateEntryField"><code class="xref py py-class docutils literal"><span class="pre">app.user_interface.BiBlerApp.updateEntryField</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manager.html"
+                        title="previous chapter">Module Manager</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="userInterface.html"
+                        title="next chapter">Module User Interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ReferenceManager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="userInterface.html" title="Module User Interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manager.html" title="Module Manager"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="manager.html" >Module Manager</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

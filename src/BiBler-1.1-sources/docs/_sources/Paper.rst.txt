@@ -1,0 +1,9 @@
+
+Class Paper
+===========
+.. autoclass:: app.field.Paper
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

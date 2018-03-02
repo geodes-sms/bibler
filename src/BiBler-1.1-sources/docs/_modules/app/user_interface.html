@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.user_interface &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.user_interface</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+<span class="sd">.. moduleauthor:: Florin Oncica </span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module represents the API of the application.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">gui.app_interface</span> <span class="k">import</span> <span class="n">IApplication</span>
+<span class="kn">from</span> <span class="nn">.manager</span> <span class="k">import</span> <span class="n">ReferenceManager</span>
+<span class="kn">from</span> <span class="nn">.command</span> <span class="k">import</span> <span class="n">AddCommand</span><span class="p">,</span> <span class="n">CommandExecutor</span><span class="p">,</span> <span class="n">DeleteCommand</span><span class="p">,</span> <span class="n">DuplicateCommand</span><span class="p">,</span> <span class="n">ExportCommand</span><span class="p">,</span> <span class="n">GenerateAllKeysCommand</span><span class="p">,</span> <span class="n">ImportCommand</span><span class="p">,</span> \
+                    <span class="n">OpenCommand</span><span class="p">,</span> <span class="n">PreviewCommand</span><span class="p">,</span> <span class="n">SearchCommand</span><span class="p">,</span> <span class="n">SortCommand</span><span class="p">,</span> <span class="n">UndoCommand</span><span class="p">,</span> <span class="n">UpdateCommand</span><span class="p">,</span> <span class="n">ValidateAllCommand</span><span class="p">,</span> <span class="n">ExportStringCommand</span>
+<span class="kn">from</span> <span class="nn">.field_name</span> <span class="k">import</span> <span class="n">FieldName</span>
+<span class="kn">from</span> <span class="nn">.bibtex_parser</span> <span class="k">import</span> <span class="n">BibTeXParser</span>
+<span class="kn">from</span> <span class="nn">utils.settings</span> <span class="k">import</span> <span class="n">Preferences</span>
+
+
+<div class="viewcode-block" id="BiBlerApp"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp">[docs]</a><span class="k">class</span> <span class="nc">BiBlerApp</span><span class="p">(</span><span class="n">IApplication</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The main class that provides all the application functionalities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BiBlerApp.__init__"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BiBlerApp</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span> <span class="o">=</span> <span class="n">ReferenceManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span> <span class="o">=</span> <span class="n">CommandExecutor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="n">Preferences</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.start"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.start`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.exit"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.exit`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.importFile"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.importFile">[docs]</a>    <span class="k">def</span> <span class="nf">importFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">importFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.importFile`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">ImportCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">importFormat</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.exportFile"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.exportFile">[docs]</a>    <span class="k">def</span> <span class="nf">exportFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.exportFile`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">ExportCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">))</span></div>
+                
+<div class="viewcode-block" id="BiBlerApp.exportString"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.exportString">[docs]</a>    <span class="k">def</span> <span class="nf">exportString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.exportFile`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">ExportStringCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.openFile"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.openFile">[docs]</a>    <span class="k">def</span> <span class="nf">openFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">openFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.openFile`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">OpenCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">openFormat</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.addEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.addEntry">[docs]</a>    <span class="k">def</span> <span class="nf">addEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">entryType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.addEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">AddCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">entryType</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.duplicateEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.duplicateEntry">[docs]</a>    <span class="k">def</span> <span class="nf">duplicateEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.duplicateEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">DuplicateCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.updateEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.updateEntry">[docs]</a>    <span class="k">def</span> <span class="nf">updateEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.updateEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">UpdateCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.updateEntryField"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.updateEntryField">[docs]</a>    <span class="k">def</span> <span class="nf">updateEntryField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">fieldName</span><span class="p">,</span> <span class="n">fieldValue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.updateEntryField`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">UpdateCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span><span class="n">entryId</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">fieldName</span><span class="p">,</span> <span class="n">fieldValue</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.deleteEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.deleteEntry">[docs]</a>    <span class="k">def</span> <span class="nf">deleteEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.deleteEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">DeleteCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.previewEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.previewEntry">[docs]</a>    <span class="k">def</span> <span class="nf">previewEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.previewEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">PreviewCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.generateAllKeys"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.generateAllKeys">[docs]</a>    <span class="k">def</span> <span class="nf">generateAllKeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.generateAllKeys`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">GenerateAllKeysCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.validateAllEntries"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.validateAllEntries">[docs]</a>    <span class="k">def</span> <span class="nf">validateAllEntries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.validateAllEntries`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">ValidateAllCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.undo"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.undo`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">UndoCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.hasUndoableActionLeft"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.hasUndoableActionLeft">[docs]</a>    <span class="k">def</span> <span class="nf">hasUndoableActionLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.hasUndoableActionLeft`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">canUndo</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.getEntryPaperURL"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntryPaperURL">[docs]</a>    <span class="k">def</span> <span class="nf">getEntryPaperURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntryPaperURL`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">getFieldValue</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.search"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.search`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">SearchCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.sort"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.sort`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">SortCommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">reverse</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getEntry"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntry">[docs]</a>    <span class="k">def</span> <span class="nf">getEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntry`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toEntryDict</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getContributors"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getContributors">[docs]</a>    <span class="k">def</span> <span class="nf">getContributors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the contributors of an entry.</span>
+<span class="sd">        :type entryId: :class:`int`</span>
+<span class="sd">        :param entryId: The I{id} of the entry. </span>
+<span class="sd">        :rtype: :class:`list` of :class:`app.field.Contributor`</span>
+<span class="sd">        :return: The contributors.</span>
+<span class="sd">        :raises: Exception: If entry not found.</span>
+<span class="sd">        :note: Contributors are not always the authors, they could be the editors or organizers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">getContributors</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getBibTeX"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getBibTeX">[docs]</a>    <span class="k">def</span> <span class="nf">getBibTeX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getBibTeX`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toBibTeX</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.getEntryRequiredFields"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntryRequiredFields">[docs]</a>    <span class="k">def</span> <span class="nf">getEntryRequiredFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntryRequiredFields`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">iterRequiredFields</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.getEntryOptionalFields"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntryOptionalFields">[docs]</a>    <span class="k">def</span> <span class="nf">getEntryOptionalFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntryOptionalFields`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">iterOptionalFields</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BiBlerApp.getEntryAdditionalFields"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntryAdditionalFields">[docs]</a>    <span class="k">def</span> <span class="nf">getEntryAdditionalFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntryAdditionalFields`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">iterAdditionalFields</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getAllEntries"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getAllEntries">[docs]</a>    <span class="k">def</span> <span class="nf">getAllEntries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getAllEntries`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">toEntryDict</span><span class="p">()</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">()]</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getEntryCount"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getEntryCount">[docs]</a>    <span class="k">def</span> <span class="nf">getEntryCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getEntryCount`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getEntryCount</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getSearchResult"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getSearchResult">[docs]</a>    <span class="k">def</span> <span class="nf">getSearchResult</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getSearchResult`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">toEntryDict</span><span class="p">()</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">iterSearchResult</span><span class="p">()]</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.getSearchResultCount"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.getSearchResultCount">[docs]</a>    <span class="k">def</span> <span class="nf">getSearchResultCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.getSearchResultCount`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">getSearchResultCount</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.iterAllEntries"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.iterAllEntries">[docs]</a>    <span class="k">def</span> <span class="nf">iterAllEntries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.iterAllEntries`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">entry</span><span class="o">.</span><span class="n">toEntryDict</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="BiBlerApp.iterSearchResult"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.iterSearchResult">[docs]</a>    <span class="k">def</span> <span class="nf">iterSearchResult</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @see: :class:`gui.app_interface.IApplication.iterSearchResult`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">iterSearchResult</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">entry</span><span class="o">.</span><span class="n">toEntryDict</span><span class="p">()</span></div>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BiBlerApp.formatBibTeX"><a class="viewcode-back" href="../../BiBlerApp.html#app.user_interface.BiBlerApp.formatBibTeX">[docs]</a>    <span class="k">def</span> <span class="nf">formatBibTeX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses a BibTeX string, formats it according to the standard, and returns it.</span>
+<span class="sd">        :type bibtex: :class:`str`</span>
+<span class="sd">        :param bibtex: The BibTeX string.</span>
+<span class="sd">        :rtype: :class:`str`</span>
+<span class="sd">        :return: If parsed successfully, returns the formatted string, otherwise returns :class:`&#39;&#39;`.</span>
+<span class="sd">        :raises: Exception: If the provided BibTeX is invalid.</span>
+<span class="sd">        @see: :class:`BibTeXParser` for supported formats.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BibTeXParser</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span><span class="o">.</span><span class="n">toBibTeX</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

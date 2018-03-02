@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class HTMLExporter &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class MySQLExporter" href="MySQLExporter.html" />
+    <link rel="prev" title="Class CSVExporter" href="CSVExporter.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MySQLExporter.html" title="Class MySQLExporter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CSVExporter.html" title="Class CSVExporter"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="impex.html" accesskey="U">Module Impex</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-htmlexporter">
+<h1>Class HTMLExporter<a class="headerlink" href="#class-htmlexporter" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.impex.HTMLExporter">
+<em class="property">class </em><code class="descclassname">app.impex.</code><code class="descname">HTMLExporter</code><span class="sig-paren">(</span><em>path</em>, <em>entries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/impex.html#HTMLExporter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.impex.HTMLExporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Exporter.html#app.impex.Exporter" title="app.impex.Exporter"><code class="xref py py-class docutils literal"><span class="pre">app.impex.Exporter</span></code></a></p>
+<p>Export a list of <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">Entries</span></code></a> to an HTML file in the default style.</p>
+<dl class="method">
+<dt id="app.impex.HTMLExporter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>path</em>, <em>entries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/impex.html#HTMLExporter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.impex.HTMLExporter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) &#8211; The path to a file.</li>
+<li><strong>entries</strong> (list of <a class="reference internal" href="EntryClass.html#app.entry.Entry" title="app.entry.Entry"><code class="xref py py-class docutils literal"><span class="pre">app.entry.Entry</span></code></a>) &#8211; The list of entries to export.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.impex.HTMLExporter._exportEntry">
+<code class="descname">_exportEntry</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/impex.html#HTMLExporter._exportEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.impex.HTMLExporter._exportEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export to HTML following the default style.
+:rtype: <code class="xref py py-class docutils literal"><span class="pre">int</span></code>
+:return: The total number of entries successfully exported.
+:raises: Exception: If an error occurred during the export process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.impex.HTMLExporter._postprocess">
+<code class="descname">_postprocess</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/impex.html#HTMLExporter._postprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.impex.HTMLExporter._postprocess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.impex.HTMLExporter._preprocess">
+<code class="descname">_preprocess</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/impex.html#HTMLExporter._preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.impex.HTMLExporter._preprocess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CSVExporter.html"
+                        title="previous chapter">Class CSVExporter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="MySQLExporter.html"
+                        title="next chapter">Class MySQLExporter</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/HTMLExporter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MySQLExporter.html" title="Class MySQLExporter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CSVExporter.html" title="Class CSVExporter"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="app.html" >Package app</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="impex.html" >Module Impex</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

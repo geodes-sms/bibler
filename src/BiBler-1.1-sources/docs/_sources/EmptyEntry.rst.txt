@@ -1,0 +1,9 @@
+
+Class EmptyEntry
+================
+.. autoclass:: app.entry.EmptyEntry
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

@@ -1,0 +1,9 @@
+
+Class Unpublished
+=================
+.. autoclass:: app.entry.Unpublished
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

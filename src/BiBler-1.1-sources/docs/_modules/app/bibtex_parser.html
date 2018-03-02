@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.bibtex_parser &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.bibtex_parser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+<span class="sd">.. moduleauthor:: Florin Oncica </span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module represents the BiTeX parser.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+<span class="kn">from</span> <span class="nn">app.entry</span> <span class="k">import</span> <span class="n">EmptyEntry</span>
+<span class="kn">from</span> <span class="nn">app.entry_type</span> <span class="k">import</span> <span class="n">EntryType</span>
+<span class="kn">from</span> <span class="nn">app.field_name</span> <span class="k">import</span> <span class="n">FieldName</span>
+<span class="kn">from</span> <span class="nn">app.field</span> <span class="k">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">utils.settings</span> <span class="k">import</span> <span class="n">Preferences</span>
+<span class="c1">#from docutils.parsers.rst.directives import encoding</span>
+
+
+<div class="viewcode-block" id="BibTeXParserWithStdFields"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields">[docs]</a><span class="k">class</span> <span class="nc">BibTeXParserWithStdFields</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as :class:`BibTeXParser &lt;app.bibtex_parser.BibTeXParser&gt;` but only looks at standard fields in the BibTeX entry.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BibTeXParserWithStdFields.__init__"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">           </span>
+<span class="sd">        :param bibtex: The BibTeX string.</span>
+<span class="sd">        :type bibtex: str.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#bibtex = bibtex.decode(&#39;utf-8&#39;,&#39;replace&#39;)   # make sure the text is in utf-8 encoding</span>
+        <span class="n">bibtex</span> <span class="o">=</span> <span class="n">bibtex</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;{stubKey,</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>   <span class="c1"># if key is missing</span>
+        <span class="n">bibtex</span> <span class="o">=</span> <span class="n">bibtex</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\xdf</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;{\ss}&#39;</span><span class="p">)</span>   <span class="c1"># unicodedata ignores \ss</span>
+        <span class="n">bibtex</span> <span class="o">=</span> <span class="n">bibtex</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\xf8</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">o&#39;</span><span class="p">)</span>     <span class="c1"># unicodedata ignores \\o</span>
+        <span class="n">bibtex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__unicodeToTex</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span>
+        <span class="c1">#bibtex = unicodedata.normalize(&#39;NFKD&#39;, bibtex).encode(encoding=&#39;ascii&#39;, errors=&#39;ignore&#39;)  # replace unicode characters with their ASCII approximation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span> <span class="o">=</span> <span class="n">bibtex</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>         <span class="c1"># remove all spaces and new lines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;=\s*</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;= {&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">)</span>      <span class="c1"># replace all double quotes that delimit the beginning of a field value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1">\s*,&#39;</span><span class="p">,</span> <span class="s1">&#39;},&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">)</span>       <span class="c1"># replace all double quotes that delimit the end of a field value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">re_header</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;\s*@(\w+)\s*[({]\s*(\w*)\s*&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">__unicodeToTex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bibtex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;   </span>
+<span class="sd">        :param bibtex: The BibTeX string.</span>
+<span class="sd">        :type bibtex: str</span>
+<span class="sd">        :returns: str -- The transformed BibTeX string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">funnychars</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\xc1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc0</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe0</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc2</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe2</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc4</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe4</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc3</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xe3</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc5</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe5</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc6</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe6</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc7</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe7</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd0</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf0</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc9</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xe9</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xc8</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xe8</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xca</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xea</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xcb</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xeb</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xcd</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xed</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xcc</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xec</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xce</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xee</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xcf</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xef</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd3</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf3</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd2</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xf2</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd4</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf4</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd6</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf6</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd5</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf5</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd8</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf8</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xdf</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xde</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xfe</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xda</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xfa</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd9</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf9</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xdb</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xfb</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xdc</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xfc</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xdd</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xfd</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xff</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xa9</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xae</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u2122</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u20ac</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xa2</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xa3</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u2018</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\u2019</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u201c</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u201d</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xab</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xbb</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u2014</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u2013</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xb0</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xb1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xbc</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;</span><span class="se">\xbd</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xbe</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xd7</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\xf7</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u03b1</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u03b2</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\u221e</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="n">bibtexcodes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{a}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{a}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{a}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{a}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\~</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;\~</span><span class="si">{a}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\AA&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">aa&#39;</span><span class="p">,</span> <span class="s1">&#39;\AE&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">ae&#39;</span><span class="p">,</span> <span class="s1">&#39;\c</span><span class="si">{C}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\c</span><span class="si">{c}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\DJ&#39;</span><span class="p">,</span> <span class="s1">&#39;\dj&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{E}</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{E}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{E}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{E}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{I}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{i}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{I}</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;\`</span><span class="si">{i}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{I}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{i}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{I}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{i}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\~</span><span class="si">{N}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\~</span><span class="si">{n}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{O}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{o}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{O}</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;\`</span><span class="si">{o}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{O}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{o}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{O}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{o}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\~</span><span class="si">{O}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\~</span><span class="si">{o}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\O&#39;</span><span class="p">,</span> <span class="s1">&#39;\o&#39;</span><span class="p">,</span> <span class="s1">&#39;\ss&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textThorn&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textthorn&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{U}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\&#39;</span><span class="si">{u}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{U}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{u}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{U}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\^</span><span class="si">{u}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{U}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{u}</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;\`</span><span class="si">{Y}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\`</span><span class="si">{y}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{y}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\copyright&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textregistered&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">texttrademark&#39;</span><span class="p">,</span> <span class="s1">&#39;\euro</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;\cent&#39;</span><span class="p">,</span> <span class="s1">&#39;\pounds&#39;</span><span class="p">,</span> <span class="s1">&#39;`&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;``&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\&#39;\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;\emdash&#39;</span><span class="p">,</span> <span class="s1">&#39;\endash&#39;</span><span class="p">,</span> <span class="s1">&#39;\degree&#39;</span><span class="p">,</span> <span class="s1">&#39;\pm&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textonequarter&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textonehalf&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textthreequarters&#39;</span><span class="p">,</span> <span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">times$&#39;</span><span class="p">,</span> <span class="s1">&#39;$\div$&#39;</span><span class="p">,</span> <span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">alpha$&#39;</span><span class="p">,</span> <span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">beta$&#39;</span><span class="p">,</span> <span class="s1">&#39;$\infty$&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bibtexcodes</span><span class="p">)):</span>
+            <span class="n">chars</span><span class="p">[</span><span class="n">funnychars</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bibtexcodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">chars</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">bibtex</span> <span class="o">=</span> <span class="n">bibtex</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">chars</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">bibtex</span>
+
+
+<div class="viewcode-block" id="BibTeXParserWithStdFields.parse"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses the string into an :class:`Entry &lt;app.entry.Entry&gt;`</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: :class:`Entry &lt;app.entry.Entry&gt;`</span>
+<span class="sd">        The entry object corresponding to its type. The default is :class:`EmptyEntry &lt;app.entry.EmptyEntry&gt;`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseEntryHeader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseFields</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry</span></div>
+    
+<div class="viewcode-block" id="BibTeXParserWithStdFields.parseEntryHeader"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields.parseEntryHeader">[docs]</a>    <span class="k">def</span> <span class="nf">parseEntryHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the type of the entry and its key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 1. Get the type of entry</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entry</span> <span class="o">=</span> <span class="n">EmptyEntry</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">re_header</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid BibTeX.&#39;</span><span class="p">)</span>
+        <span class="n">entryType</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span> <span class="o">=</span> <span class="n">EntryType</span><span class="o">.</span><span class="n">creatEntry</span><span class="p">(</span><span class="n">entryType</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="p">,</span> <span class="n">EmptyEntry</span><span class="p">):</span>            
+            <span class="c1"># 2. Get the key</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">setKey</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="BibTeXParserWithStdFields.parseFields"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields.parseFields">[docs]</a>    <span class="k">def</span> <span class="nf">parseFields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse all the fields of the entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">iterAllFields</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findField</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">setField</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">getName</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">formatField</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span></div>
+        
+<div class="viewcode-block" id="BibTeXParserWithStdFields.findField"><a class="viewcode-back" href="../../BibTeXParserWithStdFields.html#app.bibtex_parser.BibTeXParserWithStdFields.findField">[docs]</a>    <span class="k">def</span> <span class="nf">findField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the value of a field.</span>
+<span class="sd">             </span>
+<span class="sd">        :param field: The field.</span>
+<span class="sd">        :type field: str</span>
+<span class="sd">        :return: str -- The value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;{&#39;</span>
+        <span class="n">inv_sep</span> <span class="o">=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;,\s*(&quot;&quot;&quot;</span> <span class="o">+</span> <span class="n">field</span> <span class="o">+</span> <span class="s2">&quot;&quot;&quot;)\s*=\s*\{\s*(.*)\s*\}\s*,?&quot;&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="o">|</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parseNested</span><span class="p">(</span><span class="n">sep</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">inv_sep</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span> <span class="n">inv_sep</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;\s+&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+    
+    <span class="k">def</span> <span class="nf">__parseNested</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">inv_separator</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the string delimited within separators, even if the same separators are used inside the string.</span>
+<span class="sd">        </span>
+<span class="sd">        :param s: The string.</span>
+<span class="sd">        :type s: str</span>
+<span class="sd">        </span>
+<span class="sd">        :param separator: The opening separator.</span>
+<span class="sd">        :type separator: str</span>
+<span class="sd">        </span>
+<span class="sd">        :type inv_separator: str</span>
+<span class="sd">        :param inv_separator: The closing separator.</span>
+<span class="sd">        </span>
+<span class="sd">        :type level: str</span>
+<span class="sd">        :param level: The level of nesting for finding the string to return.</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: str -- The result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">separator</span><span class="p">)]</span> <span class="o">==</span> <span class="n">separator</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">inv_separator</span><span class="p">)]</span> <span class="o">==</span> <span class="n">inv_separator</span><span class="p">):</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">inv_separator</span><span class="p">)]</span> <span class="o">==</span> <span class="n">inv_separator</span> <span class="ow">and</span> <span class="n">stack</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="n">level</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span> <span class="n">i</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BibTeXParserWithNonStdFields"><a class="viewcode-back" href="../../BibTeXParserWithNonStdFields.html#app.bibtex_parser.BibTeXParserWithNonStdFields">[docs]</a><span class="k">class</span> <span class="nc">BibTeXParserWithNonStdFields</span><span class="p">(</span><span class="n">BibTeXParserWithStdFields</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as :class:`BibTeXParser &lt;app.bibtex_parser.BibTeXParser&gt;` but allows for additional non-standard fields in the BibTeX entry.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BibTeXParserWithNonStdFields.__init__"><a class="viewcode-back" href="../../BibTeXParserWithNonStdFields.html#app.bibtex_parser.BibTeXParserWithNonStdFields.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">           </span>
+<span class="sd">        :param bibtex: The BibTeX string.</span>
+<span class="sd">        :type bibtex: str.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BibTeXParserWithNonStdFields</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">re_field_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;},\s*(.*?)\s*=\s*\{&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BibTeXParserWithNonStdFields.parseFields"><a class="viewcode-back" href="../../BibTeXParserWithNonStdFields.html#app.bibtex_parser.BibTeXParserWithNonStdFields.parseFields">[docs]</a>    <span class="k">def</span> <span class="nf">parseFields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse all the fields of the entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">re_field_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bibtex</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findField</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">iterAllFieldNames</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">setField</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">additionalFields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">formatField</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="BibTeXParser"><a class="viewcode-back" href="../../BibTeXParser.html#app.bibtex_parser.BibTeXParser">[docs]</a><span class="k">class</span> <span class="nc">BibTeXParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class responsible for parsing a string written in BibTeX.</span>
+<span class="sd">    The accepted input formats are:</span>
+<span class="sd">        * spaces outside field values are ignored</span>
+<span class="sd">        * key is optional</span>
+<span class="sd">        * field value delimiters can be {} or &quot;</span>
+<span class="sd">        * entry delimiter can be {} or ()</span>
+<span class="sd">        * unicode characters are supported</span>
+<span class="sd">        * in one line:</span>
+<span class="sd">                @TYPE{KEY,field1 = {value1},field2 = {value2}}</span>
+<span class="sd">        * with new lines:</span>
+<span class="sd">                @TYPE{KEY,</span>
+<span class="sd">                    field1 = {value1},</span>
+<span class="sd">                    field2 = {value2}</span>
+<span class="sd">                    }</span>
+<span class="sd">        * with multiline values:</span>
+<span class="sd">                @TYPE{KEY,</span>
+<span class="sd">                    field1 = {value11</span>
+<span class="sd">                    value12</span>
+<span class="sd">                    value13},</span>
+<span class="sd">                    field2 = {value2}</span>
+<span class="sd">                    }</span>
+<span class="sd">        * with nested value delimiters ({} or &quot;):</span>
+<span class="sd">                @TYPE{KEY,field1 = {val{u}e1},field2 = &quot;val&quot;u&quot;e2&quot;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BibTeXParser.__init__"><a class="viewcode-back" href="../../BibTeXParser.html#app.bibtex_parser.BibTeXParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">           </span>
+<span class="sd">        :param bibtex: The BibTeX string.</span>
+<span class="sd">        :type bibtex: str.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">Preferences</span><span class="p">()</span><span class="o">.</span><span class="n">allowNonStandardFields</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">BibTeXParserWithNonStdFields</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">BibTeXParserWithStdFields</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BibTeXParser.parse"><a class="viewcode-back" href="../../BibTeXParser.html#app.bibtex_parser.BibTeXParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

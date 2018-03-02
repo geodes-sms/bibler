@@ -1,0 +1,26 @@
+.. BiBler documentation master file, created by
+   sphinx-quickstart on Fri Nov  4 08:59:37 2016.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to BiBler's documentation!
+###################################
+
+Contents
+***********************************
+.. toctree::
+   :maxdepth: 4
+   
+   Package BiBler <bibler>
+   Package app <app>
+   Package gui <gui>
+   Package utils <utils>
+   Package web <web>
+
+Indices and tables
+###################################
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
