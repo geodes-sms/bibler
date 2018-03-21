@@ -19,7 +19,7 @@ To compile the source code, you need the following dependencies:
 - Sphinx 1.5.1 or later to generate the documentation
 - py2exe 0.9.2.2 (requires Python 3.4 and wxPython_Phoenix for 3.4) to create the executable distribution
 
-The source code is licensed under a [![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)]
+The source code is licensed under a ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
 # Change log
 ## Version BiBler version 1.1
