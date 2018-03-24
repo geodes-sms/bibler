@@ -39,7 +39,7 @@ To compile the source code, you need the following dependencies:
 The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.gnu.org/copyleft/gpl.html) ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
 # Change log
-## Version BiBler version 1.1
+## Version 1.1
 #### By Félix Bélanger-Robillard (9 Apr 2017)
 #### Updated by Eugene Syriani (20 Feb 2018)
 - BiBler is now available as a web service
