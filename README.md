@@ -1,10 +1,25 @@
-# BiBler
+# BiBler ![logo](https://raw.githubusercontent.com/esyriani/bibler/master/src/BiBler-1.1-sources/bibler/utils/resources/bibler.png)
 BiBler is a software for managing references to scientific articles using BibTeX. Not only is it a fully functional software, the tool has been entirely modeled and synthesized in Python. It is used for educational purposes in order to understand how to generate a complete application from UML models in an agile and test-driven environment.
+
+## Features
+
+- Graphical user interface for Windows
+![gui_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/screenshot.png/1)
+- Python library to integrate programmatically
+![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
+- Web service to deploy online
+- Validation against BibTeX standard
+- Import from BibTeX, CSV, or EndNote
+- Export to CSV, HTML, or SQL
+
+# Installation
+If you want to use the graphical user interface, simply download [BiBler](BiBler-1.1/BiBler) as a zip and run [bibler.exe](BiBler-1.1/BiBler/bibler.exe).
+
 
 # Distribution
 This distribution contains the following files and folders:
 - bibler.exe: starts the application in windows mode
-- examples: contains some sample bibtex files
+- examples: contains some sample BibTeX files
 - docs: the source code documentation
 - external: contains files for third-party compatibility
     - BiBler Export.ens: to export an EndNote library to bibtex compatible with BiBler
@@ -24,7 +39,7 @@ The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.g
 # Change log
 ## Version BiBler version 1.1
 #### By Félix Bélanger-Robillard (9 Apr 2017)
-#### By Eugene Syriani (20 Feb 2018)
+#### Updated by Eugene Syriani (20 Feb 2018)
 - BiBler is now available as a web service
 - Added functionalities to integrate BiBler web service in ReLiS
 
