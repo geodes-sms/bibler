@@ -15,7 +15,7 @@ BiBler is a software for managing references to scientific articles using BibTeX
 # Installation
 If you want to use the graphical user interface, simply download [BiBler](BiBler-1.1/BiBler) as a zip and run [bibler.exe](BiBler-1.1/BiBler/bibler.exe).
 
-The [user manual](BiBler-1.1/BiBler/utils/resources/manual.html) is available from the help menu of the tool.
+The [user manual](BiBler-1.1/BiBler/utils/resources/manual.md) is available from the help menu of the tool.
 
 
 # Distribution
