@@ -861,17 +861,16 @@ class BibTeXStringImporter(BibTeXImporter):
         total = 0
         try:
             self.data = self.data.split('\n')
+            entry = ''
             for line in self.data:
-              entry = ''
               if line.startswith('@'):
                   if entry:
                       total += self.add(entry)
                   entry = line
               else:
                   entry += line
-              line = self.database.readline()
-              if entry:
-                  total += self.add(entry)
+            if entry:
+                total += self.add(entry)
         except:
             raise
         
@@ -901,17 +900,16 @@ class EndNoteStringImporter(EndNoteImporter):
         total = 0
         try:
             self.data = self.data.split('\n')
+            entry = ''
             for line in self.data:
-              entry = ''
               if line.startswith('@'):
                   if entry:
                       total += self.add(entry)
                   entry = line
               else:
                   entry += line
-              line = self.database.readline()
-              if entry:
-                  total += self.add(entry)
+            if entry:
+                total += self.add(entry)
         except:
             raise
         

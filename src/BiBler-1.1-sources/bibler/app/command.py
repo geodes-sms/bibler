@@ -315,7 +315,7 @@ class ImportStringCommand(UndoableCommand):
         elif self.importFormat == settings.ImportFormat.ENDNOTE:
             importer = EndNoteStringImporter
         self.total = importer(self.data, self.manager).importFile()
-        return self.total > 0
+        return self.total
     
     def unexecute(self):
         for i in range(self.total):

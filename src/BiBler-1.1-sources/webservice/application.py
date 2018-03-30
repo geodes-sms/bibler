@@ -36,12 +36,15 @@ actuel.
 #-*- coding: utf-8 -*-
 import sys, os
 import urllib.parse
-#abspath = os.path.dirname("Path to directory where web is located")
+import time
+#abspath = os.path.dirname("Path to bibler source")
+abspath = os.path.dirname("/u/relis/public_html/bibler/")
 sys.path.append(abspath)
 os.chdir(abspath)
 import web
 from bibler.utils.settings import ExportFormat, ImportFormat
-#abspath = os.path.dirname("Path to Bibler src")
+#abspath = os.path.dirname("Path to webservice")
+abspath = os.path.dirname("/u/relis/public_html/bibler/webservice/")
 sys.path.append(abspath)
 os.chdir(abspath)
 from bibwrap import BiBlerWrapper
@@ -56,7 +59,7 @@ urls = (
     '/bibtextobibtex/(.*)', 'BibTeXtoBibTeX',
     '/previewentry/(.*)', 'PreviewEntry',
     '/validateentry/(.*)', 'ValidateEntry',
-    '/createrntryforrelis/(.*)', 'CreateEntryForReLiS',
+    '/createentryforrelis/(.*)', 'CreateEntryForReLiS',
     '/importbibtexstringforrelis/(.*)', 'ImportBibTeXStringForReLiS',
     '/importendnotestringforrelis/(.*)', 'ImportEndNoteStringForReLiS',
     '/', 'index'
@@ -120,13 +123,13 @@ class CreateEntryForReLiS:
 class ImportBibTeXStringForReLiS:
     def POST(self,code):
         data = urllib.parse.unquote_plus(web.data().decode())
-        return BiBlerWrapper.importStringForReLiS(self, data, settings.ImportFormat.BIBTEX)
+        return BiBlerWrapper.importStringForReLiS(self, data, ImportFormat.BIBTEX)
         
 # Added by Eugene Syriani on 1/02/2018 for ReLiS integration
 class ImportEndNoteStringForReLiS:
     def POST(self,code):
         data = urllib.parse.unquote_plus(web.data().decode())
-        return BiBlerWrapper.importStringForReLiS(self, data, settings.ImportFormat.ENDNOTE)
+        return BiBlerWrapper.importStringForReLiS(self, data, ImportFormat.ENDNOTE)
         
 web.config.debug = True
 

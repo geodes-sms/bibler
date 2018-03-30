@@ -20,14 +20,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 :Author: Felix Belanger Robillard
 '''
 #-*- coding: utf-8 -*-
-#import sys, os
-#abspath = os.path.dirname("/var/www/ift3150/app/")
-#sys.path.append(abspath)
-#os.chdir(abspath)
+import sys, os
+#abspath = os.path.dirname("Path to bibler")
+abspath = os.path.dirname("/u/relis/public_html/bibler/bibler/")
+sys.path.append(abspath)
+os.chdir(abspath)
 from app.user_interface import BiBlerApp
-from gui.app_interface import EntryListColumn
 import tempfile
-
+import json
+from gui.app_interface import EntryListColumn
 
 class BiBlerWrapper(object):
     @staticmethod
@@ -125,16 +126,18 @@ class BiBlerWrapper(object):
         :return: The result as a dictionary
         :rtype: dict
         '''
+        json_res = {}
         biblerapp=BiBlerWrapper.__getBiblerApp()
         entryId = biblerapp.addEntry(bibtex)
         entry = biblerapp.getEntry(entryId)
-        return BiBlerWrapper.__entryToJSON(entry)
+        json_res = json.dumps(entry)
+        return json_res
 
     # Added by Eugene Syriani on 1/02/2018 for ReLiS integration
     @staticmethod
     def importStringForReLiS(self, data, format):
         '''
-
+ 
         Takes a BibTeX string and outputs a JSON object with the parsed result: validation code and message, the EntryDict, the HTML preview, the BibTeX, the authors, the year, and the venue.
         
         :param str data: The BibTeX string of all entries to be processed.
@@ -143,21 +146,24 @@ class BiBlerWrapper(object):
         :rtype: dict
         '''
         biblerapp=BiBlerWrapper.__getBiblerApp()
-        json = {'error' : '', 'total' : 0}
+        json_res = {'error' : '', 'total' : 0}
         try:
-          total = biblerapp.importString(bibtex_data, format)
-          json['total'] = total
+          total = biblerapp.importString(data, format)
+          json_res['total'] = total
           i = 1
+          papers = []
           for entry in biblerapp.iterAllEntries():
-            json[i] = BiBlerWrapper.__entryToJSON(entry)
-            i += 1
-          return str(json)
+            paper = BiBlerWrapper.__entryToJSON(entry, biblerapp)
+            papers.append(paper)			
+            i += 1			
+          json_res['papers'] = papers
         except Exception as e:
-          json['error'] = str(e)
+          json_res['error'] = str(e)
+        return json.dumps(json_res)
     
     # Added by Eugene Syriani on 1/02/2018 for ReLiS integration
     @staticmethod
-    def __entryToJSON(entry):
+    def __entryToJSON(entry, biblerapp ):
         '''
 
         Convert an entry into JSON.
@@ -165,14 +171,15 @@ class BiBlerWrapper(object):
         :return: The result as a dictionary.
         :rtype: dict
         '''
+        
         json = {}
         json['result_code'] = int(entry[EntryListColumn.Valid])
         json['result_msg'] = entry[EntryListColumn.Message]
         json['entry'] = entry
-        json['preview'] = biblerapp.previewEntry(entryId)
-        json['bibtex'] = biblerapp.getBibTeX(entryId)
+        json['preview'] = biblerapp.previewEntry(entry[EntryListColumn.Id])
+        json['bibtex'] = biblerapp.getBibTeX(entry[EntryListColumn.Id])
         authors = []
-        for c in biblerapp.getContributors(entryId):
+        for c in biblerapp.getContributors(entry[EntryListColumn.Id]):
           a = {}
           a['first_name'] = c.first_name
           a['last_name'] = c.last_name
@@ -180,8 +187,8 @@ class BiBlerWrapper(object):
           a['suffix'] = c.suffix
           authors.append(a)
         json['authors'] = authors
-        json['venue_full'] = biblerapp.getVenue(entryId)
-        return str(json)
+        json['venue_full'] = biblerapp.getVenue(entry[EntryListColumn.Id])
+        return json
 
 
     @staticmethod
