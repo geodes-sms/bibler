@@ -1,0 +1,10 @@
+
+Class DuplicateCommand
+=========================
+
+.. autoclass:: app.command.DuplicateCommand
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

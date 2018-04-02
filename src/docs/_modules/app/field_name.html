@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.field_name &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.field_name</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module represents the field names.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">gui.app_interface</span> <span class="k">import</span> <span class="n">EntryListColumn</span>
+
+<div class="viewcode-block" id="FieldName"><a class="viewcode-back" href="../../FieldNameClass.html#app.field_name.FieldName">[docs]</a><span class="k">class</span> <span class="nc">FieldName</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enum that contains all standard field names as well as additional ones used in BiBler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Address</span> <span class="o">=</span> <span class="s1">&#39;address&#39;</span>
+    <span class="n">Annote</span> <span class="o">=</span> <span class="s1">&#39;annote&#39;</span>
+    <span class="n">Author</span> <span class="o">=</span> <span class="s1">&#39;author&#39;</span>
+    <span class="n">BookTitle</span> <span class="o">=</span> <span class="s1">&#39;booktitle&#39;</span>
+    <span class="n">Chapter</span> <span class="o">=</span> <span class="s1">&#39;chapter&#39;</span>
+    <span class="n">Crossref</span> <span class="o">=</span> <span class="s1">&#39;crossref&#39;</span>
+    <span class="n">DOI</span> <span class="o">=</span> <span class="s1">&#39;doi&#39;</span> 
+    <span class="n">Edition</span> <span class="o">=</span> <span class="s1">&#39;edition&#39;</span>
+    <span class="n">Editor</span> <span class="o">=</span> <span class="s1">&#39;editor&#39;</span>
+    <span class="n">Howpublished</span> <span class="o">=</span> <span class="s1">&#39;howpublished&#39;</span>
+    <span class="n">Institution</span> <span class="o">=</span> <span class="s1">&#39;institution&#39;</span>
+    <span class="n">Journal</span> <span class="o">=</span> <span class="s1">&#39;journal&#39;</span>
+    <span class="n">Key</span> <span class="o">=</span> <span class="s1">&#39;key&#39;</span>
+    <span class="n">Month</span> <span class="o">=</span> <span class="s1">&#39;month&#39;</span>
+    <span class="n">Note</span> <span class="o">=</span> <span class="s1">&#39;note&#39;</span>
+    <span class="n">Number</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span>
+    <span class="n">Organization</span> <span class="o">=</span> <span class="s1">&#39;organization&#39;</span>
+    <span class="n">Pages</span> <span class="o">=</span> <span class="s1">&#39;pages&#39;</span>
+    <span class="n">Publisher</span> <span class="o">=</span> <span class="s1">&#39;publisher&#39;</span>
+    <span class="n">School</span> <span class="o">=</span> <span class="s1">&#39;school&#39;</span>
+    <span class="n">Series</span> <span class="o">=</span> <span class="s1">&#39;series&#39;</span>
+    <span class="n">Title</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span>
+    <span class="n">Type</span> <span class="o">=</span> <span class="s1">&#39;type&#39;</span>
+    <span class="n">Volume</span> <span class="o">=</span> <span class="s1">&#39;volume&#39;</span>
+    <span class="n">Year</span> <span class="o">=</span> <span class="s1">&#39;year&#39;</span>
+    <span class="n">Paper</span> <span class="o">=</span> <span class="s1">&#39;paper&#39;</span>     <span class="c1"># not part of the BibTeX standard</span>
+    <span class="n">Comment</span> <span class="o">=</span> <span class="s1">&#39;comment&#39;</span> <span class="c1"># not part of the BibTeX standard</span>
+    <span class="n">Abstract</span><span class="o">=</span> <span class="s1">&#39;abstract&#39;</span> <span class="c1"># not part of the BibTeX standard</span>
+    
+    <span class="n">__all_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">Abstract</span><span class="p">,</span> <span class="n">Address</span><span class="p">,</span> <span class="n">Annote</span><span class="p">,</span> <span class="n">Author</span><span class="p">,</span> <span class="n">BookTitle</span><span class="p">,</span> <span class="n">Crossref</span><span class="p">,</span>
+             <span class="n">Chapter</span><span class="p">,</span> <span class="n">Edition</span><span class="p">,</span> <span class="n">Editor</span><span class="p">,</span> <span class="n">Howpublished</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span>
+             <span class="n">Journal</span><span class="p">,</span> <span class="n">Key</span><span class="p">,</span> <span class="n">Month</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span>
+             <span class="n">Organization</span><span class="p">,</span> <span class="n">Pages</span><span class="p">,</span> <span class="n">Publisher</span><span class="p">,</span> <span class="n">School</span><span class="p">,</span> <span class="n">Series</span><span class="p">,</span>
+             <span class="n">Title</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Volume</span><span class="p">,</span> <span class="n">Year</span><span class="p">,</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">Comment</span><span class="p">])</span>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FieldName.toEntryListColumn"><a class="viewcode-back" href="../../FieldNameClass.html#app.field_name.FieldName.toEntryListColumn">[docs]</a>    <span class="k">def</span> <span class="nf">toEntryListColumn</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a field name into an entry list column name.</span>
+<span class="sd">        :type field: :class:`FieldName`</span>
+<span class="sd">        :param field: A field name.</span>
+<span class="sd">        :rtype: :class:`gui.app_interface.EntryListColumn`</span>
+<span class="sd">        :return: The corresponding :class:`EntryListColumn&lt;gui.app_interface.EntryListColumn&gt;` name.</span>
+<span class="sd">                 The same name is returned if it is not a valid EntryListColumn name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Author</span><span class="p">:</span> <span class="k">return</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Author</span>
+        <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span><span class="p">:</span> <span class="k">return</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Paper</span>
+        <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Title</span><span class="p">:</span> <span class="k">return</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Title</span>
+        <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Year</span><span class="p">:</span> <span class="k">return</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Year</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">field</span></div>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FieldName.fromEntryListColumn"><a class="viewcode-back" href="../../FieldNameClass.html#app.field_name.FieldName.fromEntryListColumn">[docs]</a>    <span class="k">def</span> <span class="nf">fromEntryListColumn</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a  entry list column name into a field name.</span>
+<span class="sd">        :type column: :class:`gui.app_interface.EntryListColumn`</span>
+<span class="sd">        :param column: A EntryListColumn name.</span>
+<span class="sd">        :rtype: :class:`FieldName`</span>
+<span class="sd">        :return: The corresponding :class:`FieldName` name.</span>
+<span class="sd">                 The same name is returned if it is not a valid :class:`FieldName` name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="o">==</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Author</span><span class="p">:</span> <span class="k">return</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Author</span>
+        <span class="k">elif</span> <span class="n">column</span> <span class="o">==</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Paper</span><span class="p">:</span> <span class="k">return</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span>
+        <span class="k">elif</span> <span class="n">column</span> <span class="o">==</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Title</span><span class="p">:</span> <span class="k">return</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Title</span>
+        <span class="k">elif</span> <span class="n">column</span> <span class="o">==</span> <span class="n">EntryListColumn</span><span class="o">.</span><span class="n">Year</span><span class="p">:</span> <span class="k">return</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">Year</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The column is not an EntryColumnList.&#39;</span><span class="p">)</span></div>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FieldName.getAllFieldNames"><a class="viewcode-back" href="../../FieldNameClass.html#app.field_name.FieldName.getAllFieldNames">[docs]</a>    <span class="k">def</span> <span class="nf">getAllFieldNames</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all field names sorted in alphabetical order.</span>
+<span class="sd">        :rtype: list of :class:`FieldName`</span>
+<span class="sd">        :return: The list of field names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">__all_names</span></div>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FieldName.iterAllFieldNames"><a class="viewcode-back" href="../../FieldNameClass.html#app.field_name.FieldName.iterAllFieldNames">[docs]</a>    <span class="k">def</span> <span class="nf">iterAllFieldNames</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterator over the list of all field names sorted in alphabetical order.</span>
+<span class="sd">        :rtype: ``generator`` of :class:`FieldName`</span>
+<span class="sd">        :return: The list of field names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">__all_names</span><span class="p">:</span> <span class="k">yield</span> <span class="n">name</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

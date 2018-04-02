@@ -1,0 +1,9 @@
+
+Class Manual
+============
+.. autoclass:: app.entry.Manual
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

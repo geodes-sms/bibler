@@ -1,0 +1,10 @@
+
+Class Command
+==================
+
+.. autoclass:: app.command.Command
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

@@ -1,0 +1,18 @@
+
+Module bibtex_parser
+=====================
+   
+.. automodule:: app.bibtex_parser
+
+Imports
+---------------------
+
+Classes
+---------------------
+
+.. toctree::
+   :maxdepth: 2
+   
+   BibTeXParserWithStdFields <BibTeXParserWithStdFields>
+   BibTeXParserWithNonStdFields <BibTeXParserWithNonStdFields>
+   BibTeXParser <BibTeXParser>

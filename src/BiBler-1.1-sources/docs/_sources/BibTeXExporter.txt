@@ -1,9 +1,0 @@
-
-Class BibTeXExporter
-====================
-.. autoclass:: app.impex.BibTeXExporter
-   :members:
-   :undoc-members:
-   :private-members:
-   :show-inheritance:
-   :special-members: __init__

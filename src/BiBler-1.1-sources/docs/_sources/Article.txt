@@ -1,9 +1,0 @@
-
-Class Article
-=============
-.. autoclass:: app.entry.Article
-   :members:
-   :undoc-members:
-   :private-members:
-   :show-inheritance:
-   :special-members: __init__

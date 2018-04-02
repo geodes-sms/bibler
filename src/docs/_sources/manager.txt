@@ -1,0 +1,16 @@
+
+Module Manager
+=====================
+   
+.. automodule:: app.manager
+
+Imports
+---------------------
+
+Classes
+---------------------
+
+.. toctree::
+   :maxdepth: 2
+   
+   ReferenceManager <ReferenceManager>

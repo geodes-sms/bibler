@@ -13,7 +13,7 @@ BiBler is a software for managing references to scientific articles using BibTeX
 - Export to CSV, HTML, or SQL
 
 # Installation
-If you want to use the graphical user interface, simply download [BiBler](BiBler-1.1/BiBler) as a zip and run [bibler.exe](BiBler-1.1/BiBler/bibler.exe).
+If you want to use the graphical user interface, simply download [BiBler.zip](latest/BiBler.zip) as a zip and run [bibler.exe](latest/BiBler/bibler.exe).
 
 The [user manual](BiBler-1.1/BiBler/utils/resources/manual.md) is available from the help menu of the tool.
 
@@ -39,6 +39,10 @@ To compile the source code, you need the following dependencies:
 The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.gnu.org/copyleft/gpl.html) ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
 # Change log
+## Version 1.2
+#### 9 Apr 2017
+- Bug fixes on the GUI and on integration with ReLiS
+
 ## Version 1.1
 #### By Félix Bélanger-Robillard (9 Apr 2017)
 #### Updated by Eugene Syriani (20 Feb 2018)

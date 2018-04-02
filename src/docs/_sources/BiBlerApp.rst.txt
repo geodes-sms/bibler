@@ -1,0 +1,9 @@
+
+Class BiBlerApp
+===============
+.. autoclass:: app.user_interface.BiBlerApp
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.command &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.command</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+<span class="sd">.. moduleauthor:: Florin Oncica </span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module contains all the commands of BiBler.</span>
+<span class="sd">It implements the Command design pattern.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.impex</span> <span class="k">import</span> <span class="n">BibTeXImporter</span><span class="p">,</span> <span class="n">CSVImporter</span><span class="p">,</span> <span class="n">EndNoteImporter</span><span class="p">,</span> <span class="n">BibTeXExporter</span><span class="p">,</span> <span class="n">CSVExporter</span><span class="p">,</span> <span class="n">HTMLExporter</span><span class="p">,</span> <span class="n">MySQLExporter</span><span class="p">,</span> <span class="n">BibTeXStringExporter</span><span class="p">,</span> <span class="n">CSVStringExporter</span><span class="p">,</span> <span class="n">HTMLStringExporter</span><span class="p">,</span> <span class="n">MySQLStringExporter</span>
+<span class="kn">from</span> <span class="nn">.entry</span> <span class="k">import</span> <span class="n">EntryIdGenerator</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">utils.settings</span> <span class="k">import</span> <span class="n">Preferences</span>
+
+
+<div class="viewcode-block" id="CommandExecutor"><a class="viewcode-back" href="../../CommandExecutor.html#app.command.CommandExecutor">[docs]</a><span class="k">class</span> <span class="nc">CommandExecutor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CommandExecutor.__init__"><a class="viewcode-back" href="../../CommandExecutor.html#app.command.CommandExecutor.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span> <span class="o">=</span> <span class="p">[]</span></div>
+    
+<div class="viewcode-block" id="CommandExecutor.execute"><a class="viewcode-back" href="../../CommandExecutor.html#app.command.CommandExecutor.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">OpenCommand</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__history</span> <span class="o">=</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>    <span class="c1"># cannot undo further than the last open command</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">UndoableCommand</span><span class="p">):</span>
+            <span class="c1"># Only add undoable commands to history and only after command is complete</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+    
+<div class="viewcode-block" id="CommandExecutor.canUndo"><a class="viewcode-back" href="../../CommandExecutor.html#app.command.CommandExecutor.canUndo">[docs]</a>    <span class="k">def</span> <span class="nf">canUndo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="CommandExecutor.undo"><a class="viewcode-back" href="../../CommandExecutor.html#app.command.CommandExecutor.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">canUndo</span><span class="p">():</span>
+            <span class="n">last_command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">last_command</span><span class="o">.</span><span class="n">unexecute</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="Command"><a class="viewcode-back" href="../../CommandClass.html#app.command.Command">[docs]</a><span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Command.__init__"><a class="viewcode-back" href="../../CommandClass.html#app.command.Command.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span></div></div>
+
+
+<div class="viewcode-block" id="UndoableCommand"><a class="viewcode-back" href="../../UndoableCommand.html#app.command.UndoableCommand">[docs]</a><span class="k">class</span> <span class="nc">UndoableCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="UndoableCommand.__init__"><a class="viewcode-back" href="../../UndoableCommand.html#app.command.UndoableCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UndoCommand"><a class="viewcode-back" href="../../UndoCommand.html#app.command.UndoCommand">[docs]</a><span class="k">class</span> <span class="nc">UndoCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="UndoCommand.__init__"><a class="viewcode-back" href="../../UndoCommand.html#app.command.UndoCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoker</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UndoCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">invoker</span> <span class="o">=</span> <span class="n">invoker</span></div>
+    
+<div class="viewcode-block" id="UndoCommand.execute"><a class="viewcode-back" href="../../UndoCommand.html#app.command.UndoCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoker</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="PreviewCommand"><a class="viewcode-back" href="../../PreviewCommand.html#app.command.PreviewCommand">[docs]</a><span class="k">class</span> <span class="nc">PreviewCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="PreviewCommand.__init__"><a class="viewcode-back" href="../../PreviewCommand.html#app.command.PreviewCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PreviewCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span> <span class="o">=</span> <span class="n">entryId</span></div>
+    
+<div class="viewcode-block" id="PreviewCommand.execute"><a class="viewcode-back" href="../../PreviewCommand.html#app.command.PreviewCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Preferences</span><span class="p">()</span><span class="o">.</span><span class="n">bibStyle</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">BibStyle</span><span class="o">.</span><span class="n">ACM</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toCompleteHtmlACM</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toCompleteHtmlDefault</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;entry not found.&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ExportCommand"><a class="viewcode-back" href="../../ExportCommand.html#app.command.ExportCommand">[docs]</a><span class="k">class</span> <span class="nc">ExportCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="ExportCommand.__init__"><a class="viewcode-back" href="../../ExportCommand.html#app.command.ExportCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExportCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">=</span> <span class="n">exportFormat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="ExportCommand.execute"><a class="viewcode-back" href="../../ExportCommand.html#app.command.ExportCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">BIBTEX</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">BibTeXExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">CSV</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">CSVExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">HTML</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">HTMLExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">SQL</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">MySQLExporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">exporter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">())</span><span class="o">.</span><span class="n">export</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span></div></div>
+
+<span class="k">class</span> <span class="nc">ExportStringCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">exportFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExportStringCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">=</span> <span class="n">exportFormat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">BIBTEX</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">BibTeXStringExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">CSV</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">CSVStringExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">HTML</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">HTMLStringExporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ExportFormat</span><span class="o">.</span><span class="n">SQL</span><span class="p">:</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">MySQLStringExporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">exporter</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">())</span><span class="o">.</span><span class="n">export</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span>
+
+<div class="viewcode-block" id="GenerateAllKeysCommand"><a class="viewcode-back" href="../../GenerateAllKeysCommand.html#app.command.GenerateAllKeysCommand">[docs]</a><span class="k">class</span> <span class="nc">GenerateAllKeysCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="GenerateAllKeysCommand.__init__"><a class="viewcode-back" href="../../GenerateAllKeysCommand.html#app.command.GenerateAllKeysCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GenerateAllKeysCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GenerateAllKeysCommand.execute"><a class="viewcode-back" href="../../GenerateAllKeysCommand.html#app.command.GenerateAllKeysCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">generateAllKeys</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="ValidateAllCommand"><a class="viewcode-back" href="../../ValidateAllCommand.html#app.command.ValidateAllCommand">[docs]</a><span class="k">class</span> <span class="nc">ValidateAllCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="ValidateAllCommand.__init__"><a class="viewcode-back" href="../../ValidateAllCommand.html#app.command.ValidateAllCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ValidateAllCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ValidateAllCommand.execute"><a class="viewcode-back" href="../../ValidateAllCommand.html#app.command.ValidateAllCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># True is automatically cast to 1 and False to 0</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">entry</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">()])</span></div></div>
+
+
+<div class="viewcode-block" id="SearchCommand"><a class="viewcode-back" href="../../SearchCommand.html#app.command.SearchCommand">[docs]</a><span class="k">class</span> <span class="nc">SearchCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<div class="viewcode-block" id="SearchCommand.__init__"><a class="viewcode-back" href="../../SearchCommand.html#app.command.SearchCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SearchCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span></div>
+    
+<div class="viewcode-block" id="SearchCommand.execute"><a class="viewcode-back" href="../../SearchCommand.html#app.command.SearchCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AddCommand"><a class="viewcode-back" href="../../AddCommand.html#app.command.AddCommand">[docs]</a><span class="k">class</span> <span class="nc">AddCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="AddCommand.__init__"><a class="viewcode-back" href="../../AddCommand.html#app.command.AddCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">entryType</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AddCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryBibTeX</span> <span class="o">=</span> <span class="n">entryBibTeX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryType</span> <span class="o">=</span> <span class="n">entryType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span> <span class="o">=</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="AddCommand.execute"><a class="viewcode-back" href="../../AddCommand.html#app.command.AddCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryBibTeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entryType</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span></div>
+    
+<div class="viewcode-block" id="AddCommand.unexecute"><a class="viewcode-back" href="../../AddCommand.html#app.command.AddCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DeleteCommand"><a class="viewcode-back" href="../../DeleteCommand.html#app.command.DeleteCommand">[docs]</a><span class="k">class</span> <span class="nc">DeleteCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="DeleteCommand.__init__"><a class="viewcode-back" href="../../DeleteCommand.html#app.command.DeleteCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DeleteCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span> <span class="o">=</span> <span class="n">entryId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntry</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryIndex</span> <span class="o">=</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="DeleteCommand.execute"><a class="viewcode-back" href="../../DeleteCommand.html#app.command.DeleteCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">originalEntry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">originalEntry</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="DeleteCommand.unexecute"><a class="viewcode-back" href="../../DeleteCommand.html#app.command.DeleteCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">insertAt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">originalEntryIndex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">originalEntry</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DuplicateCommand"><a class="viewcode-back" href="../../DuplicateCommand.html#app.command.DuplicateCommand">[docs]</a><span class="k">class</span> <span class="nc">DuplicateCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="DuplicateCommand.__init__"><a class="viewcode-back" href="../../DuplicateCommand.html#app.command.DuplicateCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">originalEntryId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DuplicateCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryId</span> <span class="o">=</span> <span class="n">originalEntryId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duplicatedEntryId</span> <span class="o">=</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="DuplicateCommand.execute"><a class="viewcode-back" href="../../DuplicateCommand.html#app.command.DuplicateCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duplicatedEntryId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">originalEntryId</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duplicatedEntryId</span></div>
+    
+<div class="viewcode-block" id="DuplicateCommand.unexecute"><a class="viewcode-back" href="../../DuplicateCommand.html#app.command.DuplicateCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duplicatedEntryId</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UpdateCommand"><a class="viewcode-back" href="../../UpdateCommand.html#app.command.UpdateCommand">[docs]</a><span class="k">class</span> <span class="nc">UpdateCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="UpdateCommand.__init__"><a class="viewcode-back" href="../../UpdateCommand.html#app.command.UpdateCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">entryBibTeX</span><span class="p">,</span> <span class="n">fieldName</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fieldValue</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UpdateCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oldBibTeX</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newBibTeX</span> <span class="o">=</span> <span class="n">entryBibTeX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryId</span> <span class="o">=</span> <span class="n">entryId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fieldName</span> <span class="o">=</span> <span class="n">fieldName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fieldValue</span> <span class="o">=</span> <span class="n">fieldValue</span></div>
+    
+<div class="viewcode-block" id="UpdateCommand.execute"><a class="viewcode-back" href="../../UpdateCommand.html#app.command.UpdateCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oldBibTeX</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">toBibTeX</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fieldName</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldValue</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">newBibTeX</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">updateEntryField</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldName</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fieldValue</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="UpdateCommand.unexecute"><a class="viewcode-back" href="../../UpdateCommand.html#app.command.UpdateCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">oldBibTeX</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ImportCommand"><a class="viewcode-back" href="../../ImportCommand.html#app.command.ImportCommand">[docs]</a><span class="k">class</span> <span class="nc">ImportCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="ImportCommand.__init__"><a class="viewcode-back" href="../../ImportCommand.html#app.command.ImportCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">importFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ImportCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">importFormat</span> <span class="o">=</span> <span class="n">importFormat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">EntryIdGenerator</span><span class="p">()</span><span class="o">.</span><span class="n">getLastId</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="ImportCommand.execute"><a class="viewcode-back" href="../../ImportCommand.html#app.command.ImportCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">importFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ImportFormat</span><span class="o">.</span><span class="n">BIBTEX</span><span class="p">:</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="n">BibTeXImporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">importFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ImportFormat</span><span class="o">.</span><span class="n">CSV</span><span class="p">:</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="n">CSVImporter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">importFormat</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ImportFormat</span><span class="o">.</span><span class="n">ENDNOTE</span><span class="p">:</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="n">EndNoteImporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">importer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="p">)</span><span class="o">.</span><span class="n">importFile</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="ImportCommand.unexecute"><a class="viewcode-back" href="../../ImportCommand.html#app.command.ImportCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastId</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">getEntry</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="OpenCommand"><a class="viewcode-back" href="../../OpenCommand.html#app.command.OpenCommand">[docs]</a><span class="k">class</span> <span class="nc">OpenCommand</span><span class="p">(</span><span class="n">ImportCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCommand.__init__"><a class="viewcode-back" href="../../OpenCommand.html#app.command.OpenCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">openFormat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">openFormat</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="OpenCommand.execute"><a class="viewcode-back" href="../../OpenCommand.html#app.command.OpenCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">deleteAll</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="OpenCommand.unexecute"><a class="viewcode-back" href="../../OpenCommand.html#app.command.OpenCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">deleteAll</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="SortCommand"><a class="viewcode-back" href="../../SortCommand.html#app.command.SortCommand">[docs]</a><span class="k">class</span> <span class="nc">SortCommand</span><span class="p">(</span><span class="n">UndoableCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="SortCommand.__init__"><a class="viewcode-back" href="../../SortCommand.html#app.command.SortCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Constructor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SortCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="n">field</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryOrder</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># keeps the ids in the order they were</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalSearchResultOrder</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># keeps the ids in the order they were</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span> <span class="o">=</span> <span class="n">reverse</span></div>
+    
+<div class="viewcode-block" id="SortCommand.execute"><a class="viewcode-back" href="../../SortCommand.html#app.command.SortCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryOrder</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">iterEntries</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">originalSearchResultOrder</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">getId</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">iterSearchResult</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span><span class="p">)</span> </div>
+    
+<div class="viewcode-block" id="SortCommand.unexecute"><a class="viewcode-back" href="../../SortCommand.html#app.command.SortCommand.unexecute">[docs]</a>    <span class="k">def</span> <span class="nf">unexecute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entryList</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">originalEntryOrder</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">getId</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">searchResult</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">originalSearchResultOrder</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">getId</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

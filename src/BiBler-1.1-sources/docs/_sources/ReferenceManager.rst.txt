@@ -1,9 +1,0 @@
-
-Class ReferenceManager
-======================
-.. autoclass:: app.manager.ReferenceManager
-   :members:
-   :undoc-members:
-   :private-members:
-   :show-inheritance:
-   :special-members: __init__

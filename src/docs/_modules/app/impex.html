@@ -1,0 +1,915 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app.impex &#8212; BiBler 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/..\..\utils\resources\favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.impex</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. moduleauthor:: Eugene Syriani</span>
+
+<span class="sd">.. versionadded:: 1.0</span>
+
+<span class="sd">Created on Nov 09, 2016</span>
+
+<span class="sd">This module represents the importers and exporters.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.field_name</span> <span class="k">import</span> <span class="n">FieldName</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">settings</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">utils.settings</span> <span class="k">import</span> <span class="n">Preferences</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">type</span>
+
+
+<div class="viewcode-block" id="ImpEx"><a class="viewcode-back" href="../../ImpExClass.html#app.impex.ImpEx">[docs]</a><span class="k">class</span> <span class="nc">ImpEx</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The abstract class for importing or exporting.</span>
+<span class="sd">    Every Impex has a :class:`path` to the database file and a :class:`database` file handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ImpEx.__init__"><a class="viewcode-back" href="../../ImpExClass.html#app.impex.ImpEx.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="kc">None</span></div>
+    
+<div class="viewcode-block" id="ImpEx.openDB"><a class="viewcode-back" href="../../ImpExClass.html#app.impex.ImpEx.openDB">[docs]</a>    <span class="k">def</span> <span class="nf">openDB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open the database in a specific mode.</span>
+<span class="sd">        :type mode: :class:`str`</span>
+<span class="sd">        :param mode: Any mode support by python `open&lt;https://docs.python.org/3.5/library/functions.html#open&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Cannot open the requested file.&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ImpEx.closeDB"><a class="viewcode-back" href="../../ImpExClass.html#app.impex.ImpEx.closeDB">[docs]</a>    <span class="k">def</span> <span class="nf">closeDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+
+<div class="viewcode-block" id="Exporter"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter">[docs]</a><span class="k">class</span> <span class="nc">Exporter</span><span class="p">(</span><span class="n">ImpEx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a specified format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Exporter.__init__"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span></div>
+    
+<div class="viewcode-block" id="Exporter.export"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The export process.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exportEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_postprocess</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span></div>
+
+<div class="viewcode-block" id="Exporter.write"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Exporter._exportEntry"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter._exportEntry">[docs]</a>    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="Exporter._preprocess"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter._preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="Exporter._postprocess"><a class="viewcode-back" href="../../Exporter.html#app.impex.Exporter._postprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+        
+<div class="viewcode-block" id="BibTeXExporter"><a class="viewcode-back" href="../../BibTeXExporter.html#app.impex.BibTeXExporter">[docs]</a><span class="k">class</span> <span class="nc">BibTeXExporter</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a BibTeX file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BibTeXExporter.__init__"><a class="viewcode-back" href="../../BibTeXExporter.html#app.impex.BibTeXExporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BibTeXExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BibTeXExporter._exportEntry"><a class="viewcode-back" href="../../BibTeXExporter.html#app.impex.BibTeXExporter._exportEntry">[docs]</a>    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to BibTeX.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toBibTeX</span><span class="p">(</span><span class="n">ignoreEmptyField</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+    
+    
+<div class="viewcode-block" id="CSVExporter"><a class="viewcode-back" href="../../CSVExporter.html#app.impex.CSVExporter">[docs]</a><span class="k">class</span> <span class="nc">CSVExporter</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a CSV (tabs) file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CSVExporter.__init__"><a class="viewcode-back" href="../../CSVExporter.html#app.impex.CSVExporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CSVExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="CSVExporter._exportEntry"><a class="viewcode-back" href="../../CSVExporter.html#app.impex.CSVExporter._exportEntry">[docs]</a>    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to CSV (tabs). The first row consists of the field names for each column.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toCSV</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="CSVExporter._preprocess"><a class="viewcode-back" href="../../CSVExporter.html#app.impex.CSVExporter._preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;entrytype</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">iterAllFieldNames</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>    <span class="c1"># headers</span></div></div>
+    
+    
+<div class="viewcode-block" id="HTMLExporter"><a class="viewcode-back" href="../../HTMLExporter.html#app.impex.HTMLExporter">[docs]</a><span class="k">class</span> <span class="nc">HTMLExporter</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to an HTML file in the default style.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="HTMLExporter.__init__"><a class="viewcode-back" href="../../HTMLExporter.html#app.impex.HTMLExporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HTMLExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="HTMLExporter._exportEntry"><a class="viewcode-back" href="../../HTMLExporter.html#app.impex.HTMLExporter._exportEntry">[docs]</a>    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to HTML following the default style.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&lt;li&gt;&#39;</span>
+        <span class="k">if</span> <span class="n">Preferences</span><span class="p">()</span><span class="o">.</span><span class="n">bibStyle</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">BibStyle</span><span class="o">.</span><span class="n">ACM</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="n">entry</span><span class="o">.</span><span class="n">toHtmlACM</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="n">entry</span><span class="o">.</span><span class="n">toHtmlDefault</span><span class="p">()</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">getField</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span><span class="p">)</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">paper</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;&lt;a href=&quot;</span><span class="si">%s</span><span class="s1">&quot; class=&quot;pdfLink&quot;&gt;&amp;nbsp;&amp;nbsp;&lt;/a&gt;&lt;/li&gt;&#39;</span> <span class="o">%</span> <span class="n">paper</span>
+        <span class="k">return</span> <span class="n">txt</span> <span class="o">+</span> <span class="s1">&#39;&lt;/li&gt;&#39;</span></div>
+    
+<div class="viewcode-block" id="HTMLExporter._preprocess"><a class="viewcode-back" href="../../HTMLExporter.html#app.impex.HTMLExporter._preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;html&gt;&lt;head&gt;&lt;style&gt;ol.ref{ list-style-type: none; counter-reset: refCounter; margin-top: 0px; padding: .495% 0 0 0;}ol.ref li:before{ content: &quot;[&quot; counter(refCounter, decimal) &quot;] &quot;; counter-increment: refCounter;}ol.ref li{ display: block; padding-top: .99%;}a.pdfLink{ background: url(&quot;http://image.chromefans.org/fileicons/format/pdf.png&quot;) center right no-repeat; padding-right: 1.48515%; margin-right: .297%; text-decoration: none;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;ref&quot;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="HTMLExporter._postprocess"><a class="viewcode-back" href="../../HTMLExporter.html#app.impex.HTMLExporter._postprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">)</span></div></div>
+    
+    
+<div class="viewcode-block" id="MySQLExporter"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter">[docs]</a><span class="k">class</span> <span class="nc">MySQLExporter</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a MySQL database script.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MySQLExporter.__init__"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MySQLExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">papersPath</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authorsPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">ext</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;_authors&#39;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assignmentsPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">ext</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;_assignments&#39;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span> <span class="o">=</span> <span class="p">{}</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter.exportPapers"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter.exportPapers">[docs]</a>    <span class="k">def</span> <span class="nf">exportPapers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">unique_authors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">papersPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exportEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">papers</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">contributor</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">getContributors</span><span class="p">():</span>
+                    <span class="n">contributor</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">contributor</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">uc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">uc</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">uc</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">unique_authors</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">contributor</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">unique_authors</span><span class="p">,[</span><span class="n">papers</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_postprocess</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">papers</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter.exportAuthors"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter.exportAuthors">[docs]</a>    <span class="k">def</span> <span class="nf">exportAuthors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorsPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;INSERT INTO Author (id, name) VALUES (</span><span class="si">%d</span><span class="s1">, N&#39;</span><span class="si">%s</span><span class="s1">&#39;);</span><span class="se">\n</span><span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">utils</span><span class="o">.</span><span class="n">escapeSQLCharacters</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter.exportAssignments"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter.exportAssignments">[docs]</a>    <span class="k">def</span> <span class="nf">exportAssignments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assignmentsPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;INSERT INTO PaperAuthor (paperId,authorId) VALUES (</span><span class="si">%d</span><span class="s1">, </span><span class="si">%d</span><span class="s1">);</span><span class="se">\n</span><span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter.export"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The export process. It outputs 3 files:</span>
+<span class="sd">            * one for the database tables and the INSERT statements of the papers,</span>
+<span class="sd">            * a second one for the authors,</span>
+<span class="sd">            * and a last one for the paper author assignments.</span>
+<span class="sd">            </span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportPapers</span><span class="p">()</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportAuthors</span><span class="p">()</span>
+        <span class="n">assignments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportAssignments</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">papers</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">authors</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">assignments</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">papers</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter._exportEntry"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter._exportEntry">[docs]</a>    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to a MySQL database script.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toSQL</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="MySQLExporter._preprocess"><a class="viewcode-back" href="../../MySQLExporter.html#app.impex.MySQLExporter._preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># create the database tables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">-- Table for Papers</span>
+<span class="s1">DROP TABLE IF EXISTS Paper;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS Paper (</span>
+<span class="s1">    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,</span>
+<span class="s1">    bibtexKey VARCHAR(100) NOT NULL UNIQUE KEY,</span>
+<span class="s1">    title VARCHAR(200) DEFAULT NULL,</span>
+<span class="s1">    doi VARCHAR(200) DEFAULT NULL,</span>
+<span class="s1">    bibtex longtext NOT NULL,</span>
+<span class="s1">    preview longtext</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+
+<span class="s1">-- Table for Authors</span>
+<span class="s1">DROP TABLE IF EXISTS Author;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS Author (</span>
+<span class="s1">    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,</span>
+<span class="s1">    name VARCHAR(200) NOT NULL UNIQUE KEY</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+
+<span class="s1">-- Table for paper author assignments</span>
+<span class="s1">DROP TABLE IF EXISTS PaperAuthor;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS PaperAuthor (</span>
+<span class="s1">    paperId INT(11) NOT NULL,</span>
+<span class="s1">    authorId INT(11) NOT NULL,</span>
+<span class="s1">    PRIMARY KEY (paperId, authorId),</span>
+<span class="s1">    KEY FK_Paper (paperId),</span>
+<span class="s1">    KEY FK_Author (authorId)</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+<span class="s1">ALTER TABLE PaperAuthor</span>
+<span class="s1">    ADD CONSTRAINT FK_Author FOREIGN KEY (authorId) REFERENCES Author (id),</span>
+<span class="s1">    ADD CONSTRAINT FK_Paper FOREIGN KEY (paperId) REFERENCES Paper (id);</span>
+
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>   </div></div>
+
+<span class="k">class</span> <span class="nc">StringExporter</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a specified format in a string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span> 
+
+    <span class="k">def</span> <span class="nf">openDB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open the database in a specific mode.</span>
+<span class="sd">        :type mode: :class:`str`</span>
+<span class="sd">        :param mode: Any mode support by python `open&lt;https://docs.python.org/3.5/library/functions.html#open&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">closeDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">+=</span><span class="n">output</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The export process.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exportEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_postprocess</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span>
+
+        
+<span class="k">class</span> <span class="nc">BibTeXStringExporter</span><span class="p">(</span><span class="n">StringExporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a BibTeX file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BibTeXStringExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to BibTeX.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toBibTeX</span><span class="p">(</span><span class="n">ignoreEmptyField</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+
+<span class="k">class</span> <span class="nc">CSVStringExporter</span><span class="p">(</span><span class="n">StringExporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a CSV formatted String.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CSVStringExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to CSV (tabs). The first row consists of the field names for each column.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toCSV</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;entrytype</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">iterAllFieldNames</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>    <span class="c1"># headers</span>
+    
+    
+<span class="k">class</span> <span class="nc">HTMLStringExporter</span><span class="p">(</span><span class="n">StringExporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to an HTML file in the default style as a String.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HTMLStringExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to HTML following the default style.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&lt;li&gt;&#39;</span>
+        <span class="k">if</span> <span class="n">Preferences</span><span class="p">()</span><span class="o">.</span><span class="n">bibStyle</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">BibStyle</span><span class="o">.</span><span class="n">ACM</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="n">entry</span><span class="o">.</span><span class="n">toHtmlACM</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="n">entry</span><span class="o">.</span><span class="n">toHtmlDefault</span><span class="p">()</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">getField</span><span class="p">(</span><span class="n">FieldName</span><span class="o">.</span><span class="n">Paper</span><span class="p">)</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">paper</span><span class="p">:</span>
+            <span class="n">txt</span> <span class="o">+=</span> <span class="s1">&#39;&lt;a href=&quot;</span><span class="si">%s</span><span class="s1">&quot; class=&quot;pdfLink&quot;&gt;&amp;nbsp;&amp;nbsp;&lt;/a&gt;&lt;/li&gt;&#39;</span> <span class="o">%</span> <span class="n">paper</span>
+        <span class="k">return</span> <span class="n">txt</span> <span class="o">+</span> <span class="s1">&#39;&lt;/li&gt;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;html&gt;&lt;head&gt;&lt;style&gt;ol.ref{ list-style-type: none; counter-reset: refCounter; margin-top: 0px; padding: .495% 0 0 0;}ol.ref li:before{ content: &quot;[&quot; counter(refCounter, decimal) &quot;] &quot;; counter-increment: refCounter;}ol.ref li{ display: block; padding-top: .99%;}a.pdfLink{ background: url(&quot;http://image.chromefans.org/fileicons/format/pdf.png&quot;) center right no-repeat; padding-right: 1.48515%; margin-right: .297%; text-decoration: none;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;ref&quot;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">)</span>
+    
+    
+<span class="k">class</span> <span class="nc">MySQLStringExporter</span><span class="p">(</span><span class="n">StringExporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export a list of :class:`Entries&lt;app.entry.Entry&gt;` to a MySQL database script as String.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type entries: list of :class:`app.entry.Entry`</span>
+<span class="sd">        :param entries: The list of entries to export.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MySQLStringExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">papersPath</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authorsPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">ext</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;_authors&#39;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assignmentsPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">ext</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;_assignments&#39;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span> <span class="o">=</span> <span class="p">{}</span>
+        
+    <span class="k">def</span> <span class="nf">exportPapers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">unique_authors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">papersPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exportEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">papers</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">contributor</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">getContributors</span><span class="p">():</span>
+                    <span class="n">contributor</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">contributor</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">uc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">contributor</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">uc</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">uc</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">unique_authors</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">contributor</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">unique_authors</span><span class="p">,[</span><span class="n">papers</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_postprocess</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">papers</span>
+    
+    <span class="k">def</span> <span class="nf">exportAuthors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorsPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;INSERT INTO Author (id, name) VALUES (</span><span class="si">%d</span><span class="s1">, N&#39;</span><span class="si">%s</span><span class="s1">&#39;);</span><span class="se">\n</span><span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">utils</span><span class="o">.</span><span class="n">escapeSQLCharacters</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span>
+    
+    <span class="k">def</span> <span class="nf">exportAssignments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assignmentsPath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;INSERT INTO PaperAuthor (paperId,authorId) VALUES (</span><span class="si">%d</span><span class="s1">, </span><span class="si">%d</span><span class="s1">);</span><span class="se">\n</span><span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_contributors</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span>
+    
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The export process. It outputs 3 files:</span>
+<span class="sd">            * one for the database tables and the INSERT statements of the papers,</span>
+<span class="sd">            * a second one for the authors,</span>
+<span class="sd">            * and a last one for the paper author assignments.</span>
+<span class="sd">            </span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportPapers</span><span class="p">()</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportAuthors</span><span class="p">()</span>
+        <span class="n">assignments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportAssignments</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">papers</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">authors</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">assignments</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="nf">_exportEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to a MySQL database script.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">toSQL</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># create the database tables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">-- Table for Papers</span>
+<span class="s1">DROP TABLE IF EXISTS Paper;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS Paper (</span>
+<span class="s1">    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,</span>
+<span class="s1">    bibtexKey VARCHAR(100) NOT NULL UNIQUE KEY,</span>
+<span class="s1">    title VARCHAR(200) DEFAULT NULL,</span>
+<span class="s1">    doi VARCHAR(200) DEFAULT NULL,</span>
+<span class="s1">    bibtex longtext NOT NULL,</span>
+<span class="s1">    preview longtext</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+
+<span class="s1">-- Table for Authors</span>
+<span class="s1">DROP TABLE IF EXISTS Author;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS Author (</span>
+<span class="s1">    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,</span>
+<span class="s1">    name VARCHAR(200) NOT NULL UNIQUE KEY</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+
+<span class="s1">-- Table for paper author assignments</span>
+<span class="s1">DROP TABLE IF EXISTS PaperAuthor;</span>
+<span class="s1">CREATE TABLE IF NOT EXISTS PaperAuthor (</span>
+<span class="s1">    paperId INT(11) NOT NULL,</span>
+<span class="s1">    authorId INT(11) NOT NULL,</span>
+<span class="s1">    PRIMARY KEY (paperId, authorId),</span>
+<span class="s1">    KEY FK_Paper (paperId),</span>
+<span class="s1">    KEY FK_Author (authorId)</span>
+<span class="s1">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span>
+<span class="s1">ALTER TABLE PaperAuthor</span>
+<span class="s1">    ADD CONSTRAINT FK_Author FOREIGN KEY (authorId) REFERENCES Author (id),</span>
+<span class="s1">    ADD CONSTRAINT FK_Paper FOREIGN KEY (paperId) REFERENCES Paper (id);</span>
+
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>   
+
+
+    
+
+<div class="viewcode-block" id="Importer"><a class="viewcode-back" href="../../Importer.html#app.impex.Importer">[docs]</a><span class="k">class</span> <span class="nc">Importer</span><span class="p">(</span><span class="n">ImpEx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import entries :class:`Entries&lt;app.entry.Entry&gt;` from a specified format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Importer.__init__"><a class="viewcode-back" href="../../Importer.html#app.impex.Importer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type manager: list of :class:`app.manager.ReferenceManager`</span>
+<span class="sd">        :param manager: The reference manager that will hold the entry list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Importer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span></div>
+        
+<div class="viewcode-block" id="Importer.importFile"><a class="viewcode-back" href="../../Importer.html#app.impex.Importer.importFile">[docs]</a>    <span class="k">def</span> <span class="nf">importFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import from a specific file format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">pass</span></div></div>
+    
+    
+<div class="viewcode-block" id="BibTeXImporter"><a class="viewcode-back" href="../../BibTeXImporter.html#app.impex.BibTeXImporter">[docs]</a><span class="k">class</span> <span class="nc">BibTeXImporter</span><span class="p">(</span><span class="n">Importer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import entries :class:`Entries&lt;app.entry.Entry&gt;` from a BibTeX file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BibTeXImporter.__init__"><a class="viewcode-back" href="../../BibTeXImporter.html#app.impex.BibTeXImporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type manager: list of :class:`app.manager.ReferenceManager`</span>
+<span class="sd">        :param manager: The reference manager that will hold the entry list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BibTeXImporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="BibTeXImporter.importFile"><a class="viewcode-back" href="../../BibTeXImporter.html#app.impex.BibTeXImporter.importFile">[docs]</a>    <span class="k">def</span> <span class="nf">importFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import from a BibTeX file.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+                        <span class="n">total</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">+=</span> <span class="n">line</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">total</span></div>
+        
+<div class="viewcode-block" id="BibTeXImporter.add"><a class="viewcode-back" href="../../BibTeXImporter.html#app.impex.BibTeXImporter.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shorthand to remove code duplication</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="EndNoteImporter"><a class="viewcode-back" href="../../EndNoteImporter.html#app.impex.EndNoteImporter">[docs]</a><span class="k">class</span> <span class="nc">EndNoteImporter</span><span class="p">(</span><span class="n">Importer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import entries :class:`Entries&lt;app.entry.Entry&gt;` from a BibTeX file exported from EndNote using the BiBler exporter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EndNoteImporter.__init__"><a class="viewcode-back" href="../../EndNoteImporter.html#app.impex.EndNoteImporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type manager: list of :class:`app.manager.ReferenceManager`</span>
+<span class="sd">        :param manager: The reference manager that will hold the entry list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EndNoteImporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="EndNoteImporter.importFile"><a class="viewcode-back" href="../../EndNoteImporter.html#app.impex.EndNoteImporter.importFile">[docs]</a>    <span class="k">def</span> <span class="nf">importFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import from a BibTeX file exported from EndNote using the BiBler exporter.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+                        <span class="n">total</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">+=</span> <span class="n">line</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span></div>
+        
+<div class="viewcode-block" id="EndNoteImporter.add"><a class="viewcode-back" href="../../EndNoteImporter.html#app.impex.EndNoteImporter.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Shorthand to remove code duplication</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cleanEndNoteEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span></div>
+    
+    <span class="k">def</span> <span class="nf">__cleanEndNoteEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is a patch when data comes from EndNote.</span>
+<span class="sd">        Sometimes, the journal of the article is in the tertiary title field.</span>
+<span class="sd">        Sometimes, the book title of the inproceedings is in the series field.</span>
+<span class="sd">        :type entry: :class:`str`</span>
+<span class="sd">        :param entry: The BibTeX string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#entry = entry.decode(&#39;utf-8&#39;,&#39;replace&#39;).encode(&#39;ascii&#39;,&#39;ignore&#39;)</span>
+        <span class="c1"># Rename url field to paper</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;url = {&#39;</span><span class="p">,</span> <span class="s1">&#39;paper = {&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Articles may have the journal in the tertiary title</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;article&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Article&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ARTICLE&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;journal&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;tertiaryTitle&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">entry</span><span class="p">[</span><span class="n">j</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;tertiaryTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;journal&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># In which case, remove the leading JO - mark</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;{JO&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">entry</span><span class="p">[</span><span class="n">k</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{JO - &#39;</span><span class="p">,</span> <span class="s1">&#39;{&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Inproceedings may have the booktitle in the series</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;inproceedings&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Inproceedings&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;INPROCEEDINGS&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;booktitle&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;series&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">entry</span><span class="p">[</span><span class="n">j</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;series&#39;</span><span class="p">,</span> <span class="s1">&#39;booktitle&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Inbooks who have an author should not have an editor</span>
+        <span class="k">elif</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;inbook&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Inbook&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;INBOOK&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            
+            <span class="n">i</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;author&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;editor&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="n">j</span><span class="p">:]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">entry</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">entry</span></div>
+
+    
+<div class="viewcode-block" id="CSVImporter"><a class="viewcode-back" href="../../CSVImporter.html#app.impex.CSVImporter">[docs]</a><span class="k">class</span> <span class="nc">CSVImporter</span><span class="p">(</span><span class="n">Importer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import entries :class:`Entries&lt;app.entry.Entry&gt;` from a CSV (tabs) file. The first row must consist of the field names for each column.</span>
+<span class="sd">    This operation is meant to be the inverse for the :class:`CSVExporter`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CSVImporter.__init__"><a class="viewcode-back" href="../../CSVImporter.html#app.impex.CSVImporter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :type path: :class:`str`</span>
+<span class="sd">        :param path: The path to a file.</span>
+<span class="sd">        :type manager: list of :class:`app.manager.ReferenceManager`</span>
+<span class="sd">        :param manager: The reference manager that will hold the entry list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CSVImporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="CSVImporter.importFile"><a class="viewcode-back" href="../../CSVImporter.html#app.impex.CSVImporter.importFile">[docs]</a>    <span class="k">def</span> <span class="nf">importFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import from a CSV (tabs) file.</span>
+<span class="sd">        :rtype: :class:`int`</span>
+<span class="sd">        :return: The total number of entries successfully exported.</span>
+<span class="sd">        :raises: Exception: If an error occurred during the export process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openDB</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">allFields</span> <span class="o">=</span> <span class="n">FieldName</span><span class="o">.</span><span class="n">getAllFieldNames</span><span class="p">()</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span> <span class="c1"># skip header line</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">allFields</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;CSV file on line </span><span class="si">%d</span><span class="s1"> has incorrect fields.&#39;</span> <span class="o">%</span> <span class="n">total</span><span class="p">)</span>
+                <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entrytype&#39;</span><span class="p">:</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allFields</span><span class="p">)):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="p">[</span><span class="n">allFields</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="c1"># Convert to BibTeX</span>
+                <span class="n">bibtex</span> <span class="o">=</span> <span class="s1">&#39;@</span><span class="si">%s</span><span class="s1">{&#39;</span> <span class="o">%</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;entrytype&#39;</span><span class="p">]</span> <span class="c1"># key will be auto generated</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">bibtex</span> <span class="o">+=</span> <span class="s1">&#39;,</span><span class="se">\n</span><span class="s1">  </span><span class="si">%s</span><span class="s1"> = {</span><span class="si">%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                <span class="n">bibtex</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">}&#39;</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">bibtex</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>            
+                <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeDB</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">total</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/..\..\utils\resources\bibler.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">BiBler documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

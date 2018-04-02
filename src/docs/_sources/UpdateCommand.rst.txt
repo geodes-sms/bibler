@@ -1,0 +1,10 @@
+
+Class UpdateCommand
+=========================
+
+.. autoclass:: app.command.UpdateCommand
+   :members:
+   :undoc-members:
+   :private-members:
+   :show-inheritance:
+   :special-members: __init__

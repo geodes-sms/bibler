@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>application &#8212; BiBler webservice 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiBler webservice documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for application</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">:Author: Felix Belanger Robillard</span>
+
+<span class="sd">:module: The following classes are used to handle the different URLs</span>
+
+
+<span class="sd">Pour utiliser l&#39;ensemble de ces classes, on s&#39;attend à ce que l&#39;utilisateur </span>
+<span class="sd">cree passe par une requête http POST pour soumettre une reference BibTeX sous </span>
+<span class="sd">forme de string au webservice. Cette reference est ensuite ajoutee à une instance</span>
+<span class="sd">locale de BiBler et sera ensuite traitee selon la methode appelee.</span>
+
+<span class="sd">On ne peut appeler l&#39;ensemble des methodes de l&#39;API BiBler, les methodes pouvant être</span>
+<span class="sd">appelees sont celles qui possèdent une classe equivalente au sein de ce module. Celles</span>
+<span class="sd">qui ne sont pas disponibles sont celles qui necessitaient un identifiant pour</span>
+<span class="sd">selectionner une entree en particulier, ce qui est caduque dans le format</span>
+<span class="sd">actuel.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="c1">#-*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="n">abspath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="s2">&quot;/var/www/html/ift3150/&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">web</span>
+<span class="kn">from</span> <span class="nn">bibwrap</span> <span class="k">import</span> <span class="n">BiBlerWrapper</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;/formatbibtex/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;FormatBibTeX&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/addentry/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;AddEntry&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/getbibtex/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;GetBibTeX&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/bibtextosql/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;BibTeXtoSQL&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/bibtextocsv/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;BibTeXtoCSV&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/bibtextohtml/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;BibTeXtoHTML&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/bibtextobibtex/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;BibTeXtoBibTeX&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/previewentry/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;PreviewEntry&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/validateentry/(.*)&#39;</span><span class="p">,</span> <span class="s1">&#39;ValidateEntry&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../application.html#application.index">[docs]</a><span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
+<div class="viewcode-block" id="index.GET"><a class="viewcode-back" href="../application.html#application.index.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+
+<div class="viewcode-block" id="FormatBibTeX"><a class="viewcode-back" href="../application.html#application.FormatBibTeX">[docs]</a><span class="k">class</span> <span class="nc">FormatBibTeX</span><span class="p">:</span>
+<div class="viewcode-block" id="FormatBibTeX.POST"><a class="viewcode-back" href="../application.html#application.FormatBibTeX.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">formatBibtex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="AddEntry"><a class="viewcode-back" href="../application.html#application.AddEntry">[docs]</a><span class="k">class</span> <span class="nc">AddEntry</span><span class="p">:</span>
+<div class="viewcode-block" id="AddEntry.POST"><a class="viewcode-back" href="../application.html#application.AddEntry.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">addEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="GetBibTeX"><a class="viewcode-back" href="../application.html#application.GetBibTeX">[docs]</a><span class="k">class</span> <span class="nc">GetBibTeX</span><span class="p">:</span>
+<div class="viewcode-block" id="GetBibTeX.POST"><a class="viewcode-back" href="../application.html#application.GetBibTeX.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">getBibTeX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="BibTeXtoSQL"><a class="viewcode-back" href="../application.html#application.BibTeXtoSQL">[docs]</a><span class="k">class</span> <span class="nc">BibTeXtoSQL</span><span class="p">:</span>
+<div class="viewcode-block" id="BibTeXtoSQL.POST"><a class="viewcode-back" href="../application.html#application.BibTeXtoSQL.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">exportString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;sql&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="BibTeXtoCSV"><a class="viewcode-back" href="../application.html#application.BibTeXtoCSV">[docs]</a><span class="k">class</span> <span class="nc">BibTeXtoCSV</span><span class="p">:</span>
+<div class="viewcode-block" id="BibTeXtoCSV.POST"><a class="viewcode-back" href="../application.html#application.BibTeXtoCSV.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">exportString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;csv&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="BibTeXtoHTML"><a class="viewcode-back" href="../application.html#application.BibTeXtoHTML">[docs]</a><span class="k">class</span> <span class="nc">BibTeXtoHTML</span><span class="p">:</span>
+<div class="viewcode-block" id="BibTeXtoHTML.POST"><a class="viewcode-back" href="../application.html#application.BibTeXtoHTML.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">exportString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="BibTeXtoBibTeX"><a class="viewcode-back" href="../application.html#application.BibTeXtoBibTeX">[docs]</a><span class="k">class</span> <span class="nc">BibTeXtoBibTeX</span><span class="p">:</span>
+<div class="viewcode-block" id="BibTeXtoBibTeX.POST"><a class="viewcode-back" href="../application.html#application.BibTeXtoBibTeX.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">exportString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;bib&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="PreviewEntry"><a class="viewcode-back" href="../application.html#application.PreviewEntry">[docs]</a><span class="k">class</span> <span class="nc">PreviewEntry</span><span class="p">:</span>
+<div class="viewcode-block" id="PreviewEntry.POST"><a class="viewcode-back" href="../application.html#application.PreviewEntry.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">previewEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="ValidateEntry"><a class="viewcode-back" href="../application.html#application.ValidateEntry">[docs]</a><span class="k">class</span> <span class="nc">ValidateEntry</span><span class="p">:</span>
+<div class="viewcode-block" id="ValidateEntry.POST"><a class="viewcode-back" href="../application.html#application.ValidateEntry.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote_plus</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">BiBlerWrapper</span><span class="o">.</span><span class="n">validateEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div></div>
+        
+<span class="n">web</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">autoreload</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">application</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">wsgifunc</span><span class="p">()</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span> <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiBler webservice documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

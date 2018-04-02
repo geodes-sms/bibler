@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handler documentation &#8212; BiBler webservice 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Wrapper documentation" href="bibwrap.html" />
+    <link rel="prev" title="Welcome to BiBler webservice’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bibwrap.html" title="Wrapper documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to BiBler webservice’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler webservice documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-application">
+<span id="handler-documentation"></span><h1>Handler documentation<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Felix Belanger Robillard</td>
+</tr>
+<tr class="field-even field"><th class="field-name">module:</th><td class="field-body">The following classes are used to handle the different URLs</td>
+</tr>
+</tbody>
+</table>
+<p>Pour utiliser l&#8217;ensemble de ces classes, on s&#8217;attend à ce que l&#8217;utilisateur 
+cree passe par une requête http POST pour soumettre une reference BibTeX sous 
+forme de string au webservice. Cette reference est ensuite ajoutee à une instance
+locale de BiBler et sera ensuite traitee selon la methode appelee.</p>
+<p>On ne peut appeler l&#8217;ensemble des methodes de l&#8217;API BiBler, les methodes pouvant être
+appelees sont celles qui possèdent une classe equivalente au sein de ce module. Celles
+qui ne sont pas disponibles sont celles qui necessitaient un identifiant pour
+selectionner une entree en particulier, ce qui est caduque dans le format
+actuel.</p>
+<dl class="class">
+<dt id="application.AddEntry">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">AddEntry</code><a class="reference internal" href="_modules/application.html#AddEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.AddEntry" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.AddEntry.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#AddEntry.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.AddEntry.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.BibTeXtoBibTeX">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">BibTeXtoBibTeX</code><a class="reference internal" href="_modules/application.html#BibTeXtoBibTeX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoBibTeX" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.BibTeXtoBibTeX.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#BibTeXtoBibTeX.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoBibTeX.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.BibTeXtoCSV">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">BibTeXtoCSV</code><a class="reference internal" href="_modules/application.html#BibTeXtoCSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoCSV" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.BibTeXtoCSV.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#BibTeXtoCSV.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoCSV.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.BibTeXtoHTML">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">BibTeXtoHTML</code><a class="reference internal" href="_modules/application.html#BibTeXtoHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoHTML" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.BibTeXtoHTML.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#BibTeXtoHTML.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoHTML.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.BibTeXtoSQL">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">BibTeXtoSQL</code><a class="reference internal" href="_modules/application.html#BibTeXtoSQL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoSQL" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.BibTeXtoSQL.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#BibTeXtoSQL.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.BibTeXtoSQL.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.FormatBibTeX">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">FormatBibTeX</code><a class="reference internal" href="_modules/application.html#FormatBibTeX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.FormatBibTeX" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.FormatBibTeX.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#FormatBibTeX.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.FormatBibTeX.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.GetBibTeX">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">GetBibTeX</code><a class="reference internal" href="_modules/application.html#GetBibTeX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.GetBibTeX" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.GetBibTeX.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#GetBibTeX.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.GetBibTeX.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.PreviewEntry">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">PreviewEntry</code><a class="reference internal" href="_modules/application.html#PreviewEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.PreviewEntry" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.PreviewEntry.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#PreviewEntry.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.PreviewEntry.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.ValidateEntry">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">ValidateEntry</code><a class="reference internal" href="_modules/application.html#ValidateEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.ValidateEntry" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.ValidateEntry.POST">
+<code class="descname">POST</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#ValidateEntry.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.ValidateEntry.POST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.index">
+<em class="property">class </em><code class="descclassname">application.</code><code class="descname">index</code><a class="reference internal" href="_modules/application.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.index" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="application.index.GET">
+<code class="descname">GET</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#index.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.index.GET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to BiBler webservice&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bibwrap.html"
+                        title="next chapter">Wrapper documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/application.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bibwrap.html" title="Wrapper documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to BiBler webservice’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">BiBler webservice documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>
