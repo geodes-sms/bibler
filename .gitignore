@@ -1,0 +1,5 @@
+# All python cache
+**/__pycache__
+
+# All compiled modules
+*.pyc

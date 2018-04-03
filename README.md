@@ -13,9 +13,9 @@ BiBler is a software for managing references to scientific articles using BibTeX
 - Export to CSV, HTML, or SQL
 
 # Installation
-If you want to use the graphical user interface, simply download [BiBler.zip](latest/BiBler.zip) as a zip and run [bibler.exe](latest/BiBler/bibler.exe).
+If you want to use the graphical user interface, simply download the latest zip file from the [build](build) directory, unzip it and run [bibler.exe](build/BiBler/bibler.exe).
 
-The [user manual](BiBler-1.1/BiBler/utils/resources/manual.md) is available from the help menu of the tool.
+The [user manual](build/BiBler/utils/resources/manual.md) is available from the help menu of the tool.
 
 
 # Distribution
@@ -84,7 +84,7 @@ framework directory.
 abspath = os.path.dirname("Path to directory where web is located")
 ```
 The second path is for the location of the BiBler source files. Beware, the webservice needs
-BiBler-1.1 source files to work properly.
+BiBler source files to work properly.
 ```python
 #abspath = os.path.dirname("Path to Bibler src")
 ```
