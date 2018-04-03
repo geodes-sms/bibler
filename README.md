@@ -40,7 +40,7 @@ The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.g
 
 # Change log
 ## Version 1.2
-#### 9 Apr 2017
+#### 3 Apr 2018
 - Bug fixes on the GUI and on integration with ReLiS
 
 ## Version 1.1
