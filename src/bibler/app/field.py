@@ -360,8 +360,6 @@ class ContributorField(Field):
             people = []
             for contributor in self.contributors:
                 person = firstNameOrder(contributor)
-                if person[-1] != '.':
-                    person += '.'
                 people.append(person)
             if len(people) > 1:
                 _and = ContributorField.SPLIT
@@ -499,8 +497,10 @@ class Paper(Field):
         if doi:
             doi.format()
             doi = doi.getValue()
-            if doi != '' and not doi.startswith('http'):
-                self.value = 'http://dx.doi.org/' + doi
+            if doi != '':
+              if not doi.startswith('http'):
+                doi = 'http://dx.doi.org/' + doi
+              self.value = doi
 
 class Abstract(Field):
     """

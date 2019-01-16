@@ -101,7 +101,7 @@ class Exporter(ImpEx):
             self.closeDB()
         return total
 
-    def write(output):
+    def write(self, output):
         self.database.write(output + '\n')
     
     def _exportEntry(self):
