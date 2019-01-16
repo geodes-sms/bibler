@@ -520,7 +520,8 @@ class Entry(object):
             bibtex = utils.escapeSQLCharacters(self.toBibTeX().replace('\n',''))
             preview = utils.escapeSQLCharacters(self.toHtmlDefault().replace('\n',''))
             url = self.getField(FieldName.Paper).getValue()
-            if url and url != '' and not url.startswith('http://'):
+            if url:
+              if url != '' and not url.startswith('http://'):
                 url = utils.escapeSQLCharacters('http://' + url)
             else:
                 url = ''
