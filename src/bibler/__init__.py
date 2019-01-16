@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 .. moduleauthor:: Eugene Syriani
-.. versionadded:: 1.2
+.. versionadded:: 1.3
 
 Created on Nov 09, 2016
 
@@ -38,7 +38,7 @@ You can also interact with BiBler programmatically through its API as follows:
 
 G{packagetree app, gui, utils}
 """
-__version__ = "1.2"
+__version__ = "1.3"
 
 import sys
 sys.path.insert(0, 'BiBler')
