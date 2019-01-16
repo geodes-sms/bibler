@@ -3,3 +3,4 @@
 
 # All compiled modules
 *.pyc
+*__pycache__

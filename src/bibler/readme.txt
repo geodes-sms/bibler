@@ -19,6 +19,9 @@ To compile the source code, you need the following dependencies:
 
 ==============================================================
 
+*** Version 1.3 (16 Jan 2019)
+- Minor fixes for HTML output
+
 *** Version 1.0 (15 Dec 2016)
 - Migrated from Python 2.7 to Python 3.5.2
 - Installation kit was done using py2exe library (the source code must be compiled with 3.4 interpreter - py2exe not yet suported by 3.5.2).

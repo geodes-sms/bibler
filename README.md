@@ -39,6 +39,10 @@ To compile the source code, you need the following dependencies:
 The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.gnu.org/copyleft/gpl.html) ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
 # Change log
+## Version 1.3
+#### 16 Jan 2019
+- Minor fixes of HTML output
+
 ## Version 1.2
 #### 3 Apr 2018
 - Bug fixes on the GUI and on integration with ReLiS
