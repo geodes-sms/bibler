@@ -387,7 +387,7 @@ class EditorFieldsTab(EditorTab):
         @param field: The name of the field        
         """
         txtCtrl = e.GetEventObject()
-        self.behavior.textChangedInFieldEditor(e.GetString(), txtCtrl.GetName())
+        self.behavior.textChangedInFieldEditor(e.GetString(), txtCtrl.GetName().lower())
         
     def onTextChangedInBibtexEditor(self, e):
         """

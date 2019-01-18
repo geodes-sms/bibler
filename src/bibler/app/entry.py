@@ -29,7 +29,7 @@ This module represents the entries.
 
 from gui.app_interface import EntryDict, EntryListColumn
 from .field_name import FieldName
-from .field import Author, Editor, Field, Organization, Pages, Year
+from .field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year
 from utils import utils
 import re
 
@@ -602,7 +602,7 @@ class Article(Entry):
     def __init__(self):
         super(Article, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.Journal: Field(FieldName.Journal),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Volume: Field(FieldName.Volume),
@@ -700,7 +700,7 @@ class Book(Entry):
         super(Book, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
                                 FieldName.Editor: Editor(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.Publisher: Field(FieldName.Publisher),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Volume: Field(FieldName.Volume),
@@ -849,7 +849,7 @@ class Booklet(Entry):
     
     def __init__(self):
         super(Booklet, self).__init__()
-        self.requiredFields = { FieldName.Title: Field(FieldName.Title)}
+        self.requiredFields = { FieldName.Title: Title()}
         self.optionalFields.update({FieldName.Author: Author(),
                                     FieldName.Howpublished: Field(FieldName.Howpublished),
                                     FieldName.Address: Field(FieldName.Address),
@@ -943,7 +943,7 @@ class Inbook(Book):
                                 FieldName.Editor: Editor(),
                                 FieldName.Title: Field(FieldName.Title),
                                 FieldName.Publisher: Field(FieldName.Publisher),
-                                FieldName.Chapter: Field(FieldName.Chapter),
+                                FieldName.Chapter: Chapter(),
                                 FieldName.Pages: Pages(),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Volume: Field(FieldName.Volume),
@@ -1045,21 +1045,23 @@ class Inbook(Book):
                 if not contributor.endswith('.'):
                     contributor += '.'
                 html = '''%s''' % contributor
-            html += ''' <i>%s</i>''' % title
+            if chapter:
+                html += ''' %s.''' % chapter
+            html += ''' In: <i>%s</i>''' % title
             if edition:
                 html += ''', %s ed.''' % edition
             if not html.endswith('.'):
                 html += '.'
             if series:
-                html += ''' %s:''' % series
+                html += ''' %s''' % series
+                if volume or number: html += ':'
             if volume:
                 html += ''' %s''' % volume
             elif number:
                 html += ''' %s''' % number
             if pages:
-                html += ''', pp. %s''' % pages
-            if chapter:
-                html += ''', ch. %s''' % chapter
+                if not html.endswith('.'): html += '.'
+                html += ''' pp. %s''' % pages
             if not html.endswith('.'):
                 html += '.'
             add_comma = False
@@ -1092,7 +1094,7 @@ class Incollection(Entry):
     def __init__(self):
         super(Incollection, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.BookTitle: Field(FieldName.BookTitle),
                                 FieldName.Publisher: Field(FieldName.Publisher),
                                 FieldName.Year: Year()}
@@ -1197,12 +1199,12 @@ class Incollection(Entry):
             if authors:
                 if not authors.endswith('.'):
                     authors += '.'
-            html = '''{0} {1}. '''.format(authors, title)
+            html = '''{0} {1}. In: '''.format(authors, title)
             if editor:
                 if self.getField(FieldName.Editor).getContributorsCount() == 1:
-                    html += '''In %s, Ed.: ''' %  editor
+                    html += '''%s (ed.): ''' %  editor
                 else:
-                    html += '''In %s, Eds.: ''' %  editor
+                    html += '''%s (eds.): ''' %  editor
             html += '''<i>%s</i>''' % booktitle
             if edition:
                 html += ''', %s ed. ''' % edition
@@ -1255,7 +1257,7 @@ class Inproceedings(Entry):
     def __init__(self):
         super(Inproceedings, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.BookTitle: Field(FieldName.BookTitle),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Editor: Editor(),
@@ -1358,28 +1360,46 @@ class Inproceedings(Entry):
                     html += '''In %s, Eds.: ''' %  editor
             html += '''<i>%s</i>. ''' % booktitle
             add_comma = False
+            publisher_processed = False
             if series:
-                html += '''%s: ''' % series
+                html += '''%s''' % series
+                if volume or number: html += ': '
+            elif volume:
+                if publisher:
+                    html += ''' %s: ''' % publisher
+                    add_comma = True
+                    publisher_processed = True
             if volume:
                 html += '''%s''' % volume
                 add_comma = True
             elif number:
+                if publisher:
+                    html += ''' %s: ''' % publisher
+                    add_comma = True
+                    publisher_processed = True
                 html += '''%s''' % number
                 add_comma = True
             if pages:
+                if publisher and not publisher_processed:
+                    if add_comma: html += ', '
+                    html += ''' %s''' % publisher
+                    add_comma = True
+                    publisher_processed = True
                 if add_comma: html += ', '
                 html += '''pp. %s''' % pages
             if organization:
                 html += ''', %s''' % organization
+            html = html.strip()
             if not html.endswith('.'):
                 html += '.'
             add_comma = False
-            if publisher:
+            if publisher and not publisher_processed:
                 html += ''' %s''' % publisher
                 add_comma = True
             if address:
                 if add_comma: html += ','
                 html += ''' %s''' % address
+                add_comma = True
             if month:
                 if add_comma: html += ','
                 html += ''' %s''' % month
@@ -1417,7 +1437,7 @@ class Manual(Entry):
     
     def __init__(self):
         super(Manual, self).__init__()
-        self.requiredFields = { FieldName.Title: Field(FieldName.Title)}
+        self.requiredFields = { FieldName.Title: Title()}
         self.optionalFields.update({FieldName.Author: Author(),
                                     FieldName.Organization: Organization(),
                                     FieldName.Edition: Field(FieldName.Edition),
@@ -1531,7 +1551,7 @@ class Misc(Entry):
     def __init__(self):
         super(Misc, self).__init__()
         self.optionalFields.update({FieldName.Author: Author(),
-                                    FieldName.Title: Field(FieldName.Title),
+                                    FieldName.Title: Title(),
                                     FieldName.Howpublished: Field(FieldName.Howpublished),
                                     FieldName.Year: Year(),
                                     FieldName.Month: Field(FieldName.Month),
@@ -1618,7 +1638,7 @@ class Phdthesis(Entry):
     def __init__(self):
         super(Phdthesis, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.School: Field(FieldName.School),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Type: Field(FieldName.Type),
@@ -1714,7 +1734,7 @@ class Proceedings(Entry):
     
     def __init__(self):
         super(Proceedings, self).__init__()
-        self.requiredFields = { FieldName.Title: Field(FieldName.Title),
+        self.requiredFields = { FieldName.Title: Title(),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Editor: Editor(),
                                     FieldName.Volume: Field(FieldName.Volume),
@@ -1853,7 +1873,7 @@ class Techreport(Entry):
     def __init__(self):
         super(Techreport, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.Institution: Field(FieldName.Institution),
                                 FieldName.Year: Year()}
         self.optionalFields.update({FieldName.Type: Field(FieldName.Type),
@@ -1944,7 +1964,7 @@ class Unpublished(Entry):
     def __init__(self):
         super(Unpublished, self).__init__()
         self.requiredFields = { FieldName.Author: Author(),
-                                FieldName.Title: Field(FieldName.Title),
+                                FieldName.Title: Title(),
                                 FieldName.Note: Field(FieldName.Note)}
         self.optionalFields.update({FieldName.Year: Year(),
                                     FieldName.Month: Field(FieldName.Month)})

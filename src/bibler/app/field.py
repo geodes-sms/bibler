@@ -419,8 +419,28 @@ class Editor(ContributorField):
     """
     def __init__(self, value = ''):
         super(Editor, self).__init__(FieldName.Editor, value)
-
-
+        
+    
+class Title(Field):
+    """
+    The field for title.
+    """
+    def __init__(self, value = ''):
+        super(Title, self).__init__(FieldName.Title, value)
+        
+    def getHtmlDefaultValue(self):
+        return '''<span style="font-weight: 600; color: #3F3F3F;">%s</span>''' % super(Title, self).getHtmlDefaultValue()
+        
+    
+class Chapter(Title):
+    """
+    The field for chapter.
+    """
+    def __init__(self, value = ''):
+        super(Chapter, self).__init__(value)
+        self.name = FieldName.Chapter
+        
+    
 class Organization(Field):
     """
     The field for the organization.
