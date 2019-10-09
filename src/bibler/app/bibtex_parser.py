@@ -57,7 +57,7 @@ class BibTeXParserWithStdFields(object):
         self.bibtex = bibtex.strip().replace('\n', ' ')         # remove all spaces and new lines
         self.bibtex = re.sub('=\s*\"', '= {', self.bibtex)      # replace all double quotes that delimit the beginning of a field value
         self.bibtex = re.sub('\"\s*,', '},', self.bibtex)       # replace all double quotes that delimit the end of a field value
-        self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*(\w*)\s*""", re.DOTALL)
+        self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*([\w-]*)\s*""", re.DOTALL)
         self.entry = None
 
     def __unicodeToTex(self,bibtex):
