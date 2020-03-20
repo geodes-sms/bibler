@@ -649,7 +649,7 @@ class CodeNode:
         
     def emit(self, indent, text_indent=''):
         import re
-        rx = re.compile('^', re.M)
+        rx = re.compile('^', re.RegexFlag.MULTILINE)
         return rx.sub(indent, self.code).rstrip(' ')
         
     def __repr__(self):
@@ -1079,7 +1079,7 @@ def frender(path, **keywords):
     
 def compile_templates(root):
     """Compiles templates to python code."""
-    re_start = re_compile('^', re.M)
+    re_start = re_compile('^', re.RegexFlag.MULTILINE)
     
     for dirpath, dirnames, filenames in os.walk(root):
         filenames = [f for f in filenames if not f.startswith('.') and not f.endswith('~') and not f.startswith('__init__.py')]

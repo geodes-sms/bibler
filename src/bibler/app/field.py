@@ -252,8 +252,8 @@ class ContributorField(Field):
         self.contributors = []
         self.hasEtal = False
         von = """(?P<von>([a-z]+)|(\\\\\{.[a-z]+\})|(\{\\\\.[a-z]+\})|(\\\\.\{[a-z]+\})|(\\\\[^{][a-z]+))?"""
-        self.re_von_Last_Jr_First = re.compile(von + """\s*(?P<last>[^,]+)\s*,\s*(?P<jr>[^,]*)\s*,\s*(?P<first>.*)""", re.DOTALL)
-        self.re_von_Last_First = re.compile(von + """\s*(?P<last>[^,]+)\s*,\s*(?P<first>.*)""", re.DOTALL)
+        self.re_von_Last_Jr_First = re.compile(von + """\s*(?P<last>[^,]+)\s*,\s*(?P<jr>[^,]*)\s*,\s*(?P<first>.*)""", re.RegexFlag.DOTALL)
+        self.re_von_Last_First = re.compile(von + """\s*(?P<last>[^,]+)\s*,\s*(?P<first>.*)""", re.RegexFlag.DOTALL)
     
     def getContributors(self):
         """

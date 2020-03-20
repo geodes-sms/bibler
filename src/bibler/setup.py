@@ -42,7 +42,7 @@ data_files = [("Microsoft.VC140.CRT", glob(r'C:\Program Files (x86)\Microsoft Vi
 VERSIONFILE = "__init__.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
-mo = re.search(VSRE, verstrline, re.M)
+mo = re.search(VSRE, verstrline, re.RegexFlag.MULTILINE)
 version = "0.0.0"
 if mo:
     version = mo.group(1)

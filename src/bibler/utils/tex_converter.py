@@ -99,7 +99,7 @@ class TeXEncoder(Encoder):
         @return: L{bool}.
         """
         try:
-            re.finditer('[A-Z]', c, flag=re.IGNORECASE)
+            re.finditer('[A-Z]', c, flag=re.RegexFlag.IGNORECASE)
             return True
         except StopIteration:
             return False

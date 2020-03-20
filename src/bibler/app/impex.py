@@ -863,12 +863,12 @@ class BibTeXStringImporter(BibTeXImporter):
             self.data = self.data.split('\n')
             entry = ''
             for line in self.data:
-              if line.startswith('@'):
-                  if entry:
-                      total += self.add(entry)
-                  entry = line
-              else:
-                  entry += line
+                if line.startswith('@'):
+                    if entry:
+                        total += self.add(entry)
+                    entry = line
+                else:
+                    entry += line
             if entry:
                 total += self.add(entry)
         except:
@@ -902,12 +902,12 @@ class EndNoteStringImporter(EndNoteImporter):
             self.data = self.data.split('\n')
             entry = ''
             for line in self.data:
-              if line.startswith('@'):
-                  if entry:
-                      total += self.add(entry)
-                  entry = line
-              else:
-                  entry += line
+                if line.startswith('@'):
+                    if entry:
+                        total += self.add(entry)
+                    entry = line
+                else:
+                    entry += line
             if entry:
                 total += self.add(entry)
         except:

@@ -28,7 +28,7 @@ This module represents the BiTeX parser.
 """
 
 import re
-import unicodedata
+#import unicodedata
 from app.entry import EmptyEntry
 from app.entry_type import EntryType
 from app.field_name import FieldName
@@ -57,7 +57,7 @@ class BibTeXParserWithStdFields(object):
         self.bibtex = bibtex.strip().replace('\n', ' ')         # remove all spaces and new lines
         self.bibtex = re.sub('=\s*\"', '= {', self.bibtex)      # replace all double quotes that delimit the beginning of a field value
         self.bibtex = re.sub('\"\s*,', '},', self.bibtex)       # replace all double quotes that delimit the end of a field value
-        self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*([\w-]*)\s*""", re.DOTALL)
+        self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*([\w-]*)\s*""", re.RegexFlag.DOTALL)
         self.entry = None
 
     def __unicodeToTex(self,bibtex):
@@ -141,7 +141,7 @@ class BibTeXParserWithStdFields(object):
         """
         sep = '{'
         inv_sep = '}'
-        result = re.findall(""",\s*(""" + field + """)\s*=\s*\{\s*(.*)\s*\}\s*,?""", self.bibtex, re.DOTALL|re.IGNORECASE)
+        result = re.findall(""",\s*(""" + field + """)\s*=\s*\{\s*(.*)\s*\}\s*,?""", self.bibtex, re.RegexFlag.DOTALL|re.RegexFlag.IGNORECASE)
         if len(result) == 0 or len(result[0]) != 2:
             return ''
         value = self.__parseNested(sep + result[0][1] + inv_sep, sep, inv_sep, 0)
@@ -191,7 +191,7 @@ class BibTeXParserWithNonStdFields(BibTeXParserWithStdFields):
         :type bibtex: str.
         """
         super(BibTeXParserWithNonStdFields, self).__init__(bibtex)
-        self.re_field_name = re.compile("""},\s*(.*?)\s*=\s*\{""", re.DOTALL)
+        self.re_field_name = re.compile("""},\s*(.*?)\s*=\s*\{""", re.RegexFlag.DOTALL)
     
     def parseFields(self):
         """
