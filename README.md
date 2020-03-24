@@ -2,11 +2,10 @@
 BiBler is a software for managing references to scientific articles using BibTeX. Not only is it a fully functional software, the tool has been entirely modeled and synthesized in Python. It is used for educational purposes in order to understand how to generate a complete application from UML models in an agile and test-driven environment.
 
 ## Features
-
-- Graphical user interface for Windows
 ![gui_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/screenshot.png/1)
-- Python library to integrate programmatically
 ![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
+- Graphical user interface for Windows
+- Python library to integrate programmatically
 - Web service to deploy online
 - Validation against BibTeX standard
 - Import from BibTeX, CSV, or EndNote
