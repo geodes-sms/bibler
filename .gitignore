@@ -3,4 +3,7 @@
 
 # All compiled modules
 *.pyc
+*.pyo
 *__pycache__
+src/bibler/build
+src/bibler/dist
