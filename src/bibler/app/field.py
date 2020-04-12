@@ -27,7 +27,7 @@ This module represents the fields of each entry.
 """
 
 import re
-from .field_name import FieldName
+from app.field_name import FieldName
 from utils import utils
 
 class FieldValueMappingToSimple(dict, metaclass=utils.Singleton):
@@ -518,9 +518,9 @@ class Paper(Field):
             doi.format()
             doi = doi.getValue()
             if doi != '':
-              if not doi.startswith('http'):
-                doi = 'http://dx.doi.org/' + doi
-              self.value = doi
+                if not doi.startswith('http'):
+                    doi = 'https://dx.doi.org/' + doi
+                self.value = doi
 
 class Abstract(Field):
     """

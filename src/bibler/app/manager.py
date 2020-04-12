@@ -27,14 +27,14 @@ Created on Nov 09, 2016
 This module represents the management of entries.
 """
 
-from .entry import EmptyEntry, EntryIdGenerator
-from .bibtex_parser import BibTeXParser
-from .field_name import FieldName
-from .field import Field, Paper
-from .entry_type import EntryType
+from app.entry import EntryIdGenerator
+from app.bibtex_parser import BibTeXParser
+from app.field_name import FieldName
+from app.field import Paper
+from app.entry_type import EntryType
 from gui.app_interface import EntryListColumn
 from utils import settings
-from re import compile as re_compile, IGNORECASE as re_IGNORECASE
+import re
     
 #TypedEmptyEntry
 
@@ -160,7 +160,7 @@ class ReferenceManager(object):
         """
         try:
             if settings.Preferences().searchRegex:
-                query = re_compile(query, re_IGNORECASE)
+                query = re.compile(query, re.RegexFlag.IGNORECASE)
                 self.searchResult = [e for e in iter(self.entryList) if e.matchesRegex(query)]
             else:
                 self.searchResult = [e for e in iter(self.entryList) if e.matchesExact(query)]

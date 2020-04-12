@@ -26,11 +26,10 @@ Created on Nov 09, 2016
 This module represents the importers and exporters.
 """
 
-from .field_name import FieldName
+from app.field_name import FieldName
 from utils import settings, utils
 from utils.settings import Preferences
 import os.path
-from builtins import type
 
 
 class ImpEx(object):

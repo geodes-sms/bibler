@@ -28,8 +28,8 @@ This module represents the entries.
 """
 
 from gui.app_interface import EntryDict, EntryListColumn
-from .field_name import FieldName
-from .field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year
+from app.field_name import FieldName
+from app.field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year
 from utils import utils
 import re
 
@@ -112,13 +112,12 @@ class Entry(object):
         self._id = None
         self.key = ''
         self.requiredFields = dict()
-        self.optionalFields = {FieldName.Annote: Field(FieldName.Annote),
-                               FieldName.Crossref: Field(FieldName.Crossref),
+        self.optionalFields = {FieldName.Crossref: Field(FieldName.Crossref),
                                FieldName.Key: Field(FieldName.Key)}
-        self.additionalFields = {FieldName.DOI: Field(FieldName.DOI),
+        self.additionalFields = {FieldName.Annote: Field(FieldName.Annote),
+                                 FieldName.DOI: Field(FieldName.DOI),
                                  FieldName.Paper: Field(FieldName.Paper),
-                                 FieldName.Comment: Field(FieldName.Comment),
-                                 FieldName.Note: Field(FieldName.Note)}
+                                 FieldName.Comment: Field(FieldName.Comment)}
         self.importantFields = []   # contains keys from optionalFields
         
     def getId(self):
@@ -392,7 +391,7 @@ class Entry(object):
             e[col] = field.getValue()
         return e
         
-    def toBibTeX(self, ignoreEmptyField=False):
+    def toBibTeX(self, ignoreEmptyField=True):
         """
         Convert the entry into its BibTeX reference.
         
@@ -411,7 +410,7 @@ class Entry(object):
             bibtex = '@%s{%s' % (self.getEntryType().upper(), self.getKey())
             for field in self.iterAllFields():
                 value = self.getFieldValue(field.getName())
-                if not value:
+                if not value and ignoreEmptyField:
                     continue
                 # This part is to put {} around capital letters if they aren't already
                 v = ''
@@ -521,10 +520,10 @@ class Entry(object):
             preview = utils.escapeSQLCharacters(self.toHtmlDefault().replace('\n',''))
             url = self.getField(FieldName.Paper).getValue()
             if url:
-              if url != '' and not url.startswith('http://'):
-                url = utils.escapeSQLCharacters('http://' + url)
+                if url != '' and not url.startswith('http://'):
+                    url = utils.escapeSQLCharacters('http://' + url)
             else:
-                url = ''
+                    url = ''
             return '''INSERT INTO Paper (bibtexKey,title,doi,bibtex,preview) VALUES (N'%s', N'%s', N'%s', N'%s', N'%s');''' \
                 % (key, title, url, bibtex, preview)
         except:

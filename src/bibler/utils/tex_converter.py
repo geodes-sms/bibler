@@ -24,7 +24,7 @@ Created on Jan 13, 2014
 This module contains utility classes and functions. 
 '''
 
-from . import utils
+import utils
 import re
 
 

@@ -36,7 +36,7 @@ import wx.lib.mixins.listctrl as wxLC
 import wx.html as wxHTML
 import webbrowser
 from utils import settings, resourcemgr
-from .app_interface import EntryListColumn
+from gui.app_interface import EntryListColumn
 from app.entry_type import EntryType
 from utils.settings import BibStyle
 """

@@ -28,10 +28,10 @@ This module represents the API of the application.
 """
 
 from gui.app_interface import IApplication
-from .manager import ReferenceManager
-from .command import AddCommand, CommandExecutor, DeleteCommand, DuplicateCommand, ExportCommand, GenerateAllKeysCommand, ImportCommand, OpenCommand, PreviewCommand, SearchCommand, SortCommand, UndoCommand, UpdateCommand, ValidateAllCommand, ExportStringCommand, ImportStringCommand
-from .field_name import FieldName
-from .bibtex_parser import BibTeXParser
+from app.manager import ReferenceManager
+from app.command import AddCommand, CommandExecutor, DeleteCommand, DuplicateCommand, ExportCommand, GenerateAllKeysCommand, ImportCommand, OpenCommand, PreviewCommand, SearchCommand, SortCommand, UndoCommand, UpdateCommand, ValidateAllCommand, ExportStringCommand, ImportStringCommand
+from app.field_name import FieldName
+from app.bibtex_parser import BibTeXParser
 from utils.settings import Preferences
 
 

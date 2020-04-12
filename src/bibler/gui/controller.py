@@ -27,8 +27,8 @@ This module represents the statechart controller of BiBler.
 It should be used as an API that a L{statechart<gui.statechart.BiBler_Statechart>}, a L{GUI<gui.BiBlerGUI>} and an L{application<app_interface.IApplication>} can invoke.
 '''
 
-from .statechart import BiBler_Statechart
-from .app_interface import EntryListColumn
+from gui.statechart import BiBler_Statechart
+from gui.app_interface import EntryListColumn
 
 class ControllerData(object):
     """

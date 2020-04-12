@@ -33,5 +33,5 @@ PyInstaller.__main__.run([
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.html'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.md'), os.pathsep, os.path.join('utils', 'resources')),
     '--icon=%s' % os.path.join('utils', 'resources', 'bibler.ico'),
-    '__init__.py'
+    os.path.join('__init__.py')
 ])

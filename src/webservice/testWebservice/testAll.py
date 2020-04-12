@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 '''
 Created on March 12, 2017
-@author: Félix Bélanger-Robillard
+@author: Felix Belanger-Robillard
 '''
 import unittest
 from testAddEntry import TestAddEntry

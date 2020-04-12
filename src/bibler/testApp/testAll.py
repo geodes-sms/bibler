@@ -25,15 +25,15 @@ Created on Jan 13, 2014
 This package contains the modules to unit test the L{app.UserInterface.UserInterface} class.
 '''
 import unittest
-from .testAdd import TestAdd
-from .testDelete import TestDelete
-from .testUpdate import TestUpdate
-from .testDuplicate import TestDuplicate
-from .testPreview import TestPreview
-from .testSearch import TestSearch
-from .testSort import TestSort
+from testApp.testAdd import TestAdd
+from testApp.testDelete import TestDelete
+from testApp.testUpdate import TestUpdate
+from testApp.testDuplicate import TestDuplicate
+from testApp.testPreview import TestPreview
+from testApp.testSearch import TestSearch
+from testApp.testSort import TestSort
 
-def testApp():
+def test():
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestAdd))
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestDelete))
@@ -44,7 +44,9 @@ def testApp():
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestSort))
     return suite  
 
+def run_tests():
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(test())
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(testApp())
+    run_tests()

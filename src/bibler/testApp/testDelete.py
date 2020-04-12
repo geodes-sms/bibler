@@ -25,7 +25,7 @@ Created on Jan 13, 2014
 This module tests the L{app.BiBlerApp.deleteEntry} method.
 '''
 import unittest
-from . import oracle
+from testApp import oracle
 from app.user_interface import BiBlerApp
 from gui.app_interface import EntryListColumn
 

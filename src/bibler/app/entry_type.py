@@ -70,7 +70,8 @@ class EntryType:
         @rtype: C{generator} of L{FieldName}
         @return: The list of field names.
         """
-        for type in EntryType.__all_types: yield type
+        for t in EntryType.__all_types:
+            yield t
         
     @staticmethod   
     def creatEntry(entryType):

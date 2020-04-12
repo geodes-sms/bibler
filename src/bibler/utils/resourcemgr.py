@@ -24,7 +24,7 @@ Created on Jan 13, 2014
 This module is responsible for managing all resources of BiBler.
 '''
 
-from . import utils
+from utils import utils
 import os
 
 class ResourceManager(object, metaclass=utils.Singleton):
@@ -33,11 +33,11 @@ class ResourceManager(object, metaclass=utils.Singleton):
     @sort: _*, get*
     """
     def __init__(self):
-        self.pdfImagePath = 'utils/resources/pdf.png'
-        self.aboutHTMLPath = 'utils/resources/about.html'
-        self.usermanualHTMLPath = 'utils/resources/manual.html'
-        self.docsHTMLPath = 'docs/index.html'
-        self.iconPath = 'utils/resources/bibler.ico'
+        self.pdfImagePath = os.path.join('utils', 'resources', 'pdf.png')
+        self.aboutHTMLPath = os.path.join('utils', 'resources', 'about.html')
+        self.usermanualHTMLPath = os.path.join('utils', 'resources', 'manual.html')
+        self.docsHTMLPath = os.path.join('docs', 'index.html')
+        self.iconPath = os.path.join('utils', 'resources', 'bibler.ico')
     
     def getAboutHTML(self):
         """

@@ -28,8 +28,8 @@ This module contains all the commands of BiBler.
 It implements the Command design pattern.
 """
 
-from .impex import BibTeXImporter, CSVImporter, EndNoteImporter, BibTeXExporter, CSVExporter, HTMLExporter, MySQLExporter, BibTeXStringExporter, CSVStringExporter, HTMLStringExporter, MySQLStringExporter, BibTeXStringImporter, EndNoteStringImporter
-from .entry import EntryIdGenerator
+from app.impex import BibTeXImporter, CSVImporter, EndNoteImporter, BibTeXExporter, CSVExporter, HTMLExporter, MySQLExporter, BibTeXStringExporter, CSVStringExporter, HTMLStringExporter, MySQLStringExporter, BibTeXStringImporter, EndNoteStringImporter
+from app.entry import EntryIdGenerator
 from utils import settings
 from utils.settings import Preferences
 
