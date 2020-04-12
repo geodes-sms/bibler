@@ -92,7 +92,7 @@ class ReferenceManager(object):
                 else:
                     return None
             except Exception as ex:
-                    return None
+                raise ex
         
     def update(self, entryId, entryBibTeX):
         """

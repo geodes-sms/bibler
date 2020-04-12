@@ -994,9 +994,10 @@ class Controller(object):
         @return: The total number of entries.
         @note: A total of 0 is not considered as an error.
         """
-        if self.data.entryList is None:
-            self.__sendError(ControllerLogicException('No entry list found.'))
-        else:
+        #if self.data.entryList is None:
+        #    self.__sendError(ControllerLogicException('No entry list found.'))
+        #else:
+        if self.data.entryList is not None:
             return self.data.entryCount
     
     def getAllEntries(self):
@@ -1092,9 +1093,10 @@ class Controller(object):
         An C{error} event is sent to the statechart if there is no entry list displayed
         or L{BiBlerGUI.displayEntries<gui.BiBlerGUI.displayEntries>} raised an exception.
         """
-        if self.data.entryList is None:
-            self.__sendError(ControllerLogicException('No entry list found.'))
-        else:
+        #if self.data.entryList is None:
+        #    self.__sendError(ControllerLogicException('No entry list found.'))
+        #else:
+        if self.data.entryList is not None:
             try:
                 result = self.GUI.displayEntries(self.data.entryList)
                 if not self.__sendAppOperationResult(lambda: result,

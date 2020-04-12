@@ -670,19 +670,21 @@ class BibTeXImporter(Importer):
         total = 0
         try:
             line = self.database.readline()
+            line_number = 1
             entry = ''
             while line:
-                if line.startswith('@'):
+                if line.strip().startswith('@'):
                     if entry:
                         total += self.add(entry)
                     entry = line
-                else:
+                elif not line.strip().startswith('%'):
                     entry += line
                 line = self.database.readline()
+                line_number += 1
             if entry:
                 total += self.add(entry)
-        except:
-            raise
+        except Exception as ex:
+            raise Exception('%s (line %d)' % (str(ex), line_number)) from ex
         finally:
             self.closeDB()
         

@@ -516,7 +516,7 @@ class Entry(object):
         try:
             key = utils.escapeSQLCharacters(self.getKey())
             title = utils.escapeSQLCharacters(self.getField(FieldName.Title).getValue())
-            bibtex = utils.escapeSQLCharacters(self.toBibTeX().replace('\n',''))
+            bibtex = utils.escapeSQLCharacters(self.toBibTeX(ignoreEmptyField=True).replace('\n',''))
             preview = utils.escapeSQLCharacters(self.toHtmlDefault().replace('\n',''))
             url = self.getField(FieldName.Paper).getValue()
             if url:
@@ -580,7 +580,7 @@ class EmptyEntry(Entry):
             return ValidationResult(ValidationResult.SUCCESS)
         return ValidationResult(ValidationResult.ERROR, msg='No field should be defined.')
         
-    def toBibTeX(self):
+    def toBibTeX(self, ignoreEmptyField=True):
         return ''
         
     def toCompleteHtmlDefault(self):

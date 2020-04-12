@@ -11,8 +11,15 @@ To compile the source code, you need the following dependencies:
 
 # Change log
 
-## Version 1.4
+## Version 1.5
 #### 12 Apr 2020
+- Ignores lines starting with '%' in a BibTeX file
+- Open/Import errors now give the line number where the error happened
+- Removed multiple error popups when an error opening a file occurs
+
+
+## Version 1.4
+#### 12 Apr 2020 (updated)
 - Minor code refactorings: unit tests are working again
 - Now using PyInstaller to create a build distribution
 
