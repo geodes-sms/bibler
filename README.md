@@ -6,7 +6,8 @@ BiBler is a open-source and cross-platform compatible.
 Not only is it a fully functional software, the tool has been entirely modeled and synthesized in Python.
 It is used for educational purposes in order to understand how to generate a complete application from UML models in an agile and test-driven environment.
 
-You can interact with BiBler via its GUI, its API, or as a we service.
+You can interact with BiBler via its GUI, its API, or as a web service.
+
 ![gui_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/screenshot.png/1)
 ![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
 
