@@ -20,11 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 This is the script that creates a distribution of BiBler as an executable.
 """
 
-import os.path
+import os
 import PyInstaller.__main__
+
 
 PyInstaller.__main__.run([
     '--name=%s' % 'bibler',
+    '--distpath=%s' % '../../build',
+    '--noconfirm',
     '--windowed',
     #'--debug=all', # remove --windowed if debug is enabled
     '--add-binary=%s%s%s' % (os.path.join('utils', 'resources', '*.ico'), os.pathsep, os.path.join('utils', 'resources')),
@@ -32,6 +35,7 @@ PyInstaller.__main__.run([
     '--add-binary=%s%s%s' % (os.path.join('utils', 'resources', '*.png'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.html'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.md'), os.pathsep, os.path.join('utils', 'resources')),
+    '--add-data=%s%s%s' % (os.path.join('external'), os.pathsep, os.path.join('external')),
     '--icon=%s' % os.path.join('utils', 'resources', 'bibler.ico'),
     os.path.join('__init__.py')
 ])
