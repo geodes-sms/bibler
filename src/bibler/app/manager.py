@@ -168,7 +168,7 @@ class ReferenceManager(object):
             else:
                 self.searchResult = [e for e in iter(self.entryList) if e.matchesExact(query)]
             return len(self.searchResult)
-        except:
+        except Exception as ex:
             return -1
     
     def sort(self, field, reverse=False):

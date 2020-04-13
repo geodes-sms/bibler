@@ -33,7 +33,12 @@ Reverse the last operation performed. When the focus is in the editor, use Ctrl+
 Select the entire text in the editor. This enables the Ctrl+A keyboard shortcut in the editor.
 
 ##### Filter
-Search through the list of entries and display only those that satisfy the query provided. This searches through all values, not field names and entry types. The query is not case-sensitive and special characters are simplified (e.g., 'e' will match é). By default, an exact match of the query must be found. Regular expressions can be used if the option is enabled in the preferences. The supported regular expressions follow [Python regex](https://docs.python.org/2.7/library/re.html).
+Search through the list of entries and display only those that satisfy the query provided.
+This searches through all values, not field names and entry types.
+The query is not case-sensitive and special characters are simplified (e.g., 'e' will match &eacute;).
+By default, an exact match of the query must be found. Regular expressions can be used if the option is enabled in the preferences.
+The supported regular expressions follow [Python regex](https://docs.python.org/library/re.html).
+Note that the search string cannot start with * since it anyways searches for substrings.
 
 ##### Clear Filter
 Display the entire list of entries back after a search.
