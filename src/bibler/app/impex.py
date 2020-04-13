@@ -640,10 +640,15 @@ class Importer(ImpEx):
         
     def add(self, entry):
         """
-        Shorthand to remove code duplication
+        Adds an entry if it is not empty.
         """        
-        result = self.manager.add(entry)
+        result = self.manager.add(entry, ignoreIfEmpty=True)
+        if result is None:
+            result = 0
         return int(result > 0)
+    
+    def remove_empty_entry(self):
+        pass
     
     
 class BibTeXImporter(Importer):
@@ -684,7 +689,7 @@ class BibTeXImporter(Importer):
             if entry:
                 total += self.add(entry)
         except Exception as ex:
-            raise Exception('%s (line %d)' % (str(ex), line_number)) from ex
+            raise Exception('%s (while reading line %d of the file)' % (str(ex), line_number)) from ex
         finally:
             self.closeDB()
         

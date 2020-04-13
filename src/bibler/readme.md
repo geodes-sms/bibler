@@ -11,7 +11,7 @@ To compile the source code, you need the following dependencies:
 
 # Change log
 
-## Version 1.5
+## Version 1.4.1
 #### 12 Apr 2020
 - Ignores lines starting with '%' in a BibTeX file
 - Open/Import errors now give the line number where the error happened

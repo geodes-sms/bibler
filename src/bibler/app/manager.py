@@ -70,7 +70,7 @@ class ReferenceManager(object):
             return True, entry
         return False, entry
         
-    def add(self, entryBibTeX, entryType=None):
+    def add(self, entryBibTeX, entryType=None, ignoreIfEmpty=False):
         """
         @see: L{app.user_interface.BiBlerApp.addEntry}.           
         """
@@ -85,6 +85,9 @@ class ReferenceManager(object):
         else:
             try:
                 valid, entry = self.__parseEntry(entryBibTeX)
+                if ignoreIfEmpty and not entry.getEntryType():
+                    # It is an EmptyEntry so ignore if specified
+                    return None
                 if valid:
                     entry.generateId()
                     self.entryList.append(entry)

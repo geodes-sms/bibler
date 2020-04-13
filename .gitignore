@@ -6,4 +6,4 @@
 *.pyo
 *__pycache__
 src/bibler/build
-src/bibler/dist
+/src/bibler/bibler.spec

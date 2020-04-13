@@ -206,11 +206,15 @@ class IApplication(object):
         """
         raise NotImplementedError()
     
-    def addEntry(self, entryBibTeX, entryType = None):
+    def addEntry(self, entryBibTeX, entryType=None, ignoreIfEmpty=False):
         """
         Add a new entry. If C{entryBibTeX==Empty Entry}, an empty entry is created.
         @type entryBibTeX: L{str}
-        @param entryBibTeX: The BibTeX reference of the entry. 
+        @param entryBibTeX: The BibTeX reference of the entry.
+        @type entryType: L{str}
+        @param entryType: The type of the entry, if known in advance.
+        @type ignoreIfEmpty: L{bool}
+        @param ignoreIfEmpty: When True, does not add the entry if it is empty.
         @rtype: L{int}
         @return: The I{id} of the new entry. C{None} is returned if failed.
         """

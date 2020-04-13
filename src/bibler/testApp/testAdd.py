@@ -63,6 +63,11 @@ class TestAdd(unittest.TestCase):
         self.assertEqual(self.ui.getEntryCount(), 1, '%s not added.' % oracle.valid_entry_full)
     
     def testAddValidBibTeX(self):
+        for e in oracle.all_entries:
+            _id = self.ui.addEntry(e.getBibTeX())
+            self.assertIsNotNone(_id, '%s not added.' % e)
+    
+    def testAddValidBibTeXVariants(self):
         for e in oracle.valid_bibtex_variants:
             _id = self.ui.addEntry(e.getBibTeX())
             self.assertIsNotNone(_id, '%s not added.' % e)
@@ -89,9 +94,14 @@ class TestAdd(unittest.TestCase):
             self.assertEqual(self.ui.getEntryCount(), 0, '%s wrongly added.' % e)
 
     def testAddInvalidBibTeX(self):
-        for e in oracle.all_invalid_entry_types:
+        for e in oracle.all_invalid_entries:
             _id = self.ui.addEntry(e.getBibTeX())
             self.assertIsNone(_id, '%s was wrongly added.' % e)
+            self.assertEqual(self.ui.getEntryCount(), 0, '%s wrongly added.' % e)
+
+    def testAddErroneousBibTeX(self):
+        for e in oracle.all_erroneous_entries:
+            self.assertRaises(Exception, self.ui.addEntry, e.getBibTeX())
             self.assertEqual(self.ui.getEntryCount(), 0, '%s wrongly added.' % e)
     
     def testAddDeleteSanity(self):

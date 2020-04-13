@@ -21,14 +21,49 @@ This is the script that creates a distribution of BiBler as an executable.
 """
 
 import os
+import datetime
 import PyInstaller.__main__
 
+VERSION = '1.4.2'
+DATE = datetime.date.today().strftime('%d %b %Y')
+
+# First update the version and the date
+####################
+
+# In the __init__.py file
+init = open('__init__.py','r+')
+init_lines = init.readlines()
+init.seek(0)
+for line in init_lines:
+    if line.startswith('.. versionadded:: '):
+        line = '.. versionadded:: %s\n' % VERSION
+    if line.startswith('__version__ = '):
+        line = '__version__ = "%s"\n' % VERSION
+    elif line.startswith('Created on '):
+        line = 'Created on %s\n' % DATE
+    init.write(line)
+init.close()
+
+# In the about.html file
+about = open(os.path.join('utils', 'resources', 'about.html'),'r+')
+about_lines = about.readlines()
+about.seek(0)
+for line in about_lines:
+    if line.find('Version') >= 0:
+        line = ' ' * 16
+        line += '<font size="2">Version: %s -- %s</font><br />\n' % (VERSION, DATE)
+    about.write(line)
+about.close()
+
+# Then build and package the code
+####################
 
 PyInstaller.__main__.run([
     '--name=%s' % 'bibler',
     '--distpath=%s' % '../../build',
     '--noconfirm',
     '--windowed',
+    '--clean',
     #'--debug=all', # remove --windowed if debug is enabled
     '--add-binary=%s%s%s' % (os.path.join('utils', 'resources', '*.ico'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-binary=%s%s%s' % (os.path.join('utils', 'resources', '*.jpg'), os.pathsep, os.path.join('utils', 'resources')),

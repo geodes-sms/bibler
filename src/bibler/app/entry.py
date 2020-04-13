@@ -727,6 +727,8 @@ class Book(Entry):
         elif not self.getField(FieldName.Editor).isEmpty():
             # First author's last name (no {}, no spaces) concatenated with year
             key = Field.simplify(self.getField(FieldName.Editor).getFirstLastName())
+        else:
+            key = key.getValue()
         return key + self.getField(FieldName.Year).getYear()
         
     def validate(self):

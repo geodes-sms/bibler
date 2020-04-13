@@ -18,9 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 .. moduleauthor:: Eugene Syriani
-.. versionadded:: 1.4
+.. versionadded:: 1.4.2
 
-Created on Oct 09, 2019
+Created on 13 Apr 2020
+
+
 
 This is the main BiBler module.
 Execute this module from the command line to start the application with a graphical user interface.
@@ -38,7 +40,7 @@ You can also interact with BiBler programmatically through its API as follows:
 
 G{packagetree app, gui, utils}
 """
-__version__ = "1.4"
+__version__ = "1.4.2"
 
 import sys
 sys.path.insert(0, 'BiBler')
@@ -104,4 +106,5 @@ The preferences from L{utils.settings.Preferences}.
 
 if __name__ == '__main__':
     __b.startGUI()
+
 

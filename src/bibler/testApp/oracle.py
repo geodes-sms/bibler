@@ -98,24 +98,81 @@ empty_entry1 = Valid('empty entry', None, '', '')
 
 empty_entry2 = Valid('empty entry', None, '', '')
 
-invalid_entry1 = Invalid('invalid entry',
+erroneous_entry1 = Invalid('invalid entry',
 '''@{,
 }''')
 
-invalid_entry3 = Invalid('invalid entry', '@')
+erroneous_entry2 = Invalid('invalid entry', '@')
 
-invalid_entry4 = Invalid('invalid entry', '@{}')
+erroneous_entry3 = Invalid('invalid entry', '@{}')
 
-invalid_entry5 = Invalid('invalid entry', '@article{y}')
+invalid_entry1 = Invalid('invalid entry', '@article{y}')
 
-invalid_entry6 = Invalid('invalid entry', '@article{y,}')
+invalid_entry2 = Invalid('invalid entry', '@article{y,}')
 
-invalid_entry7 = Invalid('invalid entry', '''@article{
+invalid_entry3 = Invalid('invalid entry', '''@article{
 x = {}
 }''')
 
-invalid_entry8 = Invalid('invalid entry', '''@article{y,
+invalid_entry4 = Invalid('invalid entry', '''@article{y,
 author = {}
+}''')
+
+valid_entry_comment = Valid('valid entry with comments',
+'''%comment
+@ARTICLE{Landin1966,
+  %comment
+  author = {{L}andin, {P}eter {J}.},
+  %comment
+  title = {{T}he next 700 programming languages},
+  journal = {{C}ommunications of {ACM}},
+  year = {1966},
+  paper = {www.google.com},
+  note = {Some note}
+}
+%comment''', """<p><font face="verdana"><b><i>ARTICLE</i>(Landin1966e)</b></font></p>
+<p><span style="font-variant:small-caps">Landin, P.</span> The next 700 programming languages. <i>Communications of ACM</i> (1966).</p>
+<p><center></center></p>"""
+, '')
+
+valid_entry_escaped_comment = Valid('valid entry with escaped comment symbol',
+'''
+@ARTICLE{Landin1966,
+  author = {{L}andin, {P}eter {J}.},
+  %comment
+  title = {{T}he next 700\% programming languages},
+  journal = {{C}ommunications of {ACM}},
+  year = {1966},
+  paper = {www.google.com},
+  note = {Some note}
+}''', """<p><font face="verdana"><b><i>ARTICLE</i>(Landin1966e)</b></font></p>
+<p><span style="font-variant:small-caps">Landin, P.</span> The next 700% programming languages. <i>Communications of ACM</i> (1966).</p>
+<p><center></center></p>"""
+, '')
+
+invalid_entry_comment1 = Invalid('invalid entry with comments',
+'''
+@ARTICLE{Landin1966,%comment
+  author = {{L}andin, {P}eter {J}.},
+  title = {{T}he next 700% programming languages},
+  journal = {{C}ommunications of {ACM}},
+  year = {1966},
+  paper = {www.google.com},
+  note = {Some note}
+}''')
+
+invalid_entry_comment2 = Invalid('invalid entry with comments',
+'''
+@ARTICLE{article,
+  author = {Adams, Peter},
+  journal = {The name %of the journal},
+  title = {The title of the work},
+  year = {1993},
+  month = {7},
+  note = {An optional note},
+  number = {2},
+  pages = {201--213},
+  volume = {4}
 }''')
 
 valid_entry_spaces = Valid('valid entry with spaces and new lines around fields',
@@ -595,6 +652,19 @@ invalid_inproceedings_author_year_no_req_fields = InvalidInProceedings('invalid 
   publisher = {ACM Press}
 }''')
 
+invalid_inproceedings_skip_booktitle = InvalidInProceedings('invalid inproceedings booktitle skipped',
+'''@INPROCEEDINGS{Aggarwal2006,
+  author = {Aggarwal, Gagan and Hartline, Jason D.},year
+  booktitle = {Proceedings of the 17th Annual ACM-SIAM Symposium on Discrete Algorithms},
+  title = {Knapsack auctions},
+  year = {2006},
+  address = {New York},
+  editor = {Hurwicz, Leonid and Schmeidler, David and Sonnenschein, Hugo},
+  pages = {1083--1092},
+  publisher = {Association for Computing Machinery},
+  series = {LNCS}
+}''')
+
 # TechReports
 valid_techreport_single_author = ValidTechReport('valid techreport with a single author',
 '''@TECHREPORT{Batz2006,
@@ -721,6 +791,11 @@ invalid_phdthesis_author_year_no_req_fields = InvalidPhdThesis('invalid phdthesi
 }''')
 
 # Lists
+all_erroneous_entries = [erroneous_entry1, erroneous_entry2, erroneous_entry3]
+
+all_invalid_entries = [invalid_entry1, invalid_entry2, invalid_entry3, invalid_entry4, invalid_entry_comment1,
+                       invalid_entry_comment2]
+
 all_entry_types = [valid_article_multi_author, valid_article_single_author, valid_book_multi_author,
                    valid_book_single_author, valid_inproceedings_multi_author, valid_inproceedings_single_author,
                    valid_phdthesis_single_author, valid_techreport_multi_author, valid_techreport_single_author]
@@ -730,17 +805,17 @@ all_entries = all_entry_types + [valid_entry_full]
 all_entries_all_fields = [valid_article_all_fields, valid_book_all_fields_author, valid_book_all_fields_editor,
                           valid_inproceedings_all_fields, valid_phdthesis_all_fields, valid_techreport_all_fields]
 
-all_invalid_entry_types_no_req = [invalid_article_author_year_no_req_fields, invalid_article_no_req_fields,
-                              invalid_book_author_year_no_req_fields, invalid_book_no_req_fields,
-                              invalid_inproceedings_author_year_no_req_fields, invalid_inproceedings_no_req_fields,
-                              invalid_phdthesis_author_year_no_req_fields, invalid_phdthesis_no_req_fields,
-                              invalid_techreport_author_year_no_req_fields, invalid_techreport_no_req_fields]
+all_invalid_entry_types_no_req = [invalid_entry_no_author, invalid_article_author_year_no_req_fields, 
+                                  invalid_article_no_req_fields, invalid_book_author_year_no_req_fields, 
+                                  invalid_book_no_req_fields, invalid_inproceedings_author_year_no_req_fields, 
+                                  invalid_inproceedings_no_req_fields, invalid_phdthesis_author_year_no_req_fields, 
+                                  invalid_phdthesis_no_req_fields, invalid_techreport_author_year_no_req_fields, 
+                                  invalid_techreport_no_req_fields, invalid_inproceedings_skip_booktitle]
 
-all_invalid_entry_types = all_invalid_entry_types_no_req + \
-                            [invalid_entry1, invalid_entry3, invalid_entry4,
-                             invalid_entry5, invalid_entry6, invalid_entry7, invalid_entry8]
+all_invalid_entry_types = all_invalid_entry_types_no_req + all_invalid_entries
 
-valid_bibtex_variants = [valid_entry_spaces, valid_entry_full, valid_entry_quote, valid_entry_multiline]
+valid_bibtex_variants = [valid_entry_spaces, valid_entry_full, valid_entry_quote, valid_entry_multiline, 
+                         valid_entry_comment, valid_entry_escaped_comment]
 
 search_all_entries_all_fields = {'landin': 1, 'graph': 2, '4': 3, '19': 4, 'ne': 5, 'm': 6}
 

@@ -87,7 +87,7 @@ class BiBlerApp(IApplication):
         """
         return self.__executor.execute(OpenCommand(self.__manager, path, openFormat))
         
-    def addEntry(self, entryBibTeX, entryType = None):
+    def addEntry(self, entryBibTeX, entryType=None, ignoreIfEmpty=False):
         """
         @see: L{gui.app_interface.IApplication.addEntry}.
         """

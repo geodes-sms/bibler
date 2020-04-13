@@ -54,7 +54,9 @@ class BibTeXParserWithStdFields(object):
         bibtex = bibtex.replace('\xf8', '\\o')     # unicodedata ignores \\o
         bibtex = self.__unicodeToTex(bibtex)
         #bibtex = unicodedata.normalize('NFKD', bibtex).encode(encoding='ascii', errors='ignore')  # replace unicode characters with their ASCII approximation
-        self.bibtex = bibtex.strip().replace('\n', ' ')         # remove all spaces and new lines
+        bibtex = bibtex.strip()                                 # remove all leading and trailing spaces
+        self.bibtex = self.remove_comments(bibtex)              # remove all comments
+        self.bibtex = self.bibtex.replace('\n', ' ')            # remove all new lines
         self.bibtex = re.sub('=\s*\"', '= {', self.bibtex)      # replace all double quotes that delimit the beginning of a field value
         self.bibtex = re.sub('\"\s*,', '},', self.bibtex)       # replace all double quotes that delimit the end of a field value
         self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*([\w-]*)\s*""", re.RegexFlag.DOTALL)
@@ -92,7 +94,29 @@ class BibTeXParserWithStdFields(object):
             bibtex = bibtex.replace(c, chars[c])
 
         return bibtex
-
+    
+    def remove_comments(self, bibtex):
+        """
+        Removes all the comments (starting with %) in the BibTeX string
+        :param bibtex: The BibTeX string.
+        :type field: str
+        :return: str -- The uncommented BibTeX string.
+        """
+        bibtex = bibtex.splitlines()
+        new_bibtex = ''
+        for i in range(len(bibtex)):
+            comment_position = bibtex[i].find('%')
+            if comment_position >= 0:
+                if bibtex[i][comment_position-1] != '\\':
+                    # in a line, ignore everything after %, except if it is escaped \%
+                    new_bibtex += bibtex[i][:comment_position]
+                else:
+                    # It was escaped so keep the text after \%
+                    new_bibtex += bibtex[i]
+            else:
+                # no comments on this line, so keep it
+                new_bibtex += bibtex[i]
+        return new_bibtex
 
     def parse(self):
         """
