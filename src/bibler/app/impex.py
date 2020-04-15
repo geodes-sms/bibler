@@ -52,7 +52,7 @@ class ImpEx(object):
         @param mode: Any mode support by python U{open<https://docs.python.org/3.5/library/functions.html#open>}.
         """
         try:
-            self.database = open(self.path, mode)
+            self.database = open(self.path, mode, encoding='utf8')
         except:
             raise Exception('Cannot open the requested file.')
     
@@ -721,6 +721,7 @@ class EndNoteImporter(Importer):
         try:
             line = self.database.readline()
             entry = ''
+            line_number = 1
             while line:
                 if line.startswith('@'):
                     if entry:
@@ -729,10 +730,11 @@ class EndNoteImporter(Importer):
                 else:
                     entry += line
                 line = self.database.readline()
+                line_number += 1
             if entry:
                 total += self.add(entry)
-        except:
-            raise
+        except Exception as ex:
+            raise Exception('%s (while reading line %d of the file)' % (str(ex), line_number)) from ex
         finally:
             self.closeDB()
         return total
@@ -777,7 +779,6 @@ class EndNoteImporter(Importer):
                     entry = entry[0:j] + entry[j:].replace('series', 'booktitle', 1)
         # Inbooks who have an author should not have an editor
         elif entry.startswith('inbook', 1) or entry.startswith('Inbook', 1) or entry.startswith('INBOOK', 1):
-            
             i = entry.find('author')
             if i != -1:
                 j = entry.find('editor')
@@ -815,6 +816,7 @@ class CSVImporter(Importer):
         try:
             line = self.database.readline() # skip header line
             line = self.database.readline()
+            line_number = 2
             while line:
                 line = line.split('\t')
                 if len(line) != len(allFields) + 1:
@@ -836,8 +838,9 @@ class CSVImporter(Importer):
                 bibtex += '\n}'
                 total += self.add(bibtex)
                 line = self.database.readline()
-        except:
-            raise
+                line_number += 1
+        except Exception as ex:
+            raise Exception('%s (while reading line %d of the file)' % (str(ex), line_number)) from ex
         finally:
             self.closeDB()
         return total

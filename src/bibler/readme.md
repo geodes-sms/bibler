@@ -16,6 +16,10 @@ To compile the source code, you need the following dependencies:
 - Ignores lines starting with '%' in a BibTeX file
 - Open/Import errors now give the line number where the error happened
 - Removed multiple error popups when an error opening a file occurs
+- Removed comment field, use the standard annote field instead. Moved abstract field to additional
+- Added endnote example for testing
+- Updated user manual
+- Minor code refactoring
 
 
 ## Version 1.4

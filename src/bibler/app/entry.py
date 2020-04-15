@@ -31,6 +31,7 @@ from gui.app_interface import EntryDict, EntryListColumn
 from app.field_name import FieldName
 from app.field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year
 from utils import utils
+from utils.utils import Utils
 import re
 
 class EntryIdGenerator(object, metaclass=utils.Singleton):
@@ -117,7 +118,7 @@ class Entry(object):
         self.additionalFields = {FieldName.Annote: Field(FieldName.Annote),
                                  FieldName.DOI: Field(FieldName.DOI),
                                  FieldName.Paper: Field(FieldName.Paper),
-                                 FieldName.Comment: Field(FieldName.Comment)}
+                                 FieldName.Abstract: Field(FieldName.Abstract)}
         self.importantFields = []   # contains keys from optionalFields
         
     def getId(self):
@@ -357,9 +358,8 @@ class Entry(object):
         :return: :class:`True` if query matched, :class:`False` otherwise.
         """
         query = query.lower()
-        simplify = Field.simplify
         for value in self.__iterAllFieldsUnsorted():
-            if query in simplify(value.getValue()).lower():
+            if query in Field.simplify(value.getValue()).lower():
                 return True
         return False
     
@@ -514,14 +514,14 @@ class Entry(object):
         :return: The INSERT statement.
         """
         try:
-            key = utils.escapeSQLCharacters(self.getKey())
-            title = utils.escapeSQLCharacters(self.getField(FieldName.Title).getValue())
-            bibtex = utils.escapeSQLCharacters(self.toBibTeX(ignoreEmptyField=True).replace('\n',''))
-            preview = utils.escapeSQLCharacters(self.toHtmlDefault().replace('\n',''))
+            key = Utils().escapeSQLCharacters(self.getKey())
+            title = Utils().escapeSQLCharacters(self.getField(FieldName.Title).getValue())
+            bibtex = Utils().escapeSQLCharacters(self.toBibTeX(ignoreEmptyField=True).replace('\n',''))
+            preview = Utils().escapeSQLCharacters(self.toHtmlDefault().replace('\n',''))
             url = self.getField(FieldName.Paper).getValue()
             if url:
                 if url != '' and not url.startswith('http://'):
-                    url = utils.escapeSQLCharacters('http://' + url)
+                    url = Utils().escapeSQLCharacters('http://' + url)
             else:
                     url = ''
             return '''INSERT INTO Paper (bibtexKey,title,doi,bibtex,preview) VALUES (N'%s', N'%s', N'%s', N'%s', N'%s');''' \
@@ -569,7 +569,7 @@ class EmptyEntry(Entry):
         self.optionalFields = dict()
         self.additionalFields = {FieldName.DOI: Field(FieldName.DOI),
                                  FieldName.Paper: Field(FieldName.Paper),
-                                 FieldName.Comment: Field(FieldName.Comment)}
+                                 FieldName.Annote: Field(FieldName.Annote)}
     
     def generateKey(self):
         return ''
@@ -608,8 +608,7 @@ class Article(Entry):
                                     FieldName.Number: Field(FieldName.Number),
                                     FieldName.Pages: Pages(),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
         self.importantFields = [FieldName.Volume, FieldName.Pages]
     
     def getContributors(self):
@@ -708,8 +707,7 @@ class Book(Entry):
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Edition: Field(FieldName.Edition),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
     
     def getContributors(self):
         if not self.getField(FieldName.Author).isEmpty():
@@ -856,8 +854,7 @@ class Booklet(Entry):
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Year: Year(),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
     
     def getContributors(self):
         return self.getField(FieldName.Author).getContributors()
@@ -954,8 +951,7 @@ class Inbook(Book):
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Edition: Field(FieldName.Edition),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
     
     def getContributors(self):
         if not self.getField(FieldName.Author).isEmpty():
@@ -1109,8 +1105,7 @@ class Incollection(Entry):
                                     FieldName.Edition: Field(FieldName.Edition),
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
         self.importantFields = [FieldName.Pages]
     
     def getContributors(self):
@@ -1242,8 +1237,8 @@ class Incollection(Entry):
             if note:
                 html += ''' %s.''' % note
             return html
-        except:
-            raise Exception('Failed to generate default style.')
+        except Exception as ex:
+            raise Exception('Failed to generate default style: ' + str(ex))
         
     
 class Inproceedings(Entry):
@@ -1270,8 +1265,7 @@ class Inproceedings(Entry):
                                     FieldName.Publisher: Field(FieldName.Publisher),
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
         self.importantFields = [FieldName.Volume, FieldName.Pages, FieldName.Publisher]
     
     def getContributors(self):
@@ -1445,8 +1439,7 @@ class Manual(Entry):
                                     FieldName.Address: Field(FieldName.Address),
                                     FieldName.Year: Year(),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
         self.importantFields = [FieldName.Author, FieldName.Year]
     
     def getContributors(self):
@@ -1556,8 +1549,7 @@ class Misc(Entry):
                                     FieldName.Howpublished: Field(FieldName.Howpublished),
                                     FieldName.Year: Year(),
                                     FieldName.Month: Field(FieldName.Month),
-                                    FieldName.Note: Field(FieldName.Note),
-                                    FieldName.Abstract: Field(FieldName.Abstract)})
+                                    FieldName.Note: Field(FieldName.Note)})
     
     def getContributors(self):
         return self.getField(FieldName.Author).getContributors()

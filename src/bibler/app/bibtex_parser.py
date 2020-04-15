@@ -34,6 +34,7 @@ from app.entry_type import EntryType
 from app.field_name import FieldName
 from app.field import Field
 from utils.settings import Preferences
+from utils.utils import Utils
 #from docutils.parsers.rst.directives import encoding
 
 
@@ -48,52 +49,17 @@ class BibTeXParserWithStdFields(object):
         :param bibtex: The BibTeX string.
         :type bibtex: str.
         """
-        #bibtex = bibtex.decode('utf-8','replace')   # make sure the text is in utf-8 encoding
-        bibtex = bibtex.replace('{\n', '{stubKey,\n')   # if key is missing
-        bibtex = bibtex.replace('\xdf', '{\ss}')   # unicodedata ignores \ss
-        bibtex = bibtex.replace('\xf8', '\\o')     # unicodedata ignores \\o
-        bibtex = self.__unicodeToTex(bibtex)
+        #bibtex = bibtex.decode('utf-8','replace')           # make sure the text is in utf-8 encoding
+        bibtex = bibtex.replace('{\n', '{stubKey,\n')       # if key is missing
+        bibtex = Utils().unicode2Tex(bibtex)                  # replace unicode characters to TeX equivalent
         #bibtex = unicodedata.normalize('NFKD', bibtex).encode(encoding='ascii', errors='ignore')  # replace unicode characters with their ASCII approximation
-        bibtex = bibtex.strip()                                 # remove all leading and trailing spaces
-        self.bibtex = self.remove_comments(bibtex)              # remove all comments
-        self.bibtex = self.bibtex.replace('\n', ' ')            # remove all new lines
-        self.bibtex = re.sub('=\s*\"', '= {', self.bibtex)      # replace all double quotes that delimit the beginning of a field value
-        self.bibtex = re.sub('\"\s*,', '},', self.bibtex)       # replace all double quotes that delimit the end of a field value
+        bibtex = bibtex.strip()                             # remove all leading and trailing spaces
+        self.bibtex = self.remove_comments(bibtex)          # remove all comments
+        self.bibtex = self.bibtex.replace('\n', ' ')        # remove all new lines
+        self.bibtex = re.sub('=\s*\"', '= {', self.bibtex)  # replace all double quotes that delimit the beginning of a field value
+        self.bibtex = re.sub('\"\s*,', '},', self.bibtex)   # replace all double quotes that delimit the end of a field value
         self.re_header = re.compile("""\s*@(\w+)\s*[({]\s*([\w-]*)\s*""", re.RegexFlag.DOTALL)
         self.entry = None
-
-    def __unicodeToTex(self,bibtex):
-        """   
-        :param bibtex: The BibTeX string.
-        :type bibtex: str
-        :returns: str -- The transformed BibTeX string.
-        """
-        chars = dict()
-        funnychars = ['\xc1','\xe1','\xc0','\xe0','\xc2','\xe2','\xc4','\xe4','\xc3',
-                      '\xe3','\xc5','\xe5','\xc6','\xe6','\xc7','\xe7','\xd0','\xf0','\xc9',
-                      '\xe9','\xc8','\xe8','\xca','\xea','\xcb','\xeb','\xcd','\xed','\xcc',
-                      '\xec','\xce','\xee','\xcf','\xef','\xd1','\xf1','\xd3','\xf3','\xd2',
-                      '\xf2','\xd4','\xf4','\xd6','\xf6','\xd5','\xf5','\xd8','\xf8','\xdf',
-                      '\xde','\xfe','\xda','\xfa','\xd9','\xf9','\xdb','\xfb','\xdc','\xfc',
-                      '\xdd','\xfd','\xff','\xa9','\xae','\u2122','\u20ac','\xa2','\xa3','\u2018',
-                      '\u2019','\u201c','\u201d','\xab','\xbb','\u2014','\u2013','\xb0','\xb1','\xbc',
-                      '\xbd','\xbe','\xd7','\xf7','\u03b1','\u03b2','\u221e']
-        bibtexcodes = ['\\\'{A}', '\\\'{a}', '\`{A}', '\`{a}', '\^{A}', '\^{a}', '\\"{A}', '\\"{a}', '\~{A}',
-                     '\~{a}', '\AA', '\\aa', '\AE', '\\ae', '\c{C}', '\c{c}', '\DJ', '\dj', '\\\'{E}',
-                     '\\\'{e}', '\`{E}', '\`{e}', '\^{E}', '\^{e}', '\\"{E}', '\\"{e}', '\\\'{I}', '\\\'{i}', '\`{I}',
-                     '\`{i}', '\^{I}', '\^{i}', '\\"{I}', '\\"{i}', '\~{N}', '\~{n}', '\\\'{O}', '\\\'{o}', '\`{O}',
-                     '\`{o}', '\^{O}', '\^{o}', '\\"{O}', '\\"{o}', '\~{O}', '\~{o}', '\O', '\o', '\ss',
-                     '\\textThorn', '\\textthorn', '\\\'{U}', '\\\'{u}', '\`{U}', '\`{u}', '\^{U}', '\^{u}', '\\"{U}', '\\"{u}',
-                     '\`{Y}', '\`{y}', '\\"{y}', '\copyright', '\\textregistered', '\\texttrademark', '\euro{}', '\cent', '\pounds', '`',
-                     '\'', '``', '\'\'', '<<', '>>', '\emdash', '\endash', '\degree', '\pm', '\\textonequarter',
-                     '\\textonehalf', '\\textthreequarters', '$\\times$', '$\div$', '$\\alpha$', '$\\beta$', '$\infty$']
-
-        for i in range(len(bibtexcodes)):
-            chars[funnychars[i]] = bibtexcodes[i]
-        for c in list(chars.keys()):
-            bibtex = bibtex.replace(c, chars[c])
-
-        return bibtex
     
     def remove_comments(self, bibtex):
         """

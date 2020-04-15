@@ -58,7 +58,6 @@ class FieldName:
     Volume = 'volume'
     Year = 'year'
     Paper = 'paper'     # not part of the BibTeX standard
-    Comment = 'comment' # not part of the BibTeX standard
     Abstract= 'abstract' # not part of the BibTeX standard
     
     __all_names = sorted(
@@ -66,7 +65,7 @@ class FieldName:
              Chapter, Edition, Editor, Howpublished, Institution,
              Journal, Key, Month, Note, Number,
              Organization, Pages, Publisher, School, Series,
-             Title, Type, Volume, Year, Paper, Comment])
+             Title, Type, Volume, Year, Paper, Abstract])
     
     @staticmethod
     def toEntryListColumn(field):

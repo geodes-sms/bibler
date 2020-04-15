@@ -70,7 +70,9 @@ PyInstaller.__main__.run([
     '--add-binary=%s%s%s' % (os.path.join('utils', 'resources', '*.png'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.html'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.md'), os.pathsep, os.path.join('utils', 'resources')),
+    '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.pdf'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('external'), os.pathsep, os.path.join('external')),
+    '--add-data=%s%s%s' % (os.path.join('..','..','examples'), os.pathsep, os.path.join('examples')),
     '--icon=%s' % os.path.join('utils', 'resources', 'bibler.ico'),
     os.path.join('__init__.py')
 ])

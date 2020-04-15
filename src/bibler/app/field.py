@@ -28,54 +28,7 @@ This module represents the fields of each entry.
 
 import re
 from app.field_name import FieldName
-from utils import utils
-
-class FieldValueMappingToSimple(dict, metaclass=utils.Singleton):
-    def __init__(self, *args, **kwargs):
-        self["{\\ss}"] = 'ss'
-        self["\\o"] = 'o'
-        for i in list(range(ord('A'), ord('Z'))) + list(range(ord('a'), ord('z'))):
-            self["{\\c%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\r%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\'%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\`%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\\"%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\^%s}" % chr(i)] = '%s' % chr(i)
-            self["{\\~%s}" % chr(i)] = '%s' % chr(i)
-        for i in list(range(ord('A'), ord('Z'))) + list(range(ord('a'), ord('z'))):
-            self["\\c{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\r{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\'{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\`{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\\"{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\^{%s}" % chr(i)] = '%s' % chr(i)
-            self["\\~{%s}" % chr(i)] = '%s' % chr(i)
-
-class FieldValueMappingToHTML(dict, metaclass=utils.Singleton):
-    def __init__(self, *args, **kwargs):
-        self["{\\ss}"] = '&szlig;'
-        self["\\ss"] = '&szlig;'
-        self["\\&"] = '&'
-        self["{\\&}"] = '&'
-        for i in list(range(ord('A'), ord('Z'))) + list(range(ord('a'), ord('z'))):
-            self["{\\c%s}" % chr(i)] = '&%scedil;' % chr(i)
-            self["{\\r%s}" % chr(i)] = '&%sring;' % chr(i)
-            self["{\\'%s}" % chr(i)] = '&%sacute;' % chr(i)
-            self["{\\`%s}" % chr(i)] = '&%sgrave;' % chr(i)
-            self["{\\\"%s}" % chr(i)] = '&%suml;' % chr(i)
-            self["{\\^%s}" % chr(i)] = '&%scirc;' % chr(i)
-            self["{\\~%s}" % chr(i)] = '&%stilde;' % chr(i)
-            self["{\\%s}" % chr(i)] = '&%sslash;' % chr(i)
-        for i in list(range(ord('A'), ord('Z'))) + list(range(ord('a'), ord('z'))):
-            self["\\c{%s}" % chr(i)] = '&%scedil;' % chr(i)
-            self["\\r{%s}" % chr(i)] = '&%sring;' % chr(i)
-            self["\\'{%s}" % chr(i)] = '&%sacute;' % chr(i)
-            self["\\`{%s}" % chr(i)] = '&%sgrave;' % chr(i)
-            self["\\\"{%s}" % chr(i)] = '&%suml;' % chr(i)
-            self["\\^{%s}" % chr(i)] = '&%scirc;' % chr(i)
-            self["\\~{%s}" % chr(i)] = '&%stilde;' % chr(i)
-        self["\\o"] = '&oslash;'
-        self["\\O"] = '&Oslash;'
+from utils.utils import Utils
 
 class Field(object):
     """
@@ -164,8 +117,7 @@ class Field(object):
         @rtype: L{str}
         @return: The simplified value.
         """
-        for i in FieldValueMappingToSimple().keys():
-            value = value.replace(i, FieldValueMappingToSimple()[i])
+        value = Utils().tex2simple(value)
         return Field.__clean(value)
         
     @staticmethod
@@ -178,9 +130,7 @@ class Field(object):
         @rtype: L{str}
         @return: The value in HTML encoding.
         """
-        for i in FieldValueMappingToHTML().keys():
-            value = value.replace(i, FieldValueMappingToHTML()[i])
-        value = value.replace('--', '&#8211;')
+        value = Utils().tex2html(value)
         return Field.__clean(value)
     
     @staticmethod
@@ -373,7 +323,7 @@ class ContributorField(Field):
             if self.hasEtal:
                 value += ContributorField.ET_AL[0]
             return Field.toHTML(value)
-        except:
+        except Exception as ex:
             raise Exception('Invalid %s names.' % self.name)
     
     def getACMValue(self):
@@ -521,14 +471,3 @@ class Paper(Field):
                 if not doi.startswith('http'):
                     doi = 'https://dx.doi.org/' + doi
                 self.value = doi
-
-class Abstract(Field):
-    """
-    The field for the abstract.
-    """
-    def __init__(self, value = ''):
-        super(Abstract, self).__init__(FieldName.Abstract, value)
-        
-    def format(self):
-        self.value = self.value.replace(' ', '')
-
