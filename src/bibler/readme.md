@@ -2,6 +2,64 @@
 
 The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.gnu.org/copyleft/gpl.html) ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
+## Usage
+
+#### Running BiBler
+
+To run the application with the GUI, simply run the `bibler` module from the command line like so.
+It requires wxPython.
+```console
+python src/bibler/__init__.py
+```
+
+To run in head-less mode, simply import the `bibler` module and use the `bibler` object.
+The main file is [`__init__.py`](__init__.py).
+The available functions are listed in the [documentation](../../docs/index.html) of the `IApplication` interface in the `App_Interface` module.
+```python
+from bibler import bibler
+bibler.start()      # starts the BiBler
+bibler.addEntry('') # adds an empty entry
+bibler.exit()       # closes BiBler
+```
+
+You can set the options of BiBler via the `Preferences` object.
+```python
+from bibler import *
+Preferences.overrideKeyGeneration = True	# Generates a key for entries even if one is already provided
+Preferences.bibStyle = BibStyle.DEFAULT		# Sets the bibliography style
+```
+
+#### Testing BiBler
+
+All unit tests are available in the [`testApp`](testApp) module.
+It requires PyUnit.
+To run the tests, simply run:
+```console
+python testApp.py
+```
+
+To test open and import, you can use the sample BibTeX files in the [examples](../../examples) folder.
+
+#### Building a distribution
+
+BiBler is built and distributed as a executable package.
+All the releases are available in the [build](../../build) folder.
+To create a new release, open the [build.py](build.py) module and set `VERSION` to the version number.
+Then, simply run:
+```console
+python build.py
+```
+It requires PyInstaller.
+This will override the latest build in the [build/bibler](../../build/bibler) folder.
+Finally, create a zip file of the build and deploy it as a new release.
+
+#### Generating the source code documentation
+
+It requires Sphinx.
+
+TODO
+
+
 ## Dependencies
 To compile the source code, you need the following dependencies:
 - [Python](https://www.python.org/) 3.7 or later

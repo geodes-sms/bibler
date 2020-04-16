@@ -102,7 +102,18 @@ Preferences = settings.Preferences()
 """
 The preferences from L{utils.settings.Preferences}.
 """
-
+ImportFormat = settings.ImportFormat
+"""
+The supported import formats from L{utils.settings.ImportFormat}.
+"""
+ExportFormat = settings.ExportFormat
+"""
+The supported export formats from L{utils.settings.ExportFormat}.
+"""
+BibStyle = settings.BibStyle
+"""
+The supported BibTeX preview styles from L{utils.settings.BibStyle}.
+"""
 
 if __name__ == '__main__':
     __b.startGUI()

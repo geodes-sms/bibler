@@ -12,15 +12,15 @@ You can interact with BiBler via its GUI, its API, or as a web service.
 ![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
 
 ## Features
-- Graphical user interface
-- Python library to integrate programmatically
-- Web service to deploy online
+- Graphical user interface to manage a BibTeX bibliography
 - Add, updated, delete references
-- Search through the list of references
+- Search through the library
 - Saves as simple BibTeX file
 - Validation against BibTeX standard
 - Import from BibTeX, CSV, or EndNote
 - Export to CSV, HTML, or SQL
+- Python module and API to integrate programmatically
+- Web service to deploy online as a service
 
 ## Installation
 
@@ -38,11 +38,13 @@ The [user manual](src/bibler/utils/resources/manual.md) is available from the he
 To run BiBler from Python code, the main file is [`src/bibler/__init__.py`](src/bibler/__init__.py).
 You can use BiBler programmatically like so:
 ```python
-from BiBler import BiBler 
-BiBler.start()    # starts the BiBler
-BiBler.add('')    # adds an empty entry
-BiBler.exit()     # closes BiBler
+from bibler import bibler 
+bibler.start()      # starts the BiBler
+bibler.addEntry('') # adds an empty entry
+bibler.exit()       # closes BiBler
 ```
+
+Go to [src/bibler](src/bibler) for more information.
 
 ### Web service
 

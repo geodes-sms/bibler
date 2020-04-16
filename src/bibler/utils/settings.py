@@ -101,7 +101,7 @@ class Preferences(object, metaclass=utils.Singleton):
         """
         self.overrideKeyGeneration = False
         """
-        Enforces to only add valid well-formed entries with respect to their BibTeX representation and ignore others.
+        Prevents generating a key for entries if one is already provided.
         """
         self.searchRegex = False
         """
