@@ -9,7 +9,7 @@ It is used for educational purposes in order to understand how to generate a com
 You can interact with BiBler via its GUI, its API, or as a web service.
 
 ![gui_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/screenshot.png/1)
-![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
+<!--![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)-->
 
 ## Features
 - Graphical user interface to manage a BibTeX bibliography
