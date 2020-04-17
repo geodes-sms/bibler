@@ -9,7 +9,7 @@ It is used for educational purposes in order to understand how to generate a com
 You can interact with BiBler via its GUI, its API, or as a web service.
 
 ![gui_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/screenshot.png/1)
-![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)
+<!--![console_screenshot](https://a.fsdn.com/con/app/proj/bibler/screenshots/library.png/1)-->
 
 ## Features
 - Graphical user interface to manage a BibTeX bibliography
@@ -22,9 +22,9 @@ You can interact with BiBler via its GUI, its API, or as a web service.
 - Python module and API to integrate programmatically
 - Web service to deploy online as a service
 
-## Installation
+## Installation and usage
 
-### Tool with graphical user interface
+### With the graphical user interface
 
 The latest version is pre-built and available under the [build/bibler](build/bibler) directory.
 You can also download the latest zip file from the [build](build) directory.
