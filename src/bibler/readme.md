@@ -2,6 +2,14 @@
 
 The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.gnu.org/copyleft/gpl.html) ![GNU GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
+
+## Dependencies
+To compile the source code, you need the following dependencies:
+- [Python](https://www.python.org/) 3.7 or later
+- [wxPython](https://wxpython.org/) 4.0 or later to run in GUI mode
+- [Sphinx](https://www.sphinx-doc.org/) 3.0.1 or later to generate the documentation
+- [PyInstaller](https://www.pyinstaller.org/) 3.6 or later to create the executable distribution
+
 ## Usage
 
 #### Running BiBler
@@ -58,14 +66,6 @@ Finally, create a zip file of the build and deploy it as a new release.
 It requires Sphinx.
 
 TODO
-
-
-## Dependencies
-To compile the source code, you need the following dependencies:
-- [Python](https://www.python.org/) 3.7 or later
-- [wxPython](https://wxpython.org/) 4.0 or later to run in GUI mode
-- [Sphinx](https://www.sphinx-doc.org/) 1.5 or later to generate the documentation
-- [PyInstaller](https://www.pyinstaller.org/) 3.6 or later create the executable distribution
 
 # Change log
 
