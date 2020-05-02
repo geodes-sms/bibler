@@ -1,6 +1,7 @@
 # ![](bibler.png)  BiBler User Manual
 
 
+[View the manual markdown.](https://github.com/geodes-sms/bibler/blob/master/src/bibler/utils/resources/manual.md)
 
 ## Introduction <a name="intro"></a>
 BiBler allows you to manage and manipulate BibTeX entries following the [standard BibTeX rules and formats](http://www.openoffice.org/bibliographic/bibtex-defs.html).
@@ -11,7 +12,7 @@ BiBler allows you to manage and manipulate BibTeX entries following the [standar
 
 ##### Open
 Import a list of entries from a BibTeX file in a given format and overwrites all existing entries.
-See the [Import menu](#import) for teh supported formats. 
+See the [Import menu](#import) for the supported formats. 
 
 ##### Save
 Overwrites the current file loaded with the list of entries displayed.

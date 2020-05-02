@@ -74,7 +74,7 @@ class EntryType:
             yield t
         
     @staticmethod   
-    def creatEntry(entryType):
+    def createEntry(entryType):
         if not entryType:
             return None
         elif entryType.lower() == Article.getEntryType():

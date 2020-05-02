@@ -76,9 +76,9 @@ class ReferenceManager(object):
         """
         if entryBibTeX == None:
             if entryType == None:
-                entry = EntryType.creatEntry(' ')
+                entry = EntryType.createEntry(' ')
             else:
-                entry = EntryType.creatEntry(entryType)
+                entry = EntryType.createEntry(entryType)
             entry.generateId()
             self.entryList.append(entry)
             return entry.getId()

@@ -118,7 +118,7 @@ class Field(object):
         @return: The simplified value.
         """
         value = Utils().tex2simple(value)
-        return Field.__clean(value)
+        return Field.clean(value)
         
     @staticmethod
     def toHTML(value):
@@ -131,10 +131,10 @@ class Field(object):
         @return: The value in HTML encoding.
         """
         value = Utils().tex2html(value)
-        return Field.__clean(value)
+        return Field.clean(value)
     
     @staticmethod
-    def __clean(value):
+    def clean(value):
         """
         Remove all E{lb},E{rb},[,], and other BibTeX commands.
         For example:: {\'e} -> &eacute;
@@ -418,8 +418,7 @@ class Pages(Field):
         self.re_dashes = re.compile("""-+""")
         
     def format(self):
-        self.value = self.value.replace(' ', '')
-        self.value = self.re_dashes.sub('--', self.value)
+        self.value = self.clean(self.value)
 
 
 class Year(Field):
@@ -439,6 +438,9 @@ class Year(Field):
             return self.value[-4:]
         else:
             return ''
+        
+    def format(self):
+        self.value = self.clean(self.value)
 
 
 class DOI(Field):
@@ -450,6 +452,7 @@ class DOI(Field):
         
     def format(self):
         self.value = self.value.replace(' ', '')
+        self.value = self.clean(self.value)
 
 
 class Paper(Field):

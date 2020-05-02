@@ -107,7 +107,7 @@ class BibTeXParserWithStdFields(object):
         if not header:
             raise Exception('Invalid BibTeX.')
         entryType = header.group(1)
-        self.entry = EntryType.creatEntry(entryType)
+        self.entry = EntryType.createEntry(entryType)
         if not isinstance(self.entry, EmptyEntry):            
             # 2. Get the key
             self.entry.setKey(header.group(2))

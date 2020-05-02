@@ -29,7 +29,7 @@ This module represents the entries.
 
 from gui.app_interface import EntryDict, EntryListColumn
 from app.field_name import FieldName
-from app.field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year
+from app.field import Author, Chapter, Editor, Field, Organization, Pages, Title, Year, DOI, Paper
 from utils import utils
 from utils.utils import Utils
 import re
@@ -116,8 +116,8 @@ class Entry(object):
         self.optionalFields = {FieldName.Crossref: Field(FieldName.Crossref),
                                FieldName.Key: Field(FieldName.Key)}
         self.additionalFields = {FieldName.Annote: Field(FieldName.Annote),
-                                 FieldName.DOI: Field(FieldName.DOI),
-                                 FieldName.Paper: Field(FieldName.Paper),
+                                 FieldName.DOI: DOI(),
+                                 FieldName.Paper: Paper(),
                                  FieldName.Abstract: Field(FieldName.Abstract)}
         self.importantFields = []   # contains keys from optionalFields
         
@@ -567,9 +567,8 @@ class EmptyEntry(Entry):
         self.entryType = ''
         self.requiredFields = dict()
         self.optionalFields = dict()
-        self.additionalFields = {FieldName.DOI: Field(FieldName.DOI),
-                                 FieldName.Paper: Field(FieldName.Paper),
-                                 FieldName.Annote: Field(FieldName.Annote)}
+        self.additionalFields = {FieldName.DOI: DOI(),
+                                 FieldName.Paper: Paper()}
     
     def generateKey(self):
         return ''

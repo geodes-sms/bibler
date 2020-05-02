@@ -69,6 +69,10 @@ TODO
 
 # Change log
 
+## Version 1.4.2
+#### 2 May 2020
+- Properly handles curly brackets in year and doi
+
 ## Version 1.4.1
 #### 12 Apr 2020
 - Ignores lines starting with '%' in a BibTeX file

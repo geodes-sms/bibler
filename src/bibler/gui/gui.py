@@ -1130,9 +1130,9 @@ class AddNewEntry(wx.Dialog):
         self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)        
         self.cancelButton = wx.Button(self.ctrlPanel, label='Cancel')
         self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
-        self.panelSizer.Add(self.createButton, 0, wx.ALIGN_LEFT)
+        self.panelSizer.Add(self.createButton, 0)
         self.panelSizer.AddSpacer(100)
-        self.panelSizer.Add(self.cancelButton, 0, wx.ALIGN_RIGHT)
+        self.panelSizer.Add(self.cancelButton, 0)
         self.ctrlPanel.SetSizerAndFit(self.panelSizer, deleteOld=True)
         
         dialogSizer.Add(self.RadioBoxes, 0, wx.ALIGN_CENTER | wx.ALL, 10)
