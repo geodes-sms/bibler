@@ -286,9 +286,21 @@ class IApplication(object):
         """
         raise NotImplementedError()
         
+    def validateEntry(self, entryId):
+        """
+        Validate an entry.
+        @type entryId: L{int}
+        @param entryId: The I{id} of the entry to validate. 
+        @rtype: L{app.entry.ValidationResult}
+        @return: The result of the validation.
+        """
+        raise NotImplementedError()
+        
     def validateAllEntries(self):
         """
         Validate all entries.
+        @rtype: L{dict}
+        @return: The total number of success, warning, and error entries in a dictionary with these keys.
         """
         raise NotImplementedError()
     

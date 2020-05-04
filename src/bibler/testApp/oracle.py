@@ -26,7 +26,34 @@ This module declares the oracles for the test cases
 
 # Some additional examples can be found at https://verbosus.com/bibtex-style-examples.html
 
-class Oracle(object):
+import os
+
+class OracleFile(object):
+    def __init__(self, path, total=0, warning=0, error=0):
+        self.path = path
+        self.total = total
+        self.warning = warning
+        self.error = error
+    
+    def getTotal(self):
+        return self.total
+    
+    def getValidNumber(self):
+        return self.total - self.warning - self.error
+    
+    def getWarningNumber(self):
+        return self.warning
+    
+    def getErrorNumber(self):
+        return self.error
+    
+    def getPath(self):
+        return self.path
+    
+    def __str__(self):
+        return self.path
+
+class OracleEntry(object):
     def __init__(self, test_case, bibtex):
         self.test_case = test_case
         self.bibtex = bibtex
@@ -37,9 +64,9 @@ class Oracle(object):
     def __str__(self):
         return self.test_case
 
-class Valid(Oracle):
+class ValidEntry(OracleEntry):
     def __init__(self, test_case, bibtex, acm_html, default_html):
-        super(Valid, self).__init__(test_case, bibtex)
+        super(ValidEntry, self).__init__(test_case, bibtex)
         self.acm_html = acm_html
         self.default_html = default_html
     
@@ -49,76 +76,76 @@ class Valid(Oracle):
     def getDefault_HTML(self):
         return self.default_html
 
-class Invalid(Oracle):
+class InvalidEntry(OracleEntry):
     def __init__(self, test_case, bibtex):
-        super(Invalid, self).__init__(test_case, bibtex)
+        super(InvalidEntry, self).__init__(test_case, bibtex)
 
-class ValidArticle(Valid):
+class ValidArticle(ValidEntry):
     def __init__(self, test_case, bibtex, acm_html, ieeeTrans_html):
         super(ValidArticle, self).__init__(test_case, bibtex, acm_html, ieeeTrans_html)
 
-class InvalidArticle(Invalid):
+class InvalidArticle(InvalidEntry):
     def __init__(self, test_case, bibtex):
         super(InvalidArticle, self).__init__(test_case, bibtex)
 
-class ValidInProceedings(Valid):
+class ValidInProceedings(ValidEntry):
     def __init__(self, test_case, bibtex, acm_html, ieeeTrans_html):
         super(ValidInProceedings, self).__init__(test_case, bibtex, acm_html, ieeeTrans_html)
 
-class InvalidInProceedings(Invalid):
+class InvalidInProceedings(InvalidEntry):
     def __init__(self, test_case, bibtex):
         super(InvalidInProceedings, self).__init__(test_case, bibtex)
 
-class ValidBook(Valid):
+class ValidBook(ValidEntry):
     def __init__(self, test_case, bibtex, acm_html, ieeeTrans_html):
         super(ValidBook, self).__init__(test_case, bibtex, acm_html, ieeeTrans_html)
 
-class InvalidBook(Invalid):
+class InvalidBook(InvalidEntry):
     def __init__(self, test_case, bibtex):
         super(InvalidBook, self).__init__(test_case, bibtex)
 
-class ValidTechReport(Valid):
+class ValidTechReport(ValidEntry):
     def __init__(self, test_case, bibtex, acm_html, ieeeTrans_html):
         super(ValidTechReport, self).__init__(test_case, bibtex, acm_html, ieeeTrans_html)
 
-class InvalidTechReport(Invalid):
+class InvalidTechReport(InvalidEntry):
     def __init__(self, test_case, bibtex):
         super(InvalidTechReport, self).__init__(test_case, bibtex)
 
-class ValidPhdThesis(Valid):
+class ValidPhdThesis(ValidEntry):
     def __init__(self, test_case, bibtex, acm_html, ieeeTrans_html):
         super(ValidPhdThesis, self).__init__(test_case, bibtex, acm_html, ieeeTrans_html)
 
-class InvalidPhdThesis(Invalid):
+class InvalidPhdThesis(InvalidEntry):
     def __init__(self, test_case, bibtex):
         super(InvalidPhdThesis, self).__init__(test_case, bibtex)
 
 # Entries
-empty_entry1 = Valid('empty entry', None, '', '')
+empty_entry1 = ValidEntry('empty entry', None, '', '')
 
-empty_entry2 = Valid('empty entry', None, '', '')
+empty_entry2 = ValidEntry('empty entry', None, '', '')
 
-erroneous_entry1 = Invalid('invalid entry',
+erroneous_entry1 = InvalidEntry('invalid entry',
 '''@{,
 }''')
 
-erroneous_entry2 = Invalid('invalid entry', '@')
+erroneous_entry2 = InvalidEntry('invalid entry', '@')
 
-erroneous_entry3 = Invalid('invalid entry', '@{}')
+erroneous_entry3 = InvalidEntry('invalid entry', '@{}')
 
-invalid_entry1 = Invalid('invalid entry', '@article{y}')
+invalid_entry1 = InvalidEntry('invalid entry', '@article{y}')
 
-invalid_entry2 = Invalid('invalid entry', '@article{y,}')
+invalid_entry2 = InvalidEntry('invalid entry', '@article{y,}')
 
-invalid_entry3 = Invalid('invalid entry', '''@article{
+invalid_entry3 = InvalidEntry('invalid entry', '''@article{
 x = {}
 }''')
 
-invalid_entry4 = Invalid('invalid entry', '''@article{y,
+invalid_entry4 = InvalidEntry('invalid entry', '''@article{y,
 author = {}
 }''')
 
-valid_entry_comment = Valid('valid entry with comments',
+valid_entry_comment = ValidEntry('valid entry with comments',
 '''%comment
 @ARTICLE{Landin1966,
   %comment
@@ -135,7 +162,7 @@ valid_entry_comment = Valid('valid entry with comments',
 <p><center></center></p>"""
 , '')
 
-valid_entry_escaped_comment = Valid('valid entry with escaped comment symbol',
+valid_entry_escaped_comment = ValidEntry('valid entry with escaped comment symbol',
 '''
 @ARTICLE{Landin1966,
   author = {{L}andin, {P}eter {J}.},
@@ -150,7 +177,7 @@ valid_entry_escaped_comment = Valid('valid entry with escaped comment symbol',
 <p><center></center></p>"""
 , '')
 
-invalid_entry_comment1 = Invalid('invalid entry with comments',
+invalid_entry_comment1 = InvalidEntry('invalid entry with comments',
 '''
 @ARTICLE{Landin1966,%comment
   author = {{L}andin, {P}eter {J}.},
@@ -161,7 +188,7 @@ invalid_entry_comment1 = Invalid('invalid entry with comments',
   note = {Some note}
 }''')
 
-invalid_entry_comment2 = Invalid('invalid entry with comments',
+invalid_entry_comment2 = InvalidEntry('invalid entry with comments',
 '''
 @ARTICLE{article,
   author = {Adams, Peter},
@@ -175,7 +202,7 @@ invalid_entry_comment2 = Invalid('invalid entry with comments',
   volume = {4}
 }''')
 
-valid_entry_spaces = Valid('valid entry with spaces and new lines around fields',
+valid_entry_spaces = ValidEntry('valid entry with spaces and new lines around fields',
 '''   
  @ARTICLE{
     Landin1966  ,
@@ -191,7 +218,7 @@ title =  {{T}he next 700 programming languages},
 <p><center></center></p>"""
 , '')
 
-invalid_entry_no_author = Invalid('invalid entry with no year',
+invalid_entry_no_author = InvalidEntry('invalid entry with no year',
 '''@ARTICLE{Landin1966,
   title = {{A} {T}heory of {T}imed {A}utomata},
   journal = {{T}heoretical {C}omputer {S}cience {J}ournal},
@@ -200,7 +227,7 @@ invalid_entry_no_author = Invalid('invalid entry with no year',
   paper = {Alur1994.pdf}
 }''')
 
-valid_entry_von_Last_Jr_First = Valid('valid entry with author name von Last Jr First',
+valid_entry_von_Last_Jr_First = ValidEntry('valid entry with author name von Last Jr First',
 '''@ARTICLE{,
   author = {von Last, Jr, First},
   title = {{T}he next 700 programming languages},
@@ -211,7 +238,7 @@ valid_entry_von_Last_Jr_First = Valid('valid entry with author name von Last Jr 
 <p><center></center></p>"""
 , '')
 
-valid_entry_von_Last_Jr_First_parenthesis = Valid('valid entry with author name von Last Jr First with parenthesis',
+valid_entry_von_Last_Jr_First_parenthesis = ValidEntry('valid entry with author name von Last Jr First with parenthesis',
 '''@ARTICLE{,
   author = {von {L}ast, {J}r, {F}irst},
   title = {{T}he next 700 programming languages},
@@ -222,7 +249,7 @@ valid_entry_von_Last_Jr_First_parenthesis = Valid('valid entry with author name 
 <p><center></center></p>"""
 , '')
 
-valid_entry_Last_Jr_First = Valid('valid entry with author name Last Jr First',
+valid_entry_Last_Jr_First = ValidEntry('valid entry with author name Last Jr First',
 '''@ARTICLE{,
   author = {Last, Jr, First},
   title = {{T}he next 700 programming languages},
@@ -233,7 +260,7 @@ valid_entry_Last_Jr_First = Valid('valid entry with author name Last Jr First',
 <p><center></center></p>"""
 , '')
 
-valid_entry_Last_First = Valid('valid entry with author name Last First',
+valid_entry_Last_First = ValidEntry('valid entry with author name Last First',
 '''@ARTICLE{,
   author = {Last, First},
   title = {{T}he next 700 programming languages},
@@ -244,7 +271,7 @@ valid_entry_Last_First = Valid('valid entry with author name Last First',
 <p><center></center></p>"""
 , '')
 
-valid_entry_von_Last_First = Valid('valid entry with author name von Last First',
+valid_entry_von_Last_First = ValidEntry('valid entry with author name von Last First',
 '''@ARTICLE{,
   author = {von Last, First},
   title = {{T}he next 700 programming languages},
@@ -255,7 +282,7 @@ valid_entry_von_Last_First = Valid('valid entry with author name von Last First'
 <p><center></center></p>"""
 , '')
 
-valid_entry_First_von_Last = Valid('valid entry with author name First von Last',
+valid_entry_First_von_Last = ValidEntry('valid entry with author name First von Last',
 '''@ARTICLE{,
   author = {First von Last},
   title = {{T}he next 700 programming languages},
@@ -266,7 +293,7 @@ valid_entry_First_von_Last = Valid('valid entry with author name First von Last'
 <p><center></center></p>"""
 , '')
 
-valid_entry_CLXJdlVP = Valid('valid entry with author name Charles Louis Xavier Joseph de la Vallee Poussin',
+valid_entry_CLXJdlVP = ValidEntry('valid entry with author name Charles Louis Xavier Joseph de la Vallee Poussin',
 '''@ARTICLE{,
   author = {Charles Louis Xavier Joseph de la Vall{\\'e}e Poussin},
   title = {{T}he next 700 programming languages},
@@ -277,7 +304,7 @@ valid_entry_CLXJdlVP = Valid('valid entry with author name Charles Louis Xavier 
 <p><center></center></p>"""
 , '')
 
-valid_entry_First_Last = Valid('valid entry with author name First Last',
+valid_entry_First_Last = ValidEntry('valid entry with author name First Last',
 '''@ARTICLE{,
   author = {First Last},
   title = {{T}he next 700 programming languages},
@@ -288,7 +315,7 @@ valid_entry_First_Last = Valid('valid entry with author name First Last',
 <p><center></center></p>"""
 , '')
 
-valid_entry_Last = Valid('valid entry with author name Last',
+valid_entry_Last = ValidEntry('valid entry with author name Last',
 '''@ARTICLE{,
   author = {Last},
   title = {{T}he next 700 programming languages},
@@ -299,7 +326,7 @@ valid_entry_Last = Valid('valid entry with author name Last',
 <p><center></center></p>"""
 , '')
 
-valid_entry_full = Valid('valid entry with all fields',
+valid_entry_full = ValidEntry('valid entry with all fields',
 '''@ARTICLE{Landin1966,
   author = {{L}andin, {P}eter {J}.},
   title = {{T}he next 700 programming languages},
@@ -312,7 +339,7 @@ valid_entry_full = Valid('valid entry with all fields',
 <p><center></center></p>"""
 , '')
 
-valid_entry_no_key = Valid('valid entry without key',
+valid_entry_no_key = ValidEntry('valid entry without key',
 '''@ARTICLE{,
   author = {{L}andin, {P}eter {J}.},
   title = {{T}he next 700 programming languages},
@@ -323,7 +350,7 @@ valid_entry_no_key = Valid('valid entry without key',
 <p><center></center></p>"""
 , '')
 
-valid_entry_wrong_key = Valid('valid entry with a wrong key',
+valid_entry_wrong_key = ValidEntry('valid entry with a wrong key',
 '''@ARTICLE{abc,
   author = {{L}andin, {P}eter {J}.},
   title = {{T}he next 700 programming languages},
@@ -334,7 +361,7 @@ valid_entry_wrong_key = Valid('valid entry with a wrong key',
 <p><center></center></p>"""
 , '')
 
-valid_entry_quote = Valid('valid entry with quotes as field delimiter',
+valid_entry_quote = ValidEntry('valid entry with quotes as field delimiter',
 '''@ARTICLE{Landin1966,
   author = "{L}and{\\"i}n, {P}eter {J}.",
   title = "{T}he next 700 programming languages",
@@ -347,7 +374,7 @@ valid_entry_quote = Valid('valid entry with quotes as field delimiter',
 <p><center></center></p>"""
 , '')
 
-valid_entry_bracket = Valid('valid entry brackets as field delimiter',
+valid_entry_bracket = ValidEntry('valid entry brackets as field delimiter',
 '''@ARTICLE{Landin1966,
   author = {{L}and{\\"i}n, {P}eter {J}.},
   title = {{T}he next 700 programming languages},
@@ -360,7 +387,7 @@ valid_entry_bracket = Valid('valid entry brackets as field delimiter',
 <p><center></center></p>"""
 , '')
 
-valid_entry_multiline = Valid('valid entry with multiple lines in fields',
+valid_entry_multiline = ValidEntry('valid entry with multiple lines in fields',
 '''@ARTICLE{Landin1966,
   author = {{L}andin, {P}eter {J}.},
   title = {{T}he next 700
@@ -790,6 +817,12 @@ invalid_phdthesis_author_year_no_req_fields = InvalidPhdThesis('invalid phdthesi
   month = {feb}
 }''')
 
+# Files
+warn_error_bibtex_file = OracleFile(os.path.join('..','..','examples','import_test.bib'), total=58, warning=26, error=18)
+warn_bibtex_file = OracleFile(os.path.join('..','..','examples','examples.bib'), total=17, warning=1, error=0)
+error_bibtex_file = OracleFile(os.path.join('..','..','examples','examples_invalid.bib'), total=17, warning=0, error=2)
+warn_error_endnote_file = OracleFile(os.path.join('..','..','examples','endnote_invalid.bib'), total=255, warning=235, error=2)
+
 # Lists
 all_erroneous_entries = [erroneous_entry1, erroneous_entry2, erroneous_entry3]
 
@@ -822,3 +855,5 @@ search_all_entries_all_fields = {'landin': 1, 'graph': 2, '4': 3, '19': 4, 'ne':
 valid_authors =  [valid_entry_CLXJdlVP, valid_entry_First_Last, valid_entry_First_von_Last, valid_entry_Last_First,
                   valid_entry_Last_Jr_First, valid_entry_von_Last_First, valid_entry_von_Last_Jr_First,
                   valid_entry_von_Last_Jr_First_parenthesis, valid_entry_Last]
+
+bibtex_files = [warn_bibtex_file, warn_error_bibtex_file, error_bibtex_file]

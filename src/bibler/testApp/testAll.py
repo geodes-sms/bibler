@@ -32,6 +32,7 @@ from testApp.testDuplicate import TestDuplicate
 from testApp.testPreview import TestPreview
 from testApp.testSearch import TestSearch
 from testApp.testSort import TestSort
+from testApp.testOpenImportValidateAll import TestOpenImportValidateAll
 
 def test():
     suite = unittest.TestSuite()
@@ -42,6 +43,7 @@ def test():
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestPreview))
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestSearch))
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestSort))
+    suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestOpenImportValidateAll))
     return suite  
 
 def run_tests():

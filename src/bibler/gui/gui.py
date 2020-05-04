@@ -1804,16 +1804,15 @@ class BiBlerGUI(wx.Frame):
         else:
             self.behavior.forceExitClicked()
     
-    def popupValidationResultMessage(self, invalid):
+    def popupValidationResultMessage(self, validation):
         """
         Display the validation result.
         """
-        if invalid > 0:
-            msg = 'There are %i invalid entries highlighted in red.' % invalid
-            dlg = wx.MessageDialog(self, msg, "Vaidation Result", wx.OK | wx.ICON_WARNING)
-        else:
-            msg = 'All entries are valid.'
-            dlg = wx.MessageDialog(self, msg, "Vaidation Result", wx.OK | wx.ICON_EXCLAMATION)
+        msg = '''On a total of {total} entries:
+{success} have no warning
+{warning} have a warning highlighted in yellow
+{error} are invalid highlighted in red'''.format_map(validation)
+        dlg = wx.MessageDialog(self, msg, "Validation Result", wx.OK | wx.ICON_WARNING)
         dlg.ShowModal()
         dlg.Destroy()
     

@@ -52,7 +52,7 @@ class BiBlerWrapper(object):
         Takes a BibTeX string and outputs the corresponding corrected BibTeX string
         
         :param str bibtex: The BibTeX string to be processed.
-        :return: The corrected BibTeX including overriden key
+        :return: The corrected BibTeX including overridden key
         :rtype: str
         '''
         biblerapp=BiBlerWrapper.__getBiblerApp()
@@ -95,12 +95,12 @@ class BiBlerWrapper(object):
         Takes a BibTeX string and outputs 1 if the entry is valid or 0 if it's not
 
         :param str bibtex: The BibTeX string to be processed.
-        :return: Number of valid entries, which will be 0 or 1
+        :return: 1 if valid, 0 if invalid
         :rtype: int
         '''
-        biblerapp=BiBlerWrapper.__getBiblerApp()
-        biblerapp.addEntry(bibtex)
-        return biblerapp.validateAllEntries()
+        biblerapp = BiBlerWrapper.__getBiblerApp()
+        entryId = biblerapp.addEntry(bibtex)
+        return int(biblerapp.validateEntry(entryId).isValid())
  
 
     @staticmethod

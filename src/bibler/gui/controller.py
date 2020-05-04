@@ -45,7 +45,7 @@ class ControllerData(object):
         self.searchQuery = None
         self.entryList = None
         self.entryCount = 0
-        self.validEntries = 0
+        self.validEntries = None
         self.isInSearch = False
         self.currentEntryId = None
         self.currentEntryBibTeX = None        
@@ -1441,7 +1441,7 @@ class Controller(object):
         L{BiBlerGUI.popupOpenDialog<gui.BiBlerGUI.popupValidationResultMessage>} raised an exception.
         """
         try:
-            self.GUI.popupValidationResultMessage(self.APP.getEntryCount() - self.data.validEntries)
+            self.GUI.popupValidationResultMessage(self.data.validEntries)
         except Exception as e:
             self.__sendError(e)
     

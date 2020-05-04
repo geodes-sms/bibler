@@ -70,8 +70,11 @@ TODO
 # Change log
 
 ## Version 1.4.2
-#### 2 May 2020
+#### 4 May 2020
 - Properly handles curly brackets in year and doi
+- Improved validation result to show more information
+- Added tests for open, import and validate all
+- Added more example files
 
 ## Version 1.4.1
 #### 12 Apr 2020

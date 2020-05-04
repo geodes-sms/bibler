@@ -160,6 +160,17 @@ class GenerateAllKeysCommand(Command):
     def execute(self):
         return self.manager.generateAllKeys()
 
+class ValidateCommand(Command):
+    def __init__(self, manager, entryId):
+        """
+        (Constructor)
+        """
+        super(ValidateCommand, self).__init__(manager)
+        self.entryId = entryId
+    
+    def execute(self):
+        self.manager.getEntry(self.entryId).validate()
+
 class ValidateAllCommand(Command):
     def __init__(self, manager):
         """
@@ -168,8 +179,17 @@ class ValidateAllCommand(Command):
         super(ValidateAllCommand, self).__init__(manager)
     
     def execute(self):
-        # True is automatically cast to 1 and False to 0
-        return sum([entry.validate().isValid() for entry in self.manager.iterEntries()])
+        validation = {'total':0, 'valid':0, 'success': 0, 'warning': 0, 'error': 0}
+        for entry in self.manager.iterEntries():
+            status = entry.validate()
+            validation['total'] += 1
+            if status.isSuccess():
+                validation['success'] += 1
+            elif status.isWarning(): validation['warning'] += 1
+            elif status.isError(): validation['error'] += 1
+            else: raise Exception('Unknown validation result')
+        validation['valid'] = validation['success'] + validation['warning']
+        return validation
 
 
 class SearchCommand(Command):

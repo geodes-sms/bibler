@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 .. moduleauthor:: Eugene Syriani
 .. versionadded:: 1.4.2
 
-Created on 02 May 2020
+Updated on 04 May 2020
 
 
 

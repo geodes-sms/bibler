@@ -39,8 +39,8 @@ for line in init_lines:
         line = '.. versionadded:: %s\n' % VERSION
     if line.startswith('__version__ = '):
         line = '__version__ = "%s"\n' % VERSION
-    elif line.startswith('Created on '):
-        line = 'Created on %s\n' % DATE
+    elif line.startswith('Updated on '):
+        line = 'Updated on %s\n' % DATE
     init.write(line)
 init.close()
 

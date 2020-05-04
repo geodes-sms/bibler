@@ -87,12 +87,26 @@ class ValidationResult(object):
         """
         return self.value is not ValidationResult.ERROR
     
-    def getValue(self):
+    def isSuccess(self):
         """
-        :rtype: :class:`SUCCESS<app.entry.ValidationResult.SUCCESS>`, :class:`ERROR<app.entry.ValidationResult.ERROR>`, or :class:`WARNING<app.entry.ValidationResult.WARNING>`
-        :return: The value of the validation.
+        :rtype: :class:`bool`
+        :return: Whether the value is a success.
         """
-        return self.value is not ValidationResult.ERROR
+        return self.value is ValidationResult.SUCCESS
+    
+    def isWarning(self):
+        """
+        :rtype: :class:`bool`
+        :return: Whether the value is a warning.
+        """
+        return self.value is ValidationResult.WARNING
+    
+    def isError(self):
+        """
+        :rtype: :class:`bool`
+        :return: Whether the value is an error.
+        """
+        return self.value is ValidationResult.ERROR
     
     def getMessage(self):
         """
