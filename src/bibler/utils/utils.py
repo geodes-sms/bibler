@@ -136,7 +136,7 @@ class Utils(object, metaclass=Singleton):
         self.tex_chars = ["{\\c%s}","{\\r%s}","{\\'%s}","{\\`%s}","{\\\"%s}","{\\^%s}","{\\~%s}",
                           "\\c{%s}","\\r{%s}","\\'{%s}","\\`{%s}","\\\"{%s}","\\^{%s}","\\~{%s}"]
         self.html_chars = ['&%scedil;','&%sring;','&%sacute;','&%sgrave;','&%suml;','&%scirc;',
-                           '&%stilde;','&%sslash;'] * 2  # corresponds to tex_chars
+                           '&%stilde;'] * 2  # corresponds to tex_chars
         self.tex_to_simple = {}
         self.tex_to_simple["{\\ss}"] = 'ss'
         self.tex_to_simple["\\o"] = 'o'
