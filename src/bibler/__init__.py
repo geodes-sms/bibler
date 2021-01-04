@@ -18,9 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 .. moduleauthor:: Eugene Syriani
-.. versionadded:: 1.4.2
+.. versionadded:: 1.4.3
 
-Updated on 27 May 2020
+Updated on 04 Jan 2021
 
 
 
@@ -40,7 +40,7 @@ You can also interact with BiBler programmatically through its API as follows:
 
 G{packagetree app, gui, utils}
 """
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 import sys
 sys.path.insert(0, 'BiBler')

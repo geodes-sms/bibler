@@ -24,7 +24,7 @@ import os
 import datetime
 import PyInstaller.__main__
 
-VERSION = '1.4.2'
+VERSION = '1.4.3'
 DATE = datetime.date.today().strftime('%d %b %Y')
 
 # First update the version and the date

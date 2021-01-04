@@ -69,6 +69,10 @@ TODO
 
 # Change log
 
+## Version 1.4.3 (dev)
+#### 4 Jan 2021
+- Small bug fixes
+
 ## Version 1.4.2 (dev)
 #### 27 May 2020
 - Properly handles curly brackets in year and doi
