@@ -471,12 +471,9 @@ class Entry(object):
         :rtype: :class:`str`
         :return: The HTML code within <p></p>.
         """
-        if self.isEmpty():
-            html = '''<p><font face="verdana"><b><i>%s</i>(%s)</b></font></p>
+        html = '''<p><font face="verdana"><b><i>%s</i>(%s)</b></font></p>
 <p>''' % (self.getEntryType().upper(), self.getKey())
-        else:
-            html = '''<p><font face="verdana"><b><i>%s</i>(%s)</b></font></p>
-<p>''' % (self.getEntryType().upper(), self.getKey())
+        if not self.isEmpty():
             html += styleWriter()
             html += '''</p>
 <p><center>'''
@@ -1766,6 +1763,9 @@ class Proceedings(Entry):
         elif not self.getField(FieldName.Organization).isEmpty():
             # First author's last name (no {}, no spaces) concatenated with year
             key = Field.simplify(self.getField(FieldName.Organization).getFirstWord())
+        else:
+            # No contributor field found
+            key = ''
         return key + self.getField(FieldName.Year).getYear()
         
     def toHtmlACM(self):

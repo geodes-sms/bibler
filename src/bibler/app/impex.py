@@ -673,9 +673,9 @@ class BibTeXImporter(Importer):
         """
         self.openDB('r')
         total = 0
+        line_number = 1
         try:
             line = self.database.readline()
-            line_number = 1
             entry = ''
             while line:
                 if line.strip().startswith('@'):
@@ -718,10 +718,10 @@ class EndNoteImporter(Importer):
         
         self.openDB('r')
         total = 0
+        line_number = 1
         try:
             line = self.database.readline()
             entry = ''
-            line_number = 1
             while line:
                 if line.startswith('@'):
                     if entry:
