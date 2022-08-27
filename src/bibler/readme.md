@@ -69,11 +69,15 @@ TODO
 
 # Change log
 
-## Version 1.4.3 (dev)
+## Version 1.4.4 (dev)
+#### 27 Aug 2022
+- Report generator, including word frequency
+
+## Version 1.4.3
 #### 4 Jan 2021
 - Small bug fixes
 
-## Version 1.4.2 (dev)
+## Version 1.4.2
 #### 27 May 2020
 - Properly handles curly brackets in year and doi
 - Improved validation result to show more information

@@ -929,6 +929,24 @@ class HTMLWindow(wx.Frame):
             self.GetParent().openURL(href)
         elif href == 'docs':
             self.GetParent().openURL(resMgr.docsHTMLPath)
+
+class TextWindow(wx.Frame):
+    """
+    A window displaying editable content.
+    """
+    def __init__(self, parent, title, text):
+        """
+        @type parent: C{wx.Window}
+        @param parent: The parent window.
+        @type title: C{str}
+        @param title: The title of the dialog.
+        @type source: C{str}
+        @param source: The path to the source of the HTML.
+        """
+        super(TextWindow, self).__init__(parent, wx.NewId(), title=title)
+        
+        self.content = wx.TextCtrl(self, wx.NewId(), style=wx.TE_MULTILINE|wx.TE_READONLY)
+        self.content.SetValue(text)
         
     
 
@@ -1194,6 +1212,7 @@ class BiBlerGUI(wx.Frame):
         fileMenu.AppendSeparator()
         menuImport = fileMenu.Append(wx.NewId(), "&Import from file\tCtrl+I"," Import database from a file")
         menuExport = fileMenu.Append(wx.NewId(),"&Export to file\tCtrl+E"," Export database to a file")
+        menuReport = fileMenu.Append(wx.NewId(), "&Generate report"," Generate a report about the loaded bibliography")
         fileMenu.AppendSeparator()
         menuExit = fileMenu.Append(wx.ID_EXIT,"E&xit\tAlt+F4"," Terminate the program")
         
@@ -1235,6 +1254,7 @@ class BiBlerGUI(wx.Frame):
         self.Bind(wx.EVT_MENU, self.__onSaveAs, menuSaveAs)
         self.Bind(wx.EVT_MENU, self.__onImport, menuImport)
         self.Bind(wx.EVT_MENU, self.__onExport, menuExport)
+        self.Bind(wx.EVT_MENU, self.__onReport, menuReport)
         self.Bind(wx.EVT_MENU, self.__onExit, menuExit)
         self.Bind(wx.EVT_MENU, self.__onUndo, menuUndo)
         self.Bind(wx.EVT_MENU, self.__onSearch, menuSearch)
@@ -1315,6 +1335,14 @@ class BiBlerGUI(wx.Frame):
         @type e: C{wx.CommandEvent}
         """
         self.behavior.exportClicked()
+        
+    def __onReport(self, e):
+        """
+        Triggered when File>Generate report is clicked.
+        @type e: C{wx.CommandEvent}
+        """
+        wx.BeginBusyCursor()
+        self.behavior.reportClicked()
 
     def __onExit(self, e):
         """
@@ -1832,3 +1860,11 @@ class BiBlerGUI(wx.Frame):
         url_opened = webbrowser.open(url, new=2)
         wx.EndBusyCursor()
         return url_opened
+    
+    def showReportWindow(self, text):
+        """
+        Open a text control in a separate frame.
+        """
+        wx.EndBusyCursor()
+        win = TextWindow(self, "Report", text)
+        return win.Show(True)

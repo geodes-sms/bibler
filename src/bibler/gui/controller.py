@@ -62,6 +62,7 @@ class ControllerData(object):
         self.sortColumn = None
         self.lastSortColumn = None
         self.sameSortColumnCount = 0
+        self.report = None
 
 class ControllerLogicException(Exception):
     """
@@ -286,6 +287,13 @@ class Controller(object):
         self.data.path = path
         self.data.exportFormat = exportFormat
         self.__sendEvent("exportFileSelected")
+    
+    def reportClicked(self):
+        """
+        Triggered when the GUI issues the word frequency command.
+        Send a C{reportClicked} event to the statechart.
+        """
+        self.__sendEvent("reportClicked")
         
     def addClicked(self):
         """
@@ -633,6 +641,18 @@ class Controller(object):
             except Exception as e:
                 self.__sendError(e)
     
+    def generateReport(self):
+        """
+        Generate a report.
+        
+        An C{error} event is sent to the statechart if
+        L{IApplication.previewEntry<gui.app_interface.IApplication.generateReport>} raised an exception.
+        """
+        try:
+            self.data.report = self.APP.generateReport()
+        except Exception as e:
+            self.__sendError(e)
+    
     def addEntry(self):
         """
         Add an entry from its BibTeX format.
@@ -783,7 +803,7 @@ class Controller(object):
         Validate all entries.
         
         An C{error} event is sent to the statechart if
-        L{IApplication.previewEntry<gui.app_interface.IApplication.validateAllEntries>} raised an exception.
+        L{IApplication.validateAllEntries<gui.app_interface.IApplication.validateAllEntries>} raised an exception.
         """
         try:
             self.data.validEntries = self.APP.validateAllEntries()
@@ -1435,7 +1455,7 @@ class Controller(object):
         
     def popupValidationResultMessage(self):
         """
-        Open the a dialog showing the validation result.
+        Open a dialog showing the validation result.
         
         An C{error} event is sent to the statechart if
         L{BiBlerGUI.popupOpenDialog<gui.BiBlerGUI.popupValidationResultMessage>} raised an exception.
@@ -1741,5 +1761,17 @@ class Controller(object):
             if not self.__sendAppOperationResult(lambda: result,
                                                  ControllerLogicException('Disable undo failed.')):
                 return
+        except Exception as e:
+            self.__sendError(e)
+        
+    def showReport(self):
+        """
+        Open a text pad showing the report.
+        
+        An C{error} event is sent to the statechart if
+        L{BiBlerGUI.showReport<gui.BiBlerGUI.showReport>} raised an exception.
+        """
+        try:
+            self.GUI.showReportWindow(self.data.report)
         except Exception as e:
             self.__sendError(e)

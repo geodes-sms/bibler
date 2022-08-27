@@ -40,7 +40,7 @@ You can also interact with BiBler programmatically through its API as follows:
 
 G{packagetree app, gui, utils}
 """
-__version__ = "1.4.3"
+__version__ = "1.4.4"
 
 import sys
 sys.path.insert(0, 'BiBler')

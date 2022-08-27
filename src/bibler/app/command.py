@@ -32,6 +32,7 @@ from app.impex import BibTeXImporter, CSVImporter, EndNoteImporter, BibTeXExport
 from app.entry import EntryIdGenerator
 from utils import settings
 from utils.settings import Preferences
+from app.report_gen import ReportGenerator
 
 
 class CommandExecutor(object):
@@ -380,3 +381,20 @@ class SortCommand(UndoableCommand):
         self.manager.entryList.sort(key=lambda e: self.originalEntryOrder.index(e.getId()))
         self.manager.searchResult.sort(key=lambda e: self.originalSearchResultOrder.index(e.getId()))
         return True
+
+class GenerateReportCommand(Command):
+    def __init__(self, manager):
+        """
+        (Constructor)
+        """
+        super(GenerateReportCommand, self).__init__(manager)
+    
+    def execute(self):
+        report = {}
+        report['total'] = self.manager.getEntryCount()
+        validation = ValidateAllCommand(self.manager).execute()
+        report['valid'] = validation['valid']
+        report['success'] = validation['success']
+        report['warning'] = validation['warning']
+        report['error'] = validation['error']
+        return ReportGenerator(self.manager.iterEntries()).generate(validation)

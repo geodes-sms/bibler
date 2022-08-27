@@ -458,3 +458,10 @@ class IApplication(object):
         @return: The list of entries.
         """
         raise NotImplementedError()
+    
+    def generateReport(self):
+        """
+        Generate a report of the loaded entries.
+        @return: A text report.
+        """
+        raise NotImplementedError()

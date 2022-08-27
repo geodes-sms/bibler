@@ -29,7 +29,9 @@ This module represents the API of the application.
 
 from gui.app_interface import IApplication
 from app.manager import ReferenceManager
-from app.command import AddCommand, CommandExecutor, DeleteCommand, DuplicateCommand, ExportCommand, GenerateAllKeysCommand, ImportCommand, OpenCommand, PreviewCommand, SearchCommand, SortCommand, UndoCommand, UpdateCommand, ValidateCommand, ValidateAllCommand, ExportStringCommand, ImportStringCommand
+from app.command import AddCommand, CommandExecutor, DeleteCommand, DuplicateCommand, ExportCommand, GenerateAllKeysCommand, ImportCommand, \
+                        OpenCommand, PreviewCommand, SearchCommand, SortCommand, UndoCommand, UpdateCommand, ValidateCommand, ValidateAllCommand, \
+                        ExportStringCommand, ImportStringCommand, GenerateReportCommand
 from app.field_name import FieldName
 from app.bibtex_parser import BibTeXParser
 from utils.settings import Preferences
@@ -289,6 +291,13 @@ class BiBlerApp(IApplication):
         """
         for entry in self.__manager.iterSearchResult():
             yield entry.toEntryDict()
+    
+    def generateReport(self):
+        """
+        @see: L{gui.app_interface.IApplication.generateReport}.
+        """
+        return self.__executor.execute(GenerateReportCommand(self.__manager))
+        
     
     @staticmethod
     def formatBibTeX(self, bibtex):

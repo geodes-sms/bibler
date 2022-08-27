@@ -83,6 +83,10 @@ class BiBler_Statechart(object):
             controller.setStatusMsg('Export complete.')
             self.statusBar(controller)
             self.state = 'exportComplete'
+        elif e == 'reportClicked':
+            controller.generateReport()
+            controller.showReport()
+            self.state = 'reportComplete'
         elif e == 'addClicked':
             controller.addEntry()
             controller.addNewEntryRow()
