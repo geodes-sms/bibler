@@ -390,11 +390,6 @@ class GenerateReportCommand(Command):
         super(GenerateReportCommand, self).__init__(manager)
     
     def execute(self):
-        report = {}
-        report['total'] = self.manager.getEntryCount()
         validation = ValidateAllCommand(self.manager).execute()
-        report['valid'] = validation['valid']
-        report['success'] = validation['success']
-        report['warning'] = validation['warning']
-        report['error'] = validation['error']
-        return ReportGenerator(self.manager.iterEntries()).generate(validation)
+        total = self.manager.getEntryCount()
+        return ReportGenerator(self.manager.iterEntries()).generate(total, validation)
