@@ -112,12 +112,15 @@ class ReportGenerator(object):
         entry_type_count = {}
         keyword_freq = {}
         for entry in self.entries:
-            #TODO: build the dictionaries
-            # use Utils().tex2simple(tex_value)
             year = entry.getFieldValue(FieldName.Year)
             year_freq[year] = (year_freq[year] + 1 if year in year_freq else 1)
             entry_type = entry.getEntryType()
             entry_type_count[entry_type] = (entry_type_count[entry_type] + 1 if entry_type in entry_type_count else 1)
+            contributors = entry.getContributors()
+            for cont in contributors:
+                cont = Utils().tex2simple(str(cont))
+                contributor_freq[cont] = (contributor_freq[cont] + 1 if cont in contributor_freq else 1)
+                contributor_count += 1
         buffer.write(TMPL_CONTRIBUTORS.substitute(contributors=contributor_count,unique_contributors=len(contributor_freq)))
         for item in Utils().sort_dict_by_value(contributor_freq, False):
             cont,freq=item

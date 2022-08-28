@@ -224,4 +224,5 @@ class Utils(object, metaclass=Singleton):
         :type ascending: int
         :returns: list -- The list of the items in sorted order.
         """
-        return list(sorted(d.items(), key=lambda item: item[1], reverse=not ascending))
+        sorted_d =  list(sorted(d.items(), key=lambda item: item[0]))
+        return list(sorted(sorted_d, key=lambda item: item[1], reverse=not ascending))
