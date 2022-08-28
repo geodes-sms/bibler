@@ -404,7 +404,7 @@ class IApplication(object):
         Get the additional fields of an entry.
         
         @type entryId: L{int}
-        @param entryId: The I{id} of the entry. 
+        @param entryId: The I{id} of the entry.
         @rtype: L{dict}
         @return: The dictionary of additional fields.
         @raise Exception: If entry not found.
@@ -459,9 +459,12 @@ class IApplication(object):
         """
         raise NotImplementedError()
     
-    def generateReport(self):
+    def generateReport(self, path):
         """
         Generate a report of the loaded entries.
+        @type path: L{str}
+        @param path: The path of the BibTeX file. 
+        @rtype: L{str}
         @return: A text report.
         """
         raise NotImplementedError()

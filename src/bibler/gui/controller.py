@@ -649,7 +649,7 @@ class Controller(object):
         L{IApplication.previewEntry<gui.app_interface.IApplication.generateReport>} raised an exception.
         """
         try:
-            self.data.report = self.APP.generateReport()
+            self.data.report = self.APP.generateReport(self.data.bibtexFilepath)
         except Exception as e:
             self.__sendError(e)
     

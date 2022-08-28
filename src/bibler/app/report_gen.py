@@ -27,21 +27,23 @@ This module represents the report generator
 """
 
 from app.field_name import FieldName
-from utils import utils
-from datetime import date
+from utils.utils import Utils
+from datetime import datetime
 from string import Template
-from cStringIO import StringIO
+from io import StringIO
 
 """
 Template strings for the report
 """
-SEPARATOR = '-----------------------'
+TMPL_SEPARATOR = '''-----------------------
+'''
 TMPL_HEADER = Template('''
-BiBler Report on $today
+BiBler Report on $today for file
+$file_name
 ''')
-TMPL_FOOTER = Template('''
+TMPL_FOOTER = '''
 Report complete.
-''')
+'''
 TMPL_TOTAL = Template('''
 Total references: $total
 ''')
@@ -55,26 +57,22 @@ $contributors authors/contributors
 $unique_contributors unique authors/contributors
 Frequency of contributors
 ''')
-TMPL_CONTRIB_FREQ = Template('''
-$contributor: $frequency
+TMPL_CONTRIB_FREQ = Template('''$contributor\t$frequency
 ''')
-TMPL_ENTRYTYPE_HEADER = Template('''
+TMPL_ENTRYTYPE_HEADER = '''
 Number of references per entry type
+'''
+TMPL_ENTRYTYPE_COUNT = Template('''$entry_type\t$count
 ''')
-TMPL_ENTRYTYPE_COUNT = Template('''
-$entry_type: $count
-''')
-TMPL_YEAR_HEADER = Template('''
+TMPL_YEAR_HEADER = '''
 Number of references per year
+'''
+TMPL_YEAR_COUNT = Template('''$year\t$count
 ''')
-TMPL_YEAR_COUNT = Template('''
-$year: $count
-''')
-TMPL_KEYWORD_HEADER = Template('''
+TMPL_KEYWORD_HEADER = '''
 Frequency of keywords (title and abstract)
-''')
-TMPL_KEYWORD_FREQ = Template('''
-$keyword: $frequency
+'''
+TMPL_KEYWORD_FREQ = Template('''$keyword\t$frequency
 ''')
 
 class ReportGenerator(object):
@@ -89,18 +87,25 @@ class ReportGenerator(object):
         """
         self.entries = entries
     
-    def generate(self, total=None, validation=None):
+    def generate(self, total=None, validation=None, path=None):
         """
         Generates the report
+        @type total: L{int}
+        @param total: The total number of entries.
         @type validation: L{dict}
         @param validation: The dictionary of the validation results (optional).
+        @type path: L{str}
+        @param path: The path of the BibTeX file.
         """
         buffer = StringIO()
-        buffer.write(TMPL_HEADER.substitute(today=date.now()))
+        buffer.write(TMPL_HEADER.substitute(today=datetime.now().strftime('%d/%m/%Y %H:%M:%S'),file_name=path))
+        buffer.write(TMPL_SEPARATOR)
         if total:
             buffer.write(TMPL_TOTAL.substitute(total=total))
+            buffer.write(TMPL_SEPARATOR)
         if validation:
             buffer.write(TMPL_VALIDATION.substitute(success=validation['success'],warning=validation['warning'],error=validation['error']))
+            buffer.write(TMPL_SEPARATOR)
         year_freq = {}
         contributor_count = 0
         contributor_freq = {}
@@ -108,10 +113,29 @@ class ReportGenerator(object):
         keyword_freq = {}
         for entry in self.entries:
             #TODO: build the dictionaries
-            # use utils.Util.tex2simple(tex_value)
-            pass
+            # use Utils().tex2simple(tex_value)
+            year = entry.getFieldValue(FieldName.Year)
+            year_freq[year] = (year_freq[year] + 1 if year in year_freq else 1)
+            entry_type = entry.getEntryType()
+            entry_type_count[entry_type] = (entry_type_count[entry_type] + 1 if entry_type in entry_type_count else 1)
         buffer.write(TMPL_CONTRIBUTORS.substitute(contributors=contributor_count,unique_contributors=len(contributor_freq)))
-        for cont,freq in contributor_freq:
+        for item in Utils().sort_dict_by_value(contributor_freq, False):
+            cont,freq=item
             buffer.write(TMPL_CONTRIB_FREQ.substitute(contributor=cont,frequency=freq))
-        #TODO: continue buffers here. Add SEPARATOR
-        return buffer.getValue()
+        buffer.write(TMPL_SEPARATOR)
+        buffer.write(TMPL_ENTRYTYPE_HEADER)
+        for item in Utils().sort_dict_by_value(entry_type_count, False):
+            entry_type,count = item
+            buffer.write(TMPL_ENTRYTYPE_COUNT.substitute(entry_type=entry_type,count=count))
+        buffer.write(TMPL_SEPARATOR)
+        buffer.write(TMPL_YEAR_HEADER)
+        for year in Utils().sort_dict_by_key(year_freq):
+            buffer.write(TMPL_YEAR_COUNT.substitute(year=year,count=year_freq[year]))
+        buffer.write(TMPL_SEPARATOR)
+        buffer.write(TMPL_KEYWORD_HEADER)
+        for item in Utils().sort_dict_by_value(keyword_freq, False):
+            keyword,freq = item
+            buffer.write(TMPL_KEYWORD_FREQ.substitute(keyword=keyword,frequency=freq))
+        buffer.write(TMPL_SEPARATOR)
+        buffer.write(TMPL_FOOTER)
+        return buffer.getvalue()

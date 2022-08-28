@@ -203,3 +203,25 @@ class Utils(object, metaclass=Singleton):
         for tex in self.tex_to_html:
             s = s.replace(tex, self.tex_to_html[tex])
         return s
+    
+    def sort_dict_by_key(self, d, ascending=True):
+        """
+        Returns a copy of the dictionary sorted by ascending order of its keys.
+        :param d: A dictionary.
+        :type d: dict
+        :param ascending: If True, ascending order, else descending order
+        :type ascending: int
+        :returns: list -- The list of the items in sorted order.
+        """
+        return list(sorted(d, reverse=not ascending))
+    
+    def sort_dict_by_value(self, d, ascending=True):
+        """
+        Returns a copy of the dictionary sorted by ascending order of its values.
+        :param d: A dictionary.
+        :type d: dict
+        :param ascending: If True, ascending order, else descending order
+        :type ascending: int
+        :returns: list -- The list of the items in sorted order.
+        """
+        return list(sorted(d.items(), key=lambda item: item[1], reverse=not ascending))

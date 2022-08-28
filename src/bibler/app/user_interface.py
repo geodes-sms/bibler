@@ -292,11 +292,11 @@ class BiBlerApp(IApplication):
         for entry in self.__manager.iterSearchResult():
             yield entry.toEntryDict()
     
-    def generateReport(self):
+    def generateReport(self, path):
         """
         @see: L{gui.app_interface.IApplication.generateReport}.
         """
-        return self.__executor.execute(GenerateReportCommand(self.__manager))
+        return self.__executor.execute(GenerateReportCommand(self.__manager, path))
         
     
     @staticmethod
