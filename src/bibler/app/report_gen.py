@@ -31,6 +31,7 @@ from utils.utils import Utils
 from datetime import datetime
 from string import Template
 from io import StringIO
+import spacy
 
 """
 Template strings for the report
@@ -69,9 +70,10 @@ Number of references per year
 '''
 TMPL_YEAR_COUNT = Template('''$year\t$count
 ''')
-TMPL_KEYWORD_HEADER = '''
+TMPL_KEYWORD_HEADER = Template('''
 Frequency of keywords (title and abstract)
-'''
+$keyword_count unique keywords
+''')
 TMPL_KEYWORD_FREQ = Template('''$keyword\t$frequency
 ''')
 
@@ -110,7 +112,9 @@ class ReportGenerator(object):
         contributor_count = 0
         contributor_freq = {}
         entry_type_count = {}
+        keyword_count = 0
         keyword_freq = {}
+        keywords = ' '
         for entry in self.entries:
             year = entry.getFieldValue(FieldName.Year)
             year_freq[year] = (year_freq[year] + 1 if year in year_freq else 1)
@@ -121,6 +125,12 @@ class ReportGenerator(object):
                 cont = Utils().tex2simple(str(cont))
                 contributor_freq[cont] = (contributor_freq[cont] + 1 if cont in contributor_freq else 1)
                 contributor_count += 1
+            keywords = '. '.join([keywords, entry.getFieldValue(FieldName.Title), entry.getFieldValue(FieldName.Abstract)])
+        keywords = self.lemmatize(keywords)
+        for keyword in keywords:
+            k = Utils().tex2simple(str(keyword))
+            keyword_freq[k] = (keyword_freq[k] + 1 if k in keyword_freq else 1)
+            keyword_count += 1
         buffer.write(TMPL_CONTRIBUTORS.substitute(contributors=contributor_count,unique_contributors=len(contributor_freq)))
         for item in Utils().sort_dict_by_value(contributor_freq, False):
             cont,freq=item
@@ -135,10 +145,27 @@ class ReportGenerator(object):
         for year in Utils().sort_dict_by_key(year_freq):
             buffer.write(TMPL_YEAR_COUNT.substitute(year=year,count=year_freq[year]))
         buffer.write(TMPL_SEPARATOR)
-        buffer.write(TMPL_KEYWORD_HEADER)
+        buffer.write(TMPL_KEYWORD_HEADER.substitute(keyword_count=keyword_count))
         for item in Utils().sort_dict_by_value(keyword_freq, False):
             keyword,freq = item
             buffer.write(TMPL_KEYWORD_FREQ.substitute(keyword=keyword,frequency=freq))
         buffer.write(TMPL_SEPARATOR)
         buffer.write(TMPL_FOOTER)
         return buffer.getvalue()
+    
+    def lemmatize(self, text):
+        """
+        Tokenizes a text by stemming each word ignoring stop words.
+        @type text: L{str}
+        @param total: The text to lemmatize.
+        @rtype: L{list}
+        @return: Returns a list of all the unique words.
+        """
+        # Initialize spacy 'en' model, keeping only tagger component needed for lemmatization
+        nlp = spacy.load('en_core_web_trf', disable=['parser', 'ner'])
+        stop_words = nlp.Defaults.stop_words
+        #stop_words.add('')
+        # Parse the text
+        doc = nlp(text)
+        # Extract the lemma for each token and join
+        return [token.lemma_ for token in doc if not token in stop_words]

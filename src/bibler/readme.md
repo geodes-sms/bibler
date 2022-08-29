@@ -5,10 +5,11 @@ The source code is licensed under a [GNU GENERAL PUBLIC LICENSE 3](https://www.g
 
 ## Dependencies
 To compile the source code, you need the following dependencies:
-- [Python](https://www.python.org/) 3.7 or later
+- [Python](https://www.python.org/) 3.9
 - [wxPython](https://wxpython.org/) 4.0 or later to run in GUI mode
 - [Sphinx](https://www.sphinx-doc.org/) 3.0.1 or later to generate the documentation
 - [PyInstaller](https://www.pyinstaller.org/) 3.6 or later to create the executable distribution
+- [spaCY](https://spacy.io/) 3.4 or later to perform natural language processing operations
 
 ## Usage
 
