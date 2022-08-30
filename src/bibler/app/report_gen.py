@@ -27,6 +27,7 @@ This module represents the report generator
 """
 
 from app.field_name import FieldName
+from app.field import Field
 from utils.utils import Utils
 from datetime import datetime
 from string import Template
@@ -122,13 +123,12 @@ class ReportGenerator(object):
             entry_type_count[entry_type] = (entry_type_count[entry_type] + 1 if entry_type in entry_type_count else 1)
             contributors = entry.getContributors()
             for cont in contributors:
-                cont = Utils().tex2simple(str(cont))
+                cont = Field.simplify(str(cont))
                 contributor_freq[cont] = (contributor_freq[cont] + 1 if cont in contributor_freq else 1)
                 contributor_count += 1
             keywords = '. '.join([keywords, entry.getFieldValue(FieldName.Title), entry.getFieldValue(FieldName.Abstract)])
-        keywords = self.lemmatize(keywords)
-        for keyword in keywords:
-            k = Utils().tex2simple(str(keyword))
+        for keyword in self.lemmatize(keywords):
+            k = Field.simplify(keyword)
             keyword_freq[k] = (keyword_freq[k] + 1 if k in keyword_freq else 1)
             keyword_count += 1
         buffer.write(TMPL_CONTRIBUTORS.substitute(contributors=contributor_count,unique_contributors=len(contributor_freq)))
@@ -155,17 +155,19 @@ class ReportGenerator(object):
     
     def lemmatize(self, text):
         """
-        Tokenizes a text by stemming each word ignoring stop words.
+        Generator that tokenizes a text by stemming each word ignoring stop words.
         @type text: L{str}
         @param total: The text to lemmatize.
-        @rtype: L{list}
-        @return: Returns a list of all the unique words.
+        @rtype: L{str}
+        @return: All the unique words.
         """
         # Initialize spacy 'en' model, keeping only tagger component needed for lemmatization
         nlp = spacy.load('en_core_web_trf', disable=['parser', 'ner'])
         stop_words = nlp.Defaults.stop_words
-        #stop_words.add('')
+        #stop_words |= {' ', '.', ':', '(', ')', ',', "'", }
         # Parse the text
         doc = nlp(text)
         # Extract the lemma for each token and join
-        return [token.lemma_ for token in doc if not token in stop_words]
+        for token in doc:
+            if not token.lemma_ in stop_words and not token.is_punct and not token.is_digit:
+                yield token.lemma_
