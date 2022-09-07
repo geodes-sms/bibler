@@ -7,3 +7,4 @@
 *__pycache__
 src/bibler/build
 /src/bibler/bibler.spec
+/build/bibler
