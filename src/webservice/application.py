@@ -62,6 +62,7 @@ urls = (
     '/createentryforrelis/(.*)', 'CreateEntryForReLiS',
     '/importbibtexstringforrelis/(.*)', 'ImportBibTeXStringForReLiS',
     '/importendnotestringforrelis/(.*)', 'ImportEndNoteStringForReLiS',
+    '/generateReport/(.*)', 'GenerateReport',
     '/', 'index'
 )
 class index:
@@ -130,6 +131,12 @@ class ImportEndNoteStringForReLiS:
     def POST(self,code):
         data = urllib.parse.unquote_plus(web.data().decode())
         return BiBlerWrapper.importStringForReLiS(self, data, ImportFormat.ENDNOTE)
+        
+# Added by Eugene Syriani on 2/09/2022 for ReLiS integration
+class GenerateReport:
+    def POST(self,code):
+        data = urllib.parse.unquote_plus(web.data().decode())
+        return BiBlerWrapper.generateReport(self, data, ImportFormat.BIBTEX)
         
 web.config.debug = True
 

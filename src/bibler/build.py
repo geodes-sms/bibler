@@ -23,8 +23,9 @@ This is the script that creates a distribution of BiBler as an executable.
 import os
 import datetime
 import PyInstaller.__main__
+#import pkgutil
 
-VERSION = '1.4.4'
+VERSION = '1.5'
 DATE = datetime.date.today().strftime('%d %b %Y')
 
 # First update the version and the date
@@ -55,6 +56,10 @@ for line in about_lines:
     about.write(line)
 about.close()
 
+#en_file = open('en_core_web_trf','wb')
+#en_file.write(pkgutil.get_data('en_core_web_trf', 'en_core_web_trf-3.4.0\\ner\\model'))
+#en_file.close
+
 # Then build and package the code
 ####################
 
@@ -73,6 +78,7 @@ PyInstaller.__main__.run([
     '--add-data=%s%s%s' % (os.path.join('utils', 'resources', '*.pdf'), os.pathsep, os.path.join('utils', 'resources')),
     '--add-data=%s%s%s' % (os.path.join('external'), os.pathsep, os.path.join('external')),
     '--add-data=%s%s%s' % (os.path.join('..','..','examples'), os.pathsep, os.path.join('examples')),
+    #'--add-data=%s%s%s' % (os.path.join('utils', 'resources', 'en_core_web_trf-3.4.0'), os.pathsep, os.path.join('utils', 'resources')),
     '--icon=%s' % os.path.join('utils', 'resources', 'bibler.ico'),
     os.path.join('__init__.py')
 ])

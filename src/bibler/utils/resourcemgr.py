@@ -38,6 +38,7 @@ class ResourceManager(object, metaclass=utils.Singleton):
         self.usermanualHTMLPath = os.path.join('utils', 'resources', 'manual.html')
         self.docsHTMLPath = os.path.join('docs', 'index.html')
         self.iconPath = os.path.join('utils', 'resources', 'bibler.ico')
+        self.nlp_modelPath = os.path.join('utils', 'resources', 'en_core_web_trf-3.4.0', 'en_core_web_trf', 'en_core_web_trf-3.4.0')
     
     def getAboutHTML(self):
         """
@@ -62,6 +63,12 @@ class ResourceManager(object, metaclass=utils.Singleton):
         Get the path to the icon of BiBler.
         """
         return self.__getPath(self.iconPath)
+    
+    #def getNLPModelPath(self):
+    #    """
+    #    Get the path to the NLP model.
+    #    """
+    #    return self.__getPath(self.nlp_modelPath)
     
     def __getPath(self, path):
         """

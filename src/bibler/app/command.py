@@ -383,14 +383,19 @@ class SortCommand(UndoableCommand):
         return True
 
 class GenerateReportCommand(Command):
-    def __init__(self, manager, path):
+    def __init__(self, manager, path, text_format=True):
         """
         (Constructor)
         """
         super(GenerateReportCommand, self).__init__(manager)
         self.path = path
+        self.text_format = text_format
     
     def execute(self):
         validation = ValidateAllCommand(self.manager).execute()
         total = self.manager.getEntryCount()
-        return ReportGenerator(self.manager.iterEntries()).generate(total, validation, self.path)
+        generator = ReportGenerator(list(self.manager.iterEntries()))
+        if self.text_format:
+            return generator.generateText(total, validation, self.path)
+        else:
+            return generator.generate(total, validation, self.path)

@@ -459,12 +459,14 @@ class IApplication(object):
         """
         raise NotImplementedError()
     
-    def generateReport(self, path):
+    def generateReport(self, path, text_format=True):
         """
         Generate a report of the loaded entries.
         @type path: L{str}
-        @param path: The path of the BibTeX file. 
-        @rtype: L{str}
-        @return: A text report.
+        @param path: The path of the BibTeX file.
+        @type text_format: L{bool}
+        @param text_format: Option to return the report in text format or as a dictionary.
+        @rtype: L{str} or L{dict}
+        @return: A report of all the loaded entries.
         """
         raise NotImplementedError()

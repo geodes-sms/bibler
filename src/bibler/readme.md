@@ -70,9 +70,10 @@ TODO
 
 # Change log
 
-## Version 1.4.4 (dev)
-#### 27 Aug 2022
+## Version 1.5 (dev)
+#### 2 Sep 2022
 - Report generator, including word frequency
+- NLP support with spaCY
 
 ## Version 1.4.3
 #### 4 Jan 2021
