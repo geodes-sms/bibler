@@ -22,7 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #-*- coding: utf-8 -*-
 import sys, os
 #abspath = os.path.dirname("Path to bibler")
-abspath = os.path.dirname("/u/relis/public_html/bibler/bibler/")
+abspath = os.path.dirname("./bibler/")
 sys.path.append(abspath)
 os.chdir(abspath)
 from app.user_interface import BiBlerApp

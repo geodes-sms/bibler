@@ -38,13 +38,13 @@ import sys, os
 import urllib.parse
 import time
 #abspath = os.path.dirname("Path to bibler source")
-abspath = os.path.dirname("/u/relis/public_html/bibler/")
+abspath = os.path.dirname("./")
 sys.path.append(abspath)
 os.chdir(abspath)
 import web
 from bibler.utils.settings import ExportFormat, ImportFormat
 #abspath = os.path.dirname("Path to webservice")
-abspath = os.path.dirname("/u/relis/public_html/bibler/webservice/")
+abspath = os.path.dirname("./webservice/")
 sys.path.append(abspath)
 os.chdir(abspath)
 from bibwrap import BiBlerWrapper
