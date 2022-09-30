@@ -194,5 +194,6 @@ cython_debug/
 # Custom
 # All compiled modules
 src/bibler/build
-/src/bibler/bibler.spec
-/build/bibler
+src/bibler/bibler.spec
+build/bibler
+build
