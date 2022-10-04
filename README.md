@@ -49,7 +49,7 @@ Go to [src/bibler](src/bibler) for more information.
 ### Web service
 
 1. Using Docker
-   1. `docker build src/bibler -t bibler:latest`
+   1. `docker build . -t bibler:latest`
    2. `docker run -p <port-on-your-system>:8000 bibler:latest`
 
    > To run Production Server use this command
