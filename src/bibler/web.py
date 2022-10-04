@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 :Author: Gauransh Kumar
 
-:module: FastAPI version of Bbibler Web Service
+:module: FastAPI version of Bibler Web Service
 
 """
 
@@ -225,4 +225,9 @@ async def generateReport(data: Data):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=80, log_level="info")
+    if os.environ.get("ENV") == "prod":
+        # running a production server
+        uvicorn.run(app, host="0.0.0.0", port=80, log_level="info")
+    else:
+        # running a Debug server
+        uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)

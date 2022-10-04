@@ -10,10 +10,16 @@ To compile the source code, you need the following dependencies:
 - [Sphinx](https://www.sphinx-doc.org/) 3.0.1 or later to generate the documentation
 - [PyInstaller](https://www.pyinstaller.org/) 3.6 or later to create the executable distribution
 - [spaCY](https://spacy.io/) 3.4 or later to perform natural language processing operations
+> For Webservice only
+
+- [Fastapi](https://fastapi.tiangolo.com/)
+- [uvicorn[standard]](https://fastapi.tiangolo.com/deployment/manually/#__tabbed_1_1)
 
 ## Usage
-
 #### Running BiBler
+
+Install the Dependencies
+`pip install -r requirements.txt`
 
 To run the application with the GUI, simply run the `bibler` module from the command line like so.
 It requires wxPython.
@@ -37,6 +43,26 @@ from bibler import *
 Preferences.overrideKeyGeneration = True	# Generates a key for entries even if one is already provided
 Preferences.bibStyle = BibStyle.DEFAULT		# Sets the bibliography style
 ```
+
+#### Running Bibler Webservice
+
+1. Using Docker
+   1. docker build . -t bibler:latest
+   2. docker run -p <port-on-your-system>:8000 bibler:latest
+
+   > To run Production Server use this command
+
+   3. docker run -e ENV=prod -p <port-on-your-system>:80 bibler:latest
+   > Also, if you want to use our prebuilt docker image skip building on Step 1. and replace image name `bibler:latest` with `relis/bibler:latest` in the commands.
+
+
+2. Using local installation
+   1. Install the Dependencies with this command `pip install -r requirements-web.txt`
+   2. Run command `python web.py`
+   > To Run Production Server set Environment Variable ENV=prod or use command `ENV=prod python web.py`
+
+
+
 
 #### Testing BiBler
 
