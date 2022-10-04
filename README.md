@@ -21,6 +21,7 @@ You can interact with BiBler via its GUI, its API, or as a web service.
 - Export to CSV, HTML, or SQL
 - Python module and API to integrate programmatically
 - Web service to deploy online as a service
+- Builtin Swagger UI for testing Webservice at `<url-of-bibler>/docs`
 
 ## Installation and usage
 
