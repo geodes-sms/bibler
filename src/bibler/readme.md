@@ -47,12 +47,12 @@ Preferences.bibStyle = BibStyle.DEFAULT		# Sets the bibliography style
 #### Running Bibler Webservice
 
 1. Using Docker
-   1. docker build . -t bibler:latest
-   2. docker run -p <port-on-your-system>:8000 bibler:latest
+   1. `docker build . -t bibler:latest`
+   2. `docker run -p <port-on-your-system>:8000 bibler:latest`
 
    > To run Production Server use this command
 
-   3. docker run -e ENV=prod -p <port-on-your-system>:80 bibler:latest
+   3. `docker run -e ENV=prod -p <port-on-your-system>:80 bibler:latest`
    > Also, if you want to use our prebuilt docker image skip building on Step 1. and replace image name `bibler:latest` with `relis/bibler:latest` in the commands.
 
 
