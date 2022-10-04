@@ -10,10 +10,16 @@ To compile the source code, you need the following dependencies:
 - [Sphinx](https://www.sphinx-doc.org/) 3.0.1 or later to generate the documentation
 - [PyInstaller](https://www.pyinstaller.org/) 3.6 or later to create the executable distribution
 - [spaCY](https://spacy.io/) 3.4 or later to perform natural language processing operations
+> For Webservice only
+
+- [Fastapi](https://fastapi.tiangolo.com/)
+- [uvicorn[standard]](https://fastapi.tiangolo.com/deployment/manually/#__tabbed_1_1)
 
 ## Usage
-
 #### Running BiBler
+
+Install the Dependencies
+`pip install -r requirements.txt`
 
 To run the application with the GUI, simply run the `bibler` module from the command line like so.
 It requires wxPython.
@@ -37,6 +43,11 @@ from bibler import *
 Preferences.overrideKeyGeneration = True	# Generates a key for entries even if one is already provided
 Preferences.bibStyle = BibStyle.DEFAULT		# Sets the bibliography style
 ```
+
+#### Webservice
+
+For webservice [see this](../../README.md#web-service)
+
 
 #### Testing BiBler
 

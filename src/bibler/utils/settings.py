@@ -26,7 +26,7 @@ This is module represents the settings for BiBler.
 '''
 
 import os
-from utils import utils
+from . import utils
 
 class ImportFormat:
     """

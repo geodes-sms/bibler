@@ -1,0 +1,4 @@
+wxPython<=4.0
+sphinx<=3.0.1
+PyInstaller<=3.6
+spacy<=3.4

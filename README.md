@@ -21,6 +21,7 @@ You can interact with BiBler via its GUI, its API, or as a web service.
 - Export to CSV, HTML, or SQL
 - Python module and API to integrate programmatically
 - Web service to deploy online as a service
+- Builtin Swagger UI for testing Webservice at `<url-of-bibler>/docs`
 
 ## Installation and usage
 
@@ -48,7 +49,20 @@ Go to [src/bibler](src/bibler) for more information.
 
 ### Web service
 
-Go to [src/webservice](src/webservice).
+1. Using Docker
+   1. `docker build . -t bibler:latest`
+   2. `docker run -p <port-on-your-system>:8000 bibler:latest`
+
+   > To run Production Server use this command
+
+   3. `docker run -e ENV=prod -p <port-on-your-system>:80 bibler:latest`
+   > Also, if you want to use our prebuilt docker image skip building on Step 1. and replace image name `bibler:latest` with `relis/bibler:latest` in the commands.
+
+
+2. Using local installation
+   1. Install the Dependencies with this command `pip install -r src/bibler/requirements-web.txt`
+   2. Run command `python src/bibler/web.py`
+   > To Run Production Server set Environment Variable ENV=prod or use command `ENV=prod python src/bibler/web.py`
 
 
 ## Distribution

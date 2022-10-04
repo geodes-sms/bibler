@@ -20,8 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 .. moduleauthor:: Eugene Syriani
 .. versionadded:: 1.5
 
-Updated on 06 Sep 2022
+Updated on 29 Sep 2022
 
+Commented for WebService
 
 
 This is the main BiBler module.
@@ -45,7 +46,6 @@ __version__ = "1.5"
 import sys
 sys.path.insert(0, 'BiBler')
 
-import wx
 from gui.gui import BiBlerGUI 
 from gui.controller import Controller
 from app.user_interface import BiBlerApp
@@ -84,6 +84,7 @@ class BiBler:
         """
         Starts the BiBler application with the GUI. 
         """
+        import wx
         app = wx.App(False)
         self.control = Controller()
         self.gui = BiBlerGUI(self.control)
