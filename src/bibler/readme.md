@@ -44,24 +44,9 @@ Preferences.overrideKeyGeneration = True	# Generates a key for entries even if o
 Preferences.bibStyle = BibStyle.DEFAULT		# Sets the bibliography style
 ```
 
-#### Running Bibler Webservice
+#### Webservice
 
-1. Using Docker
-   1. `docker build . -t bibler:latest`
-   2. `docker run -p <port-on-your-system>:8000 bibler:latest`
-
-   > To run Production Server use this command
-
-   3. `docker run -e ENV=prod -p <port-on-your-system>:80 bibler:latest`
-   > Also, if you want to use our prebuilt docker image skip building on Step 1. and replace image name `bibler:latest` with `relis/bibler:latest` in the commands.
-
-
-2. Using local installation
-   1. Install the Dependencies with this command `pip install -r requirements-web.txt`
-   2. Run command `python web.py`
-   > To Run Production Server set Environment Variable ENV=prod or use command `ENV=prod python web.py`
-
-
+For webservice [see this](../../README.md#web-service)
 
 
 #### Testing BiBler
