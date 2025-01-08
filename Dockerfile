@@ -1,14 +1,19 @@
 FROM python:3.9.14-slim-bullseye
 
-
 WORKDIR /app
 
-COPY requirements-web.txt src/bibler/requirements-web.txt
+RUN apt-get update && apt-get install -y --no-install-recommends gcc build-essential && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
 
-RUN pip install -U -r src/bibler/requirements-web.txt
+COPY src/bibler/requirements-web.txt requirements-web.txt
 
-RUN python -m spacy download en_core_web_trf
+RUN BLIS_ARCH="generic" pip install spacy --no-binary blis
 
-COPY . /app
+RUN pip install -U -r requirements-web.txt
 
-CMD ["python", "src/bibler/web.py"]
+COPY src/bibler/ /app
+
+COPY entrypoint.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/bin/sh", "-c", "/app/entrypoint.sh"]
