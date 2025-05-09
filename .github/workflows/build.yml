@@ -4,6 +4,11 @@ on:
   push:
     branches:
         - master
+        - main
+  pull_reques:
+    branches:
+        - master
+        - main
 
 jobs:
   docker:
