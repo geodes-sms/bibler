@@ -17,11 +17,11 @@ jobs:
     steps:
     # Step 1: Check out the code
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # Step 2: Set up Python
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9.14'  # Use the desired Python version
 
@@ -39,7 +39,7 @@ jobs:
     # Step 5: Upload test results (optional, for analysis on GitHub)
     - name: Upload Test Results
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: unittest-results
         path: test-results.xml  # Adjust this to match your test result file if needed
