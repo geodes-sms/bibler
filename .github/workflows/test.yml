@@ -29,7 +29,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r src/bibler/testApp/requirements.txt  # Install dependencies listed in requirements.txt
+        pip install -r src/bibler/requirements.txt  # Install dependencies listed in requirements.txt
 
     # Step 4: Run unit tests
     - name: Run Unit Tests
