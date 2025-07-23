@@ -1,19 +1,20 @@
 FROM python:3.9.14-slim-bullseye
 
+
+RUN apt-get update && apt-get install -y --no-install-recommends gcc build-essential && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends gcc build-essential && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+COPY src/bibler/requirements-web.txt src/bibler/requirements-web.txt
 
-COPY src/bibler/requirements-web.txt requirements-web.txt
+RUN if [ $TARGETARCH = "arm64" ]; then \
+    BLIS_ARCH="generic" pip install --no-cache-dir --no-binary blis \
+    ; fi
 
-RUN BLIS_ARCH="generic" pip install spacy --no-binary blis
+RUN pip install --no-cache-dir -U -r src/bibler/requirements-web.txt
 
-RUN pip install -U -r requirements-web.txt
+RUN python -m spacy download en_core_web_trf
 
-COPY src/bibler/ /app
+COPY . /app
 
-COPY entrypoint.sh /app/entrypoint.sh
-
-RUN chmod +x /app/entrypoint.sh
-
-CMD ["/bin/sh", "-c", "/app/entrypoint.sh"]
+CMD ["python", "src/bibler/web.py"]
