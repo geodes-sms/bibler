@@ -37,6 +37,7 @@ from pydantic import BaseModel
 from app.user_interface import BiBlerApp
 from gui.app_interface import EntryListColumn
 from utils.settings import ExportFormat, ImportFormat
+from utils.utils import Utils
 
 
 def getBiblerApp():
@@ -55,10 +56,17 @@ def entryToJSON(entry, biblerapp):
     :return: The result as a dictionary.
     :rtype: dict
     """
+    utils = Utils()
     json = {}
     json["result_code"] = int(entry[EntryListColumn.Valid])
     json["result_msg"] = entry[EntryListColumn.Message]
-    json["entry"] = entry
+    # Decode LaTeX-encoded characters to Unicode in all text fields
+    # before returning the entry to the caller (fix for issue #23)
+    decoded_entry = dict(entry)
+    for field, value in decoded_entry.items():
+        if isinstance(value, str) and value:
+            decoded_entry[field] = utils.tex2unicode(value)
+    json["entry"] = decoded_entry
     json["preview"] = biblerapp.previewEntry(entry[EntryListColumn.Id])
     json["bibtex"] = biblerapp.getBibTeX(entry[EntryListColumn.Id])
     authors = []
