@@ -180,18 +180,7 @@ class Utils(object, metaclass=Singleton):
         :returns: str -- The converted string.
         """
         return s.translate(str.maketrans(self.funnychars_to_latex))
-
-    def tex2unicode(self, s):
-        """
-        Returns a copy of a string with all TeX-encoded characters replaced
-        by their Unicode equivalents. This is the inverse of unicode2Tex().
-        Used when returning BibTeX data to external services (e.g. ReLiS API)
-        so that accented characters are properly decoded instead of returned
-        as raw LaTeX commands.
-        See: https://github.com/geodes-sms/relis/issues/23
-        """
-        from pylatexenc.latex2text import LatexNodes2Text
-        return LatexNodes2Text().latex_to_text(s)
+    
     def tex2simple(self, s):
         """
         Returns a copy of a string with all TeX symbols simplified.
