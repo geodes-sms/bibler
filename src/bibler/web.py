@@ -63,9 +63,9 @@ def entryToJSON(entry, biblerapp):
     # Decode LaTeX-encoded characters to Unicode in all text fields
     # before returning the entry to the caller (fix for issue #23)
     decoded_entry = dict(entry)
-    for field in ['title', 'abstract', 'school', 'note', 'annote']:
-        if decoded_entry.get(field):
-            decoded_entry[field] = utils.tex2unicode(decoded_entry[field])
+    for field, value in decoded_entry.items():
+        if isinstance(value, str) and value:
+            decoded_entry[field] = utils.tex2unicode(value)
     json["entry"] = decoded_entry
     json["preview"] = biblerapp.previewEntry(entry[EntryListColumn.Id])
     json["bibtex"] = biblerapp.getBibTeX(entry[EntryListColumn.Id])
